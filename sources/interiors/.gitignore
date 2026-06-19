@@ -1,0 +1,11 @@
+.gradle/
+build/
+versions/*/.gradle/
+versions/*/build/
+versions/*/run/
+.idea/
+!.idea/icon.png
+*.iml
+.DS_Store
+.kotlin/
+src/main/java/build.properties

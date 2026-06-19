@@ -1,0 +1,23 @@
+{
+  "required": true,
+  "priority": 1000,
+  "package": "plus.dragons.createcentralkitchen.mixin.farmersdelight",
+  "plugin": "plus.dragons.createcentralkitchen.mixin.UniversalConditionalMixinPlugin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "BlockHelperMixin",
+    "CCKJeiPluginMixin",
+    "CookingPotBlockEntityMixin",
+    "HeatableBlockEntityMixin",
+    "RuntimeDataGeneratorMixin",
+    "SawBlockEntityMixin",
+    "SkilletBlockEntityMixin"
+  ],
+  "client": [
+    "client.BlazeBurnerBlockEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

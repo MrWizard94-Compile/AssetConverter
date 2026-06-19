@@ -1,0 +1,168 @@
+package net.mehvahdjukaar.supplementaries.common.block.tiles;
+
+
+import net.mehvahdjukaar.moonlight.api.block.IAnalogRotatable;
+import net.mehvahdjukaar.moonlight.api.platform.ForgeHelper;
+import net.mehvahdjukaar.supplementaries.common.block.blocks.TurnTableBlock;
+import net.mehvahdjukaar.supplementaries.common.utils.BlockUtil;
+import net.mehvahdjukaar.supplementaries.reg.ModRegistry;
+import net.mehvahdjukaar.supplementaries.reg.ModSounds;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseRailBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.RailShape;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
+
+
+public class TurnTableBlockTile extends BlockEntity {
+    private int timeUntilNextRotation = 5;
+    private int catTimer = 0;
+
+    public TurnTableBlockTile(BlockPos pos, BlockState state) {
+        super(ModRegistry.TURN_TABLE_TILE.get(), pos, state);
+    }
+
+    //server only
+    public static void tick(Level level, BlockPos pos, BlockState state, TurnTableBlockTile tile) {
+        tile.catTimer = Math.max(tile.catTimer - 1, 0);
+        if (!state.getValue(TurnTableBlock.ROTATING)) return;
+
+        int power = state.getValue(TurnTableBlock.POWER);
+        boolean isPowered = power != 0;
+
+        Direction dir = state.getValue(TurnTableBlock.FACING);
+        boolean ccw = state.getValue(TurnTableBlock.INVERTED) ^ (state.getValue(TurnTableBlock.FACING) == Direction.DOWN);
+        BlockPos targetPos = pos.relative(dir);
+        BlockState above = level.getBlockState(targetPos);
+
+        if (above.getBlock() instanceof IAnalogRotatable ar && ar.canRotateAnalog(above, level, targetPos, dir)) {
+            if (isPowered) {
+                ar.rotateAnalog(above, level, targetPos, dir, ccw, power);
+            } else {
+                tile.stopRotation();
+            }
+            return;
+        }
+        if (tile.timeUntilNextRotation != 0) {
+            tile.timeUntilNextRotation--;
+        } else {
+            tile.timeUntilNextRotation = TurnTableBlock.getPeriod(state);
+            tile.performRotation(level, pos, state, dir, ccw, targetPos);
+            // if it didn't rotate last block that means that block is immovable
+            if (!isPowered) {
+                tile.stopRotation();
+            }
+        }
+    }
+
+    private static Direction.Axis getMinecartMovementAxis(AbstractMinecart m) {
+        Vec3 dir = Vec3.directionFromRotation(0, m.getYRot());
+        return Direction.getNearest(dir.x, dir.y, dir.z).getAxis();
+    }
+
+    private static Direction.Axis getRailAxis(RailShape rail) {
+        return switch (rail) {
+            case EAST_WEST, ASCENDING_WEST, ASCENDING_EAST -> Direction.Axis.X;
+            case NORTH_SOUTH, ASCENDING_SOUTH, ASCENDING_NORTH -> Direction.Axis.Z;
+            default -> Direction.Axis.Y;
+        };
+    }
+
+    public void startRotation() {
+        this.timeUntilNextRotation = TurnTableBlock.getPeriod(this.getBlockState());
+        this.level.setBlock(worldPosition, getBlockState().setValue(TurnTableBlock.ROTATING, true), 3);
+
+        this.setChanged();
+    }
+
+    public void stopRotation() {
+        this.timeUntilNextRotation = 0;
+        this.level.setBlock(worldPosition, getBlockState().setValue(TurnTableBlock.ROTATING, false), 3);
+
+        this.setChanged();
+    }
+
+    public int getCatTimer() {
+        return catTimer;
+    }
+
+    public void setCat() {
+        this.catTimer = 20 * 20;
+    }
+
+    private boolean performRotation(Level level, BlockPos pos, BlockState state, Direction dir, boolean ccw, BlockPos targetPos) {
+        boolean success = BlockUtil.tryRotatingBlock(dir, ccw, targetPos, level, null, null).isPresent();
+        if (success) {
+            //play particle with block event
+            level.blockEvent(pos, state.getBlock(), 0, 0);
+            level.gameEvent(null, GameEvent.BLOCK_CHANGE, targetPos);
+            level.playSound(null, targetPos, ModSounds.BLOCK_ROTATE.get(), SoundSource.BLOCKS, 1.0F, 1);
+
+            if (dir == Direction.UP) {
+                this.tryRotatingMinecartsAbove(level, pos, ccw);
+            }
+        }
+
+        return success;
+    }
+
+    private void tryRotatingMinecartsAbove(Level level, BlockPos pos, boolean ccw) {
+        BlockPos above = pos.above();
+        BlockState state = level.getBlockState(above);
+        if (state.getBlock() instanceof BaseRailBlock rb) {
+            for (var c : level.getEntitiesOfClass(AbstractMinecart.class, new AABB(above))) {
+                RailShape shape = ForgeHelper.getRailDirection(rb, state, level, above, c);
+                Direction.Axis axis = getRailAxis(shape);
+                if (axis == Direction.Axis.Y) continue;
+                //if (axis == getMinecartMovementAxis(c)) continue;
+                //this whole thing wont work properly as cart can be on a to be rotated rail before its rotated.
+                //onceit touches it it will rotate as per the default cart logic so such a mechanism just is not possible...
+                c.setYRot(c.getYRot() + (ccw ? 90 : -90));
+                c.yRotO = c.getYRot();
+                c.setPos(new Vec3(pos.getX() + 0.5f, c.getY(), pos.getZ() + 0.5));
+                c.xOld = c.getX();
+                c.zOld = c.getZ();
+
+                var movement = c.getDeltaMovement();
+                c.setDeltaMovement(movement.yRot(ccw ? Mth.HALF_PI : -Mth.HALF_PI));
+            }
+        }
+    }
+
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return this.saveWithoutMetadata(registries);
+    }
+
+    @Override
+    public @Nullable Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+        this.timeUntilNextRotation = tag.getInt("Cooldown");
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        tag.putInt("Cooldown", this.timeUntilNextRotation);
+    }
+
+}

@@ -1,0 +1,32 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.mehvahdjukaar.supplementaries.mixins.fabric",
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "net.mehvahdjukaar.supplementaries.mixins.MixinPlugin",
+  "client": [
+    "GuiMixin",
+    "ItemInHandRendererMixin",
+    "LevelRendererMixin",
+    "MC263524FixMixin",
+    "MinecraftInputMixin",
+    "MouseScrollMixin",
+    "ParrotLayerMixin",
+    "SkullBlockRendererMixin",
+    "compat.CompatIFMapAtlasTextureMixin",
+    "compat.CompatIFMapTextureMixin2"
+  ],
+  "mixins": [
+    "BiomeAccessor",
+    "CropBlockMixin",
+    "FireBlockAccessor",
+    "MobMixin",
+    "RedstoneWireBlockMixin",
+    "SugarCaneBlockMixin",
+    "ThrowableProjectileMixin",
+    "compat.CompatSodiumFluidRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,80 @@
+package net.mehvahdjukaar.supplementaries.integration;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.NotNull;
+
+public final class FlanCompat {
+
+    public static boolean canBreak(@NotNull Player player, @NotNull BlockPos pos) {
+        /*
+        if (!(player instanceof ServerPlayer sp)) return true; //should only be used from server but client can call too
+        try {
+            ClaimStorage storage = ClaimStorage.get((ServerLevel) player.level());
+            IPermissionContainer claim = storage.getForPermissionCheck(pos);
+            return claim.canInteract(sp, BuiltinPermission.BREAK, pos, true);
+        } catch (Exception e) {
+            Supplementaries.LOGGER.error("Failed call break block event: [Player: {}, Pos: {}]", player, pos, e);
+            return true;
+        }*/
+        return true;
+    }
+
+    public static boolean canPlace(@NotNull Player player, @NotNull BlockPos pos) {
+       /*
+        if (!(player instanceof ServerPlayer sp)) return true; //should only be used from server but client can call too
+        try {
+            ClaimStorage storage = ClaimStorage.get((ServerLevel) player.level());
+            IPermissionContainer claim = storage.getForPermissionCheck(pos);
+            return claim.canInteract(sp, BuiltinPermission.PLACE, pos);
+        } catch (Exception e) {
+            Supplementaries.LOGGER.error("Failed call place block event: [Player: {}, Pos: {}]", player, pos, e);
+            return true;
+        }*/
+        return true;
+    }
+
+    public static boolean canReplace(@NotNull Player player, @NotNull BlockPos pos) {
+//        if (!(player instanceof ServerPlayer sp)) return true; //should only be used from server but client can call too
+//        try {
+//            ClaimStorage storage = ClaimStorage.get((ServerLevel) player.level());
+//            IPermissionContainer claim = storage.getForPermissionCheck(pos);
+//            return claim.canInteract(sp, BuiltinPermission.PLACE, pos);
+//        } catch (Exception e) {
+//            Supplementaries.LOGGER.error("Failed call replace block event: [Player: {}, Pos: {}]", player, pos, e);
+//            return true;
+//        }
+        return true;
+    }
+
+    public static boolean canAttack(@NotNull Player player, @NotNull Entity victim) {
+//        if (!(player instanceof ServerPlayer sp)) return true; //should only be used from server but client can call too
+//        try {
+//            ClaimStorage storage = ClaimStorage.get((ServerLevel) player.level());
+//            IPermissionContainer claim = storage.getForPermissionCheck(victim.blockPosition());
+//            if (victim instanceof ServerPlayer) {
+//                return claim.canInteract(sp, BuiltinPermission.HURTPLAYER, victim.blockPosition());
+//            } else {
+//                return claim.canInteract(sp, BuiltinPermission.HURTANIMAL, victim.blockPosition());
+//            }
+//        } catch (Exception e) {
+//            Supplementaries.LOGGER.error("Failed call attack entity event: [Player: {}, Victim: {}]", player, victim, e);
+//            return true;
+//        }
+        return true;
+    }
+
+    public static boolean canInteract(@NotNull Player player, @NotNull BlockPos targetPos) {
+//        if (!(player instanceof ServerPlayer sp)) return true; //should only be used from server but client can call too
+//        try {
+//            ClaimStorage storage = ClaimStorage.get((ServerLevel) player.level());
+//            IPermissionContainer claim = storage.getForPermissionCheck(targetPos);
+//            return claim.canInteract(sp, BuiltinPermission.INTERACTBLOCK, targetPos);
+//        } catch (Exception e) {
+//            Supplementaries.LOGGER.error("Failed call interact event: [Player: {}, Pos: {}]", player, targetPos, e);
+//            return true;
+//        }
+        return true;
+    }
+}

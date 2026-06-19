@@ -1,0 +1,56 @@
+package net.mehvahdjukaar.supplementaries.common.items;
+
+import net.mehvahdjukaar.candlelight.api.VirtualOverride;
+import net.mehvahdjukaar.moonlight.api.block.IColored;
+import net.mehvahdjukaar.supplementaries.common.block.blocks.AbstractPresentBlock;
+import net.mehvahdjukaar.supplementaries.common.items.components.PresentAddress;
+import net.mehvahdjukaar.supplementaries.reg.ModComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.block.Block;
+
+import java.util.List;
+
+public class PresentItem extends BlockItem implements IColored {
+
+    public PresentItem(Block block, Properties properties) {
+        super(block, properties);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+        PresentAddress address = stack.get(ModComponents.ADDRESS.get());
+        if (address != null) {
+            address.addToTooltip(context, tooltipComponents::add, tooltipFlag);
+        }
+    }
+
+    @VirtualOverride("neoforge")
+    public int getMaxStackSize(ItemStack stack) {
+        return stack.has(ModComponents.ADDRESS.get()) ? 1 : this.getDefaultMaxStackSize();
+    }
+
+    @VirtualOverride("neoforge")
+    public boolean canFitInsideContainerItems(ItemStack stack) {
+        return !stack.has(ModComponents.ADDRESS.get());
+    }
+
+    @Override
+    public boolean canFitInsideContainerItems() {
+        return false;
+    }
+
+    @Override
+    public DyeColor getColor() {
+        return ((AbstractPresentBlock) this.getBlock()).getColor();
+    }
+
+    @Override
+    public boolean supportsBlankColor() {
+        return true;
+    }
+}

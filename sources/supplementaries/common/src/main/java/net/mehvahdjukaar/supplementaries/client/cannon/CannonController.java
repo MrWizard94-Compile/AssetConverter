@@ -1,0 +1,270 @@
+package net.mehvahdjukaar.supplementaries.client.cannon;
+
+import net.mehvahdjukaar.supplementaries.common.block.cannon.BallisticTrajectory;
+import net.mehvahdjukaar.supplementaries.common.block.cannon.BallisticTrajectory3D;
+import net.mehvahdjukaar.supplementaries.common.block.cannon.CannonUtils;
+import net.mehvahdjukaar.supplementaries.common.block.cannon.ShootingMode;
+import net.mehvahdjukaar.supplementaries.common.block.tiles.CannonBlockTile;
+import net.mehvahdjukaar.supplementaries.common.entities.CannonBoatEntity;
+import net.minecraft.client.Camera;
+import net.minecraft.client.CameraType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.Input;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
+import org.lwjgl.glfw.GLFW;
+
+
+public class CannonController {
+
+    @Nullable
+    protected static BallisticTrajectory trajectory;
+    protected static CannonBlockTile cannon;
+    protected static HitResult hit;
+    protected static ShootingMode shootingMode = ShootingMode.DOWN;
+    protected static boolean showsTrajectory = true;
+
+    private static CameraType lastCameraType;
+    // values controlled by player mouse movement. Not actually what camera uses
+    private static float yawIncrease;
+    private static float pitchIncrease;
+    private static boolean needsToUpdateServer;
+    // lerp camera
+    private static Vec3 lastCameraPos;
+    private static float lastZoomOut = 0;
+    private static float lastCameraYaw = 0;
+    private static float lastCameraPitch = 0;
+    private static boolean turnedLastTick = false;
+
+    public static void startControlling(CannonBlockTile cannon) {
+        Minecraft mc = Minecraft.getInstance();
+        if (CannonController.cannon == null) {
+            CannonController.cannon = cannon;
+            shootingMode = cannon.getBallisticData().drag() != 0 ? ShootingMode.DOWN : ShootingMode.STRAIGHT;
+            lastCameraType = mc.options.getCameraType();
+        } //if not it means we entered from manoeuvre mode gui
+        mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
+        MutableComponent message = Component.translatable("message.supplementaries.cannon.maneuver",
+                mc.options.keyShift.getTranslatedKeyMessage(),
+                mc.options.keyAttack.getTranslatedKeyMessage());
+        mc.gui.setOverlayMessage(message, false);
+        mc.getNarrator().sayNow(message);
+
+    }
+
+    // only works if we are already controlling
+    private static void stopControllingAndSync() {
+        if (cannon == null) return;
+        LocalPlayer player = Minecraft.getInstance().player;
+        cannon.syncToServer(false, true, player);
+        stopControlling();
+    }
+
+    public static void stopControlling() {
+        if (cannon == null) return;
+        cannon = null;
+        lastCameraYaw = 0;
+        lastCameraPitch = 0;
+        lastZoomOut = 0;
+        lastCameraPos = null;
+        turnedLastTick = false;
+        if (lastCameraType != null) {
+            Minecraft.getInstance().options.setCameraType(lastCameraType);
+        }
+    }
+
+    public static boolean isActive() {
+        return cannon != null;
+    }
+
+    public static boolean setupCamera(Camera camera, BlockGetter level, Entity entity,
+                                      boolean detached, boolean thirdPersonReverse, float partialTick) {
+
+        if (!isActive()) return false;
+        Vec3 centerCannonPos = cannon.getGlobalPosition(partialTick);
+
+        if (lastCameraPos == null) {
+            lastCameraPos = camera.getPosition();
+            lastCameraYaw = camera.getYRot();
+            lastCameraPitch = camera.getXRot();
+        }
+
+        // lerp camera
+        Vec3 targetCameraPos = centerCannonPos.add(0, 2, 0);
+        float targetYRot = camera.getYRot() + yawIncrease;
+        float targetXRot = Mth.clamp(camera.getXRot() + pitchIncrease, -90, 90);
+
+        camera.setPosition(targetCameraPos);
+        camera.setRotation(targetYRot, targetXRot);
+
+        lastCameraPos = camera.getPosition();
+        lastCameraYaw = camera.getYRot();
+        lastCameraPitch = camera.getXRot();
+        lastZoomOut = camera.getMaxZoom(4);
+
+        float horizontalOffset = -1;
+
+        camera.move(-lastZoomOut, 0, horizontalOffset);
+
+        yawIncrease = 0;
+        pitchIncrease = 0;
+
+        if (!cannon.isFiring()) {
+
+            // find hit result
+            Vec3 lookDir2 = new Vec3(camera.getLookVector());
+            float maxRange = 128;
+            Vec3 actualCameraPos = camera.getPosition().add(lookDir2.normalize());
+            Vec3 endPos = actualCameraPos.add(lookDir2.scale(maxRange));
+
+            hit = level.clip(new ClipContext(actualCameraPos, endPos,
+                    ClipContext.Block.OUTLINE, ClipContext.Fluid.ANY, entity));
+
+            BallisticTrajectory3D comp = CannonUtils.computeTrajectory(cannon, hit.getLocation(), shootingMode);
+
+            if (comp != null) {
+                trajectory = comp.trajectory();
+                cannon.setRotationToMatchTrajectory(comp, partialTick);
+                if (turnedLastTick) cannon.snapToWantedRotationInstantly();
+                turnedLastTick = true;
+                return true;
+            }
+        }
+        turnedLastTick = false;
+        return true;
+    }
+
+    // true cancels the thing
+    public static boolean onPlayerRotated(double yawAdd, double pitchAdd) {
+        if (CannonController.isActive()) {
+            float scale = 0.2f;
+            yawIncrease += (float) (yawAdd * scale);
+            pitchIncrease += (float) (pitchAdd * scale);
+            if (yawAdd != 0 || pitchAdd != 0) needsToUpdateServer = true;
+
+            if (cannon.shouldRotatePlayerFaceWhenManeuvering()) {
+                //make player face camera while maneuvering
+                LocalPlayer player = Minecraft.getInstance().player;
+                player.turn(Mth.wrapDegrees((lastCameraYaw + yawAdd) - player.yHeadRot),
+                        Mth.wrapDegrees((lastCameraPitch + pitchAdd) - player.getXRot()));
+                player.yHeadRotO = player.yHeadRot;
+                player.xRotO = player.getXRot();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private static void onKeyJump() {
+        if (trajectory != null && trajectory.gravity() != 0) {
+            shootingMode = shootingMode.cycle();
+            needsToUpdateServer = true;
+        }
+    }
+
+    private static void onKeyInventory() {
+        //Disabled, too buggy
+        cannon.sendOpenGuiRequest();
+    }
+
+    private static void onKeyShift() {
+        stopControllingAndSync();
+    }
+
+    public static boolean onMouseScrolled(double scrollDelta) {
+        if (!isActive()) return false;
+
+        if (scrollDelta != 0) {
+            byte newPower = (byte) (1 + Math.floorMod((int) (cannon.getPowerLevel() - 1 + scrollDelta), CannonBlockTile.MAX_POWER_LEVEL));
+            cannon.setFirePower(newPower);
+            needsToUpdateServer = true;
+        }
+        return true;
+    }
+
+
+    public static boolean onPlayerAttack() {
+        if (!isActive()) return false;
+        if (cannon != null && cannon.readyToFire()) {
+            LocalPlayer player = Minecraft.getInstance().player;
+            cannon.syncToServer(true, false, player);
+        }
+        return true;
+    }
+
+    public static boolean onPlayerUse() {
+        if (!isActive()) return false;
+        showsTrajectory = !showsTrajectory;
+        return true;
+    }
+
+    public static void onInputUpdate(Input input) {
+        // resets input
+        if (cannon.impedePlayerMovementWhenManeuvering()) {
+            input.down = false;
+            input.up = false;
+            input.left = false;
+            input.right = false;
+            input.forwardImpulse = 0;
+            input.leftImpulse = 0;
+        }
+        input.shiftKeyDown = false;
+        input.jumping = false;
+    }
+
+    public static void onClientTick(Minecraft mc) {
+        Player player = Minecraft.getInstance().player;
+        if (player == null) return;
+        if (!isActive()) return;
+        if (cannon.stillValid(player)) {
+            if (needsToUpdateServer) {
+                needsToUpdateServer = false;
+                cannon.syncToServer(false, false, player);
+            }
+        } else {
+            stopControllingAndSync();
+        }
+    }
+
+    //called by mixin. its cancellable. maybe switch all to this
+    public static boolean onEarlyKeyPress(int key, int scanCode, int action, int modifiers) {
+        if (!isActive()) return false;
+        var options = Minecraft.getInstance().options;
+
+        if (action != GLFW.GLFW_PRESS) return false;
+        if (key == 256) {
+            stopControllingAndSync();
+            return true;
+        } else if (options.keyInventory.matches(key, scanCode)) {
+            onKeyInventory();
+            return true;
+        }
+        if (options.keyJump.matches(key, scanCode)) {
+            onKeyJump();
+            return true;
+        }
+        if (options.keyShift.matches(key, scanCode)) {
+            onKeyShift();
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean cancelsXPBar() {
+        return isActive() || Minecraft.getInstance().player.getVehicle() instanceof CannonBoatEntity;
+    }
+
+    public static boolean cancelsHotBar() {
+        return isActive();
+    }
+}
+
