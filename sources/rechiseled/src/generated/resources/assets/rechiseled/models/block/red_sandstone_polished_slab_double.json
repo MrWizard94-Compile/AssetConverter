@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/red_sandstone_polished",
+    "down": "rechiseled:block/red_sandstone_polished",
+    "north": "rechiseled:block/red_sandstone_polished",
+    "east": "rechiseled:block/red_sandstone_polished",
+    "south": "rechiseled:block/red_sandstone_polished",
+    "west": "rechiseled:block/red_sandstone_polished",
+    "particle": "rechiseled:block/red_sandstone_polished"
+  }
+}

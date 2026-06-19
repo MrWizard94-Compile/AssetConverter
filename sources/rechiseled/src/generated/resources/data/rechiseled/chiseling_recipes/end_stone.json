@@ -1,0 +1,163 @@
+{
+  "type": "rechiseled:chiseling",
+  "entries": [
+    "minecraft:end_stone",
+    {
+      "block": "minecraft:end_stone_bricks",
+      "slab": "minecraft:end_stone_brick_slab",
+      "slab_worth": 0.5,
+      "stairs": "minecraft:end_stone_brick_stairs"
+    },
+    {
+      "block": "rechiseled:end_stone_blobs",
+      "connecting_block": "rechiseled:end_stone_blobs_connecting",
+      "connecting_slab": "rechiseled:end_stone_blobs_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:end_stone_blobs_stairs_connecting",
+      "slab": "rechiseled:end_stone_blobs_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:end_stone_blobs_stairs"
+    },
+    {
+      "block": "rechiseled:end_stone_brick_pattern",
+      "connecting_block": "rechiseled:end_stone_brick_pattern_connecting",
+      "connecting_slab": "rechiseled:end_stone_brick_pattern_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:end_stone_brick_pattern_stairs_connecting",
+      "slab": "rechiseled:end_stone_brick_pattern_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:end_stone_brick_pattern_stairs"
+    },
+    {
+      "block": "rechiseled:end_stone_brick_paving",
+      "connecting_block": "rechiseled:end_stone_brick_paving_connecting",
+      "connecting_slab": "rechiseled:end_stone_brick_paving_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:end_stone_brick_paving_stairs_connecting",
+      "slab": "rechiseled:end_stone_brick_paving_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:end_stone_brick_paving_stairs"
+    },
+    {
+      "block": "rechiseled:end_stone_chiseled",
+      "connecting_block": "rechiseled:end_stone_chiseled_connecting",
+      "connecting_slab": "rechiseled:end_stone_chiseled_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:end_stone_chiseled_stairs_connecting",
+      "slab": "rechiseled:end_stone_chiseled_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:end_stone_chiseled_stairs"
+    },
+    {
+      "block": "rechiseled:end_stone_crushed",
+      "connecting_block": "rechiseled:end_stone_crushed_connecting",
+      "connecting_slab": "rechiseled:end_stone_crushed_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:end_stone_crushed_stairs_connecting",
+      "slab": "rechiseled:end_stone_crushed_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:end_stone_crushed_stairs"
+    },
+    {
+      "block": "rechiseled:end_stone_diagonal_bricks",
+      "connecting_block": "rechiseled:end_stone_diagonal_bricks_connecting",
+      "connecting_slab": "rechiseled:end_stone_diagonal_bricks_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:end_stone_diagonal_bricks_stairs_connecting",
+      "slab": "rechiseled:end_stone_diagonal_bricks_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:end_stone_diagonal_bricks_stairs"
+    },
+    {
+      "block": "rechiseled:end_stone_mesh",
+      "connecting_block": "rechiseled:end_stone_mesh_connecting",
+      "connecting_slab": "rechiseled:end_stone_mesh_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:end_stone_mesh_stairs_connecting",
+      "slab": "rechiseled:end_stone_mesh_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:end_stone_mesh_stairs"
+    },
+    {
+      "block": "rechiseled:end_stone_paving",
+      "connecting_block": "rechiseled:end_stone_paving_connecting",
+      "connecting_slab": "rechiseled:end_stone_paving_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:end_stone_paving_stairs_connecting",
+      "slab": "rechiseled:end_stone_paving_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:end_stone_paving_stairs"
+    },
+    {
+      "block": "rechiseled:end_stone_polished",
+      "connecting_block": "rechiseled:end_stone_polished_connecting",
+      "connecting_slab": "rechiseled:end_stone_polished_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:end_stone_polished_stairs_connecting",
+      "slab": "rechiseled:end_stone_polished_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:end_stone_polished_stairs"
+    },
+    {
+      "block": "rechiseled:end_stone_rotated_bricks",
+      "connecting_block": "rechiseled:end_stone_rotated_bricks_connecting",
+      "connecting_slab": "rechiseled:end_stone_rotated_bricks_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:end_stone_rotated_bricks_stairs_connecting",
+      "slab": "rechiseled:end_stone_rotated_bricks_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:end_stone_rotated_bricks_stairs"
+    },
+    {
+      "block": "rechiseled:end_stone_scales",
+      "connecting_block": "rechiseled:end_stone_scales_connecting",
+      "connecting_slab": "rechiseled:end_stone_scales_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:end_stone_scales_stairs_connecting",
+      "slab": "rechiseled:end_stone_scales_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:end_stone_scales_stairs"
+    },
+    {
+      "block": "rechiseled:end_stone_small_tiles",
+      "connecting_block": "rechiseled:end_stone_small_tiles_connecting",
+      "connecting_slab": "rechiseled:end_stone_small_tiles_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:end_stone_small_tiles_stairs_connecting",
+      "slab": "rechiseled:end_stone_small_tiles_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:end_stone_small_tiles_stairs"
+    },
+    {
+      "block": "rechiseled:end_stone_spiral_pattern",
+      "connecting_block": "rechiseled:end_stone_spiral_pattern_connecting",
+      "connecting_slab": "rechiseled:end_stone_spiral_pattern_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:end_stone_spiral_pattern_stairs_connecting",
+      "slab": "rechiseled:end_stone_spiral_pattern_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:end_stone_spiral_pattern_stairs"
+    },
+    {
+      "block": "rechiseled:end_stone_squares",
+      "connecting_block": "rechiseled:end_stone_squares_connecting",
+      "connecting_slab": "rechiseled:end_stone_squares_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:end_stone_squares_stairs_connecting",
+      "slab": "rechiseled:end_stone_squares_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:end_stone_squares_stairs"
+    },
+    {
+      "block": "rechiseled:end_stone_tiles",
+      "connecting_block": "rechiseled:end_stone_tiles_connecting",
+      "connecting_slab": "rechiseled:end_stone_tiles_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:end_stone_tiles_stairs_connecting",
+      "slab": "rechiseled:end_stone_tiles_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:end_stone_tiles_stairs"
+    }
+  ],
+  "overwrite": false
+}

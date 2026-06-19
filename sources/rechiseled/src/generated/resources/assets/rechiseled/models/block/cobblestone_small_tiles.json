@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/cobblestone_small_tiles",
+    "down": "rechiseled:block/cobblestone_small_tiles",
+    "north": "rechiseled:block/cobblestone_small_tiles",
+    "east": "rechiseled:block/cobblestone_small_tiles",
+    "south": "rechiseled:block/cobblestone_small_tiles",
+    "west": "rechiseled:block/cobblestone_small_tiles",
+    "particle": "rechiseled:block/cobblestone_small_tiles"
+  }
+}

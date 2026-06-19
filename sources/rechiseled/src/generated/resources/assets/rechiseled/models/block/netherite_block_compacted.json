@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/netherite_block_compacted",
+    "down": "rechiseled:block/netherite_block_compacted",
+    "north": "rechiseled:block/netherite_block_compacted",
+    "east": "rechiseled:block/netherite_block_compacted",
+    "south": "rechiseled:block/netherite_block_compacted",
+    "west": "rechiseled:block/netherite_block_compacted",
+    "particle": "rechiseled:block/netherite_block_compacted"
+  }
+}

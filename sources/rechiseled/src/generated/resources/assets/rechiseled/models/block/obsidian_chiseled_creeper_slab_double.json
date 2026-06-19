@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/obsidian_chiseled_creeper",
+    "down": "rechiseled:block/obsidian_chiseled_creeper",
+    "north": "rechiseled:block/obsidian_chiseled_creeper",
+    "east": "rechiseled:block/obsidian_chiseled_creeper",
+    "south": "rechiseled:block/obsidian_chiseled_creeper",
+    "west": "rechiseled:block/obsidian_chiseled_creeper",
+    "particle": "rechiseled:block/obsidian_chiseled_creeper"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/bone_block_inverted_tiles",
+    "down": "rechiseled:block/bone_block_inverted_tiles",
+    "north": "rechiseled:block/bone_block_inverted_tiles",
+    "east": "rechiseled:block/bone_block_inverted_tiles",
+    "south": "rechiseled:block/bone_block_inverted_tiles",
+    "west": "rechiseled:block/bone_block_inverted_tiles",
+    "particle": "rechiseled:block/bone_block_inverted_tiles"
+  }
+}

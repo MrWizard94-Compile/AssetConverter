@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/bone_block_decorated_bordered",
+    "down": "rechiseled:block/bone_block_decorated_bordered",
+    "north": "rechiseled:block/bone_block_decorated_bordered",
+    "east": "rechiseled:block/bone_block_decorated_bordered",
+    "south": "rechiseled:block/bone_block_decorated_bordered",
+    "west": "rechiseled:block/bone_block_decorated_bordered",
+    "particle": "rechiseled:block/bone_block_decorated_bordered"
+  }
+}

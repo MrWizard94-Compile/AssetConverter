@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/purpur_squares",
+    "down": "rechiseled:block/purpur_squares",
+    "north": "rechiseled:block/purpur_squares",
+    "east": "rechiseled:block/purpur_squares",
+    "south": "rechiseled:block/purpur_squares",
+    "west": "rechiseled:block/purpur_squares",
+    "particle": "rechiseled:block/purpur_squares"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/birch_planks_diagonal_stripes",
+    "down": "rechiseled:block/birch_planks_diagonal_stripes",
+    "north": "rechiseled:block/birch_planks_diagonal_stripes",
+    "east": "rechiseled:block/birch_planks_diagonal_stripes",
+    "south": "rechiseled:block/birch_planks_diagonal_stripes",
+    "west": "rechiseled:block/birch_planks_diagonal_stripes",
+    "particle": "rechiseled:block/birch_planks_diagonal_stripes"
+  }
+}

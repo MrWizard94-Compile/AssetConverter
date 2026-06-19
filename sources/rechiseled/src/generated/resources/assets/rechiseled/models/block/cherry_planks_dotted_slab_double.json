@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/cherry_planks_dotted",
+    "down": "rechiseled:block/cherry_planks_dotted",
+    "north": "rechiseled:block/cherry_planks_dotted",
+    "east": "rechiseled:block/cherry_planks_dotted",
+    "south": "rechiseled:block/cherry_planks_dotted",
+    "west": "rechiseled:block/cherry_planks_dotted",
+    "particle": "rechiseled:block/cherry_planks_dotted"
+  }
+}

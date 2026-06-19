@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/jungle_planks_diagonal_tiles",
+    "down": "rechiseled:block/jungle_planks_diagonal_tiles",
+    "north": "rechiseled:block/jungle_planks_diagonal_tiles",
+    "east": "rechiseled:block/jungle_planks_diagonal_tiles",
+    "south": "rechiseled:block/jungle_planks_diagonal_tiles",
+    "west": "rechiseled:block/jungle_planks_diagonal_tiles",
+    "particle": "rechiseled:block/jungle_planks_diagonal_tiles"
+  }
+}

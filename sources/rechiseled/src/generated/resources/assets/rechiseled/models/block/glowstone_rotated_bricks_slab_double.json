@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/glowstone_rotated_bricks",
+    "down": "rechiseled:block/glowstone_rotated_bricks",
+    "north": "rechiseled:block/glowstone_rotated_bricks",
+    "east": "rechiseled:block/glowstone_rotated_bricks",
+    "south": "rechiseled:block/glowstone_rotated_bricks",
+    "west": "rechiseled:block/glowstone_rotated_bricks",
+    "particle": "rechiseled:block/glowstone_rotated_bricks"
+  }
+}

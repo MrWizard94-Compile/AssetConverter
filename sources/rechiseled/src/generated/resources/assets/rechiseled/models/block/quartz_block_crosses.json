@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/quartz_block_crosses",
+    "down": "rechiseled:block/quartz_block_crosses",
+    "north": "rechiseled:block/quartz_block_crosses",
+    "east": "rechiseled:block/quartz_block_crosses",
+    "south": "rechiseled:block/quartz_block_crosses",
+    "west": "rechiseled:block/quartz_block_crosses",
+    "particle": "rechiseled:block/quartz_block_crosses"
+  }
+}

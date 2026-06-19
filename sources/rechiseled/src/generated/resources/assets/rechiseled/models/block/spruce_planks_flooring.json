@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/spruce_planks_flooring",
+    "down": "rechiseled:block/spruce_planks_flooring",
+    "north": "rechiseled:block/spruce_planks_flooring",
+    "east": "rechiseled:block/spruce_planks_flooring",
+    "south": "rechiseled:block/spruce_planks_flooring",
+    "west": "rechiseled:block/spruce_planks_flooring",
+    "particle": "rechiseled:block/spruce_planks_flooring"
+  }
+}
