@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "pink",
+  "ingredient": "#cabletiers:ultra_exporters",
+  "result": "cabletiers:pink_ultra_exporter"
+}

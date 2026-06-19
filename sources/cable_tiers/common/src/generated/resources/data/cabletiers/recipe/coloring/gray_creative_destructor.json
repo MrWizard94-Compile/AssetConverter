@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "gray",
+  "ingredient": "#cabletiers:creative_destructors",
+  "result": "cabletiers:creative_destructor"
+}

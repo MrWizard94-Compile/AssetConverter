@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "magenta",
+  "ingredient": "#cabletiers:creative_importers",
+  "result": "cabletiers:magenta_creative_importer"
+}

@@ -1,0 +1,9 @@
+{
+  "variants": {
+    "": {
+      "type": "refinedstorage:cable_part",
+      "color": "light_gray",
+      "part_model": "cabletiers:block/elite_exporter"
+    }
+  }
+}

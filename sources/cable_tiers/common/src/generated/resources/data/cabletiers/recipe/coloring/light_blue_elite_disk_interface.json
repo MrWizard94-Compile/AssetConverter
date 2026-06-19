@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "light_blue",
+  "ingredient": "#cabletiers:elite_disk_interfaces",
+  "result": "cabletiers:elite_disk_interface"
+}

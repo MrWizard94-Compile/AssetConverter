@@ -1,0 +1,197 @@
+package com.ultramega.cabletiers.common.storage;
+
+import com.ultramega.cabletiers.common.advancedfilter.AdvancedFilter;
+
+import com.refinedmods.refinedstorage.api.network.impl.node.AbstractStorageContainerNetworkNode;
+import com.refinedmods.refinedstorage.api.network.impl.node.storagetransfer.StorageTransferListener;
+import com.refinedmods.refinedstorage.api.network.impl.node.storagetransfer.StorageTransferMode;
+import com.refinedmods.refinedstorage.api.network.node.NetworkNodeActor;
+import com.refinedmods.refinedstorage.api.network.storage.StorageNetworkComponent;
+import com.refinedmods.refinedstorage.api.resource.ResourceAmount;
+import com.refinedmods.refinedstorage.api.resource.ResourceKey;
+import com.refinedmods.refinedstorage.api.resource.filter.FilterMode;
+import com.refinedmods.refinedstorage.api.storage.Actor;
+import com.refinedmods.refinedstorage.api.storage.StateTrackedStorage;
+import com.refinedmods.refinedstorage.api.storage.Storage;
+import com.refinedmods.refinedstorage.api.storage.TransferHelper;
+import com.refinedmods.refinedstorage.api.storage.limited.LimitedStorage;
+
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.function.ToLongFunction;
+import java.util.function.UnaryOperator;
+
+import net.minecraft.tags.TagKey;
+import org.jspecify.annotations.Nullable;
+
+public class AdvancedStorageTransferNetworkNode extends AbstractStorageContainerNetworkNode {
+    private final AdvancedFilter filter = new AdvancedFilter();
+    private final Actor actor = new NetworkNodeActor(this);
+
+    private StorageTransferMode mode = StorageTransferMode.INSERT_INTO_NETWORK;
+    @Nullable
+    private ToLongFunction<Storage> transferQuotaProvider;
+    @Nullable
+    private Supplier<Boolean> stackUpgradeProvider;
+    @Nullable
+    private StorageTransferListener listener;
+
+    public AdvancedStorageTransferNetworkNode(final long energyUsage, final long energyUsagePerStorage, final int size) {
+        super(energyUsage, energyUsagePerStorage, size);
+    }
+
+    public void setMode(final StorageTransferMode mode) {
+        this.mode = mode;
+    }
+
+    public StorageTransferMode getMode() {
+        return this.mode;
+    }
+
+    public void setTransferQuotaProvider(final ToLongFunction<Storage> transferQuotaProvider) {
+        this.transferQuotaProvider = transferQuotaProvider;
+    }
+
+    public void setStackUpgradeProvider(final Supplier<Boolean> stackUpgradeProvider) {
+        this.stackUpgradeProvider = stackUpgradeProvider;
+    }
+
+    public void setListener(@Nullable final StorageTransferListener listener) {
+        this.listener = listener;
+    }
+
+    public FilterMode getFilterMode() {
+        return this.filter.getMode();
+    }
+
+    public void setFilterMode(final FilterMode filterMode) {
+        this.filter.setMode(filterMode);
+    }
+
+    public void setFilters(final Set<ResourceKey> filters, final Set<TagKey<?>> tagFilters) {
+        this.filter.setFilters(filters);
+        this.filter.setTagFilters(tagFilters);
+    }
+
+    public void setNormalizer(final UnaryOperator<ResourceKey> normalizer) {
+        this.filter.setNormalizer(normalizer);
+    }
+
+    @Override
+    public void doWork() {
+        super.doWork();
+        if (!this.isActive() || this.network == null) {
+            return;
+        }
+
+        int firstNonNullIndex = -1;
+        for (int i = 0; i < this.storages.length / 2; ++i) {
+            if (this.storages[i] != null) {
+                firstNonNullIndex = i;
+                break;
+            }
+        }
+
+        if (firstNonNullIndex < 0) {
+            return;
+        }
+
+        final StorageNetworkComponent networkStorage = this.network.getComponent(StorageNetworkComponent.class);
+        for (int i = firstNonNullIndex; i < this.storages.length / 2; ++i) {
+            final StateTrackedStorage storage = this.storages[i];
+            if (storage == null) {
+                continue;
+            }
+            final Result result = this.transfer(storage, networkStorage);
+            if (this.processResult(result, i)) {
+                return;
+            }
+        }
+    }
+
+    private Result transfer(final StateTrackedStorage storage, final StorageNetworkComponent networkStorage) {
+        if (this.transferQuotaProvider == null) {
+            return Result.FAILURE;
+        }
+        final long transferQuota = this.transferQuotaProvider.applyAsLong(storage.getDelegate());
+        if (this.mode == StorageTransferMode.INSERT_INTO_NETWORK) {
+            return this.transfer(storage, networkStorage, transferQuota, this::hasNoExtractableResources);
+        }
+        return this.transfer(
+            networkStorage,
+            storage,
+            transferQuota,
+            source -> this.hasNoExtractableResources(source) || this.storageIsFull(storage)
+        );
+    }
+
+    private Result transfer(final Storage source,
+                            final Storage destination,
+                            final long transferQuota,
+                            final Predicate<Storage> readyPredicate) {
+        if (readyPredicate.test(source)) {
+            return Result.SUCCESS;
+        }
+        if (this.transfer(source, destination, transferQuota)) {
+            return readyPredicate.test(source)
+                ? Result.SUCCESS
+                : Result.PARTIAL;
+        }
+        return Result.FAILURE;
+    }
+
+    private boolean transfer(final Storage source, final Storage destination, final long transferQuota) {
+        if (this.stackUpgradeProvider == null) {
+            return false;
+        }
+
+        long remainder = transferQuota;
+        for (final ResourceAmount resourceAmount : source.getAll()) {
+            final ResourceKey resource = resourceAmount.resource();
+            if (!this.filter.isAllowed(resource)) {
+                continue;
+            }
+            final long amount = this.stackUpgradeProvider.get() ? resourceAmount.amount() : Math.min(remainder, resourceAmount.amount());
+            if (this.stackUpgradeProvider.get()) {
+                remainder = amount;
+            }
+            final long transferred = TransferHelper.transfer(resource, amount, this.actor, source, destination, source);
+            remainder -= transferred;
+            if (remainder == 0) {
+                return true;
+            }
+        }
+        return remainder != transferQuota;
+    }
+
+    private boolean hasNoExtractableResources(final Storage source) {
+        return source.getAll().stream().noneMatch(resourceAmount -> this.filter.isAllowed(resourceAmount.resource()));
+    }
+
+    private boolean storageIsFull(final Storage storage) {
+        return storage instanceof LimitedStorage limitedStorage
+            && limitedStorage.getCapacity() > 0
+            && limitedStorage.getCapacity() == limitedStorage.getStored();
+    }
+
+    private boolean processResult(final Result result, final int index) {
+        if (result.isSuccess()) {
+            if (result == Result.SUCCESS && this.listener != null) {
+                this.listener.onTransferSuccess(index);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private enum Result {
+        SUCCESS,
+        PARTIAL,
+        FAILURE;
+
+        private boolean isSuccess() {
+            return this == PARTIAL || this == SUCCESS;
+        }
+    }
+}

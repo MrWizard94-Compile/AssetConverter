@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "light_gray",
+  "ingredient": "#cabletiers:elite_importers",
+  "result": "cabletiers:light_gray_elite_importer"
+}

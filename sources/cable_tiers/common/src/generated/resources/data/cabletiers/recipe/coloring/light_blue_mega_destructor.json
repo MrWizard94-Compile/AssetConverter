@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "light_blue",
+  "ingredient": "#cabletiers:mega_destructors",
+  "result": "cabletiers:light_blue_mega_destructor"
+}

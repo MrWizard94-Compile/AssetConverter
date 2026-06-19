@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "green",
+  "ingredient": "#cabletiers:mega_constructors",
+  "result": "cabletiers:green_mega_constructor"
+}

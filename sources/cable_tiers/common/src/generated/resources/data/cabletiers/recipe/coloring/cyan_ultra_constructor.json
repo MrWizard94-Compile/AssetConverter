@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "cyan",
+  "ingredient": "#cabletiers:ultra_constructors",
+  "result": "cabletiers:cyan_ultra_constructor"
+}

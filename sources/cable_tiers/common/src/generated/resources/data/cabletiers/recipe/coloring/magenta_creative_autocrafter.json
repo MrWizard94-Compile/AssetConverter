@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "magenta",
+  "ingredient": "#cabletiers:creative_autocrafters",
+  "result": "cabletiers:magenta_creative_autocrafter"
+}

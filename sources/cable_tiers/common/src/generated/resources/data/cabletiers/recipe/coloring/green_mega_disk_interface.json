@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "green",
+  "ingredient": "#cabletiers:mega_disk_interfaces",
+  "result": "cabletiers:green_mega_disk_interface"
+}

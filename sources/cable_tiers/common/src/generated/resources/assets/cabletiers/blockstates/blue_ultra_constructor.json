@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "": {
+      "type": "refinedstorage:active_inactive_cable_part",
+      "active_part_model": "cabletiers:block/ultra_constructor/active",
+      "color": "blue",
+      "inactive_part_model": "cabletiers:block/ultra_constructor/inactive"
+    }
+  }
+}

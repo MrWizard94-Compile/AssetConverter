@@ -1,0 +1,9 @@
+{
+  "variants": {
+    "": {
+      "type": "refinedstorage:cable_part",
+      "color": "purple",
+      "part_model": "cabletiers:block/creative_importer"
+    }
+  }
+}

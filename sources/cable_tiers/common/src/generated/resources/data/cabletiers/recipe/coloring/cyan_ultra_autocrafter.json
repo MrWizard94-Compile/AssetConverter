@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "cyan",
+  "ingredient": "#cabletiers:ultra_autocrafters",
+  "result": "cabletiers:cyan_ultra_autocrafter"
+}

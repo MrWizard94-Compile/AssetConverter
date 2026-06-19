@@ -1,0 +1,9 @@
+{
+  "variants": {
+    "": {
+      "type": "cabletiers:tiered_disk_interface",
+      "color": "light_blue",
+      "tier": "ultra"
+    }
+  }
+}

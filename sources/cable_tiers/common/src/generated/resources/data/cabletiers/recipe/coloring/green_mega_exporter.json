@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "green",
+  "ingredient": "#cabletiers:mega_exporters",
+  "result": "cabletiers:green_mega_exporter"
+}

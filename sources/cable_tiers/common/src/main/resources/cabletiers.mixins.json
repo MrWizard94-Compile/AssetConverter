@@ -1,0 +1,29 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.ultramega.cabletiers.common.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "AbstractBaseBlockMixin",
+    "AutocrafterBlockEntityMixin",
+    "PatternGridBlockEntityMixin",
+    "PatternGridContainerMenuMixin",
+    "AbstractExternalStorageBlockEntityMixin",
+    "PatternItemMixin",
+    "InnerValidatedSlotMixin",
+    "PatternGridContainerMenuInvoker",
+    "PatternTooltipCacheAccessor",
+    "ActionButtonInvoker",
+    "LockModeInvoker",
+    "ResourceContainerImplInvoker",
+    "AbstractTaskPatternAccessor",
+    "TaskImplInvoker"
+  ],
+  "client": [
+    "PatternGridScreenMixin",
+    "ProcessingPatternGridRendererMixin",
+    "UpgradeDestinationClientTooltipComponentMixin",
+    "ProcessingPatternClientTooltipComponentMixin",
+    "AbstractContainerScreenAccessor"
+  ]
+}

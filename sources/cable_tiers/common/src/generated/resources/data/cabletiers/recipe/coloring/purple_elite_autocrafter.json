@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "purple",
+  "ingredient": "#cabletiers:elite_autocrafters",
+  "result": "cabletiers:purple_elite_autocrafter"
+}

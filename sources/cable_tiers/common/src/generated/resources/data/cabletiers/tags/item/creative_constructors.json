@@ -1,0 +1,20 @@
+{
+  "values": [
+    "cabletiers:white_creative_constructor",
+    "cabletiers:orange_creative_constructor",
+    "cabletiers:magenta_creative_constructor",
+    "cabletiers:light_blue_creative_constructor",
+    "cabletiers:yellow_creative_constructor",
+    "cabletiers:lime_creative_constructor",
+    "cabletiers:pink_creative_constructor",
+    "cabletiers:creative_constructor",
+    "cabletiers:light_gray_creative_constructor",
+    "cabletiers:cyan_creative_constructor",
+    "cabletiers:purple_creative_constructor",
+    "cabletiers:blue_creative_constructor",
+    "cabletiers:brown_creative_constructor",
+    "cabletiers:green_creative_constructor",
+    "cabletiers:red_creative_constructor",
+    "cabletiers:black_creative_constructor"
+  ]
+}

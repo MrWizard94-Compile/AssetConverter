@@ -1,0 +1,32 @@
+{
+  "values": [
+    "#cabletiers:elite_importers",
+    "#cabletiers:ultra_importers",
+    "#cabletiers:mega_importers",
+    "#cabletiers:creative_importers",
+    "#cabletiers:elite_exporters",
+    "#cabletiers:ultra_exporters",
+    "#cabletiers:mega_exporters",
+    "#cabletiers:creative_exporters",
+    "#cabletiers:elite_destructors",
+    "#cabletiers:ultra_destructors",
+    "#cabletiers:mega_destructors",
+    "#cabletiers:creative_destructors",
+    "#cabletiers:elite_constructors",
+    "#cabletiers:ultra_constructors",
+    "#cabletiers:mega_constructors",
+    "#cabletiers:creative_constructors",
+    "#cabletiers:elite_disk_interfaces",
+    "#cabletiers:ultra_disk_interfaces",
+    "#cabletiers:mega_disk_interfaces",
+    "#cabletiers:creative_disk_interfaces",
+    "#cabletiers:elite_autocrafters",
+    "#cabletiers:ultra_autocrafters",
+    "#cabletiers:mega_autocrafters",
+    "#cabletiers:creative_autocrafters",
+    "#cabletiers:elite_interfaces",
+    "#cabletiers:ultra_interfaces",
+    "#cabletiers:mega_interfaces",
+    "#cabletiers:creative_interfaces"
+  ]
+}

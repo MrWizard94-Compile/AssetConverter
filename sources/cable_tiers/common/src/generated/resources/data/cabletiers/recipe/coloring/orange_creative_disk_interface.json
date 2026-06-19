@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "orange",
+  "ingredient": "#cabletiers:creative_disk_interfaces",
+  "result": "cabletiers:orange_creative_disk_interface"
+}

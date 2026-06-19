@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "black",
+  "ingredient": "#cabletiers:creative_exporters",
+  "result": "cabletiers:black_creative_exporter"
+}

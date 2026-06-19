@@ -1,0 +1,9 @@
+{
+  "variants": {
+    "": {
+      "type": "refinedstorage:cable_part",
+      "color": "brown",
+      "part_model": "cabletiers:block/mega_exporter"
+    }
+  }
+}

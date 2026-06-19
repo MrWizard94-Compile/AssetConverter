@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "cyan",
+  "ingredient": "#cabletiers:elite_exporters",
+  "result": "cabletiers:cyan_elite_exporter"
+}
