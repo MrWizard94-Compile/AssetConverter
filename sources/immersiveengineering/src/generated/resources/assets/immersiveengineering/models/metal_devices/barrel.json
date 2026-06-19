@@ -1,0 +1,5 @@
+{
+  "type": "vertical",
+  "base_name": "immersiveengineering:block/metal_device/barrel",
+  "loader": "immersiveengineering:conf_sides"
+}

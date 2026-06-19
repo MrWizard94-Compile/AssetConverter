@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:birch_planks"
+    },
+    "/": {
+      "tag": "handcrafted:cushions"
+    },
+    "@": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "pattern": [
+    "@/@",
+    "###"
+  ],
+  "result": {
+    "count": 2,
+    "item": "handcrafted:birch_couch"
+  },
+  "show_notification": true
+}

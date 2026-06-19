@@ -1,0 +1,4 @@
+{
+  "parent": "neoforge:item/bucket",
+  "loader": "immersiveengineering:potion_bucket"
+}

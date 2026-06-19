@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:acacia_planks"
+    },
+    "-": {
+      "item": "minecraft:acacia_slab"
+    }
+  },
+  "pattern": [
+    "---",
+    "# #"
+  ],
+  "result": {
+    "count": 2,
+    "item": "handcrafted:acacia_dining_bench"
+  },
+  "show_notification": true
+}

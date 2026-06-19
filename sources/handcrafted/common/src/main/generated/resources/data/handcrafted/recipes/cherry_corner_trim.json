@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:cherry_planks"
+    }
+  },
+  "pattern": [
+    "#  ",
+    "#  ",
+    "###"
+  ],
+  "result": {
+    "count": 4,
+    "item": "handcrafted:cherry_corner_trim"
+  },
+  "show_notification": true
+}

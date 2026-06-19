@@ -1,0 +1,13 @@
+{
+  "parent": "minecraft:block/block",
+  "callbacks": "immersiveengineering:logic_unit",
+  "layers": [
+    "solid",
+    "translucent"
+  ],
+  "loader": "immersiveengineering:ie_obj",
+  "model": "immersiveengineering:models/block/wooden_device/logic_unit.obj.ie",
+  "textures": {
+    "particle": "immersiveengineering:block/wooden_device/logic_unit"
+  }
+}

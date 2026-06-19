@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:gray_wool"
+    },
+    "/": {
+      "item": "minecraft:feather"
+    }
+  },
+  "pattern": [
+    "###",
+    "///",
+    "###"
+  ],
+  "result": {
+    "count": 16,
+    "item": "handcrafted:gray_cushion"
+  },
+  "show_notification": true
+}

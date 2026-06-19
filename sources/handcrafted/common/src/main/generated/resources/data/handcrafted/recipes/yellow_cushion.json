@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:yellow_wool"
+    },
+    "/": {
+      "item": "minecraft:feather"
+    }
+  },
+  "pattern": [
+    "###",
+    "///",
+    "###"
+  ],
+  "result": {
+    "count": 16,
+    "item": "handcrafted:yellow_cushion"
+  },
+  "show_notification": true
+}

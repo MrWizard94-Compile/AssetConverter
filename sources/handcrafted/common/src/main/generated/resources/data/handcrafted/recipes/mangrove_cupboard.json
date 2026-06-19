@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:mangrove_planks"
+    },
+    "/": {
+      "tag": "handcrafted:chests"
+    }
+  },
+  "pattern": [
+    "###",
+    "#/#",
+    "###"
+  ],
+  "result": {
+    "count": 3,
+    "item": "handcrafted:mangrove_cupboard"
+  },
+  "show_notification": true
+}

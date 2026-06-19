@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:bamboo_planks"
+    },
+    "/": {
+      "tag": "handcrafted:chests"
+    },
+    "@": {
+      "item": "minecraft:calcite"
+    }
+  },
+  "pattern": [
+    "@@@",
+    "#/#"
+  ],
+  "result": {
+    "count": 3,
+    "item": "handcrafted:bamboo_counter"
+  },
+  "show_notification": true
+}

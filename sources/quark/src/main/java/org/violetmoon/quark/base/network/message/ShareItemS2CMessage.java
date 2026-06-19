@@ -1,0 +1,48 @@
+package org.violetmoon.quark.base.network.message;
+
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.violetmoon.quark.catnip.net.base.ClientboundPacketPayload;
+import net.minecraft.client.GuiMessageTag;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
+import org.violetmoon.quark.base.network.QuarkNetwork;
+import org.violetmoon.quark.content.management.module.ItemSharingModule;
+
+import java.util.UUID;
+
+public record ShareItemS2CMessage(UUID senderUuid, Component senderName, ItemStack stack) implements ClientboundPacketPayload {
+	public static final StreamCodec<RegistryFriendlyByteBuf, ShareItemS2CMessage> STREAM_CODEC = StreamCodec.composite(
+		UUIDUtil.STREAM_CODEC, ShareItemS2CMessage::senderUuid,
+		ComponentSerialization.STREAM_CODEC, ShareItemS2CMessage::senderName,
+	    ItemStack.STREAM_CODEC, ShareItemS2CMessage::stack,
+	    ShareItemS2CMessage::new
+	);
+
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void handle(LocalPlayer player) {
+		if (Minecraft.getInstance().isBlocked(senderUuid))
+			return;
+        Component shared = Component.translatable("chat.type.text", senderName, ItemSharingModule.createStackComponent(stack));
+        Component narrated = Component.translatable("chat.type.text.narrate", senderName, ItemSharingModule.createStackComponent(stack)); //Todo: Maybe note in the narration that this is an item being shared?
+
+		Minecraft.getInstance().gui.getChat().addMessage(
+				shared,
+				null,
+				new GuiMessageTag(0xDEB483, null, null, "Quark shared item")
+		);
+        Minecraft.getInstance().getNarrator().sayChat(narrated);
+	}
+
+	@Override
+	public PacketTypeProvider getTypeProvider() {
+		return QuarkNetwork.SHARE_ITEM_S2C_MESSAGE;
+	}
+}

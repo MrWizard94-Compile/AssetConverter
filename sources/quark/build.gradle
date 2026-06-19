@@ -1,0 +1,394 @@
+buildscript {
+    repositories {
+        maven {
+            url = "https://maven.minecraftforge.net"
+        }
+    }
+}
+
+plugins {
+    id 'java-library'
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'pmd'
+    id 'net.neoforged.moddev' version '2.0.120'
+}
+
+ext.configFile = file('build.properties')
+ext.depsFile = file('dependencies.properties')
+ext.config = parseConfig(configFile)
+ext.deps = parseConfig(depsFile)
+
+version = "${config.version}-${config.build_number}"
+group = "org.violetmoon.${config.mod_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+base.archivesName = config.mod_name
+
+compileJava.options.compilerArgs << "-Xlint:all,-classfile,-processing,-deprecation"
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+
+if (System.getenv().RELEASE_MODE != "true") {
+    version += '-SNAPSHOT'
+}
+
+sourceSets {
+    main {
+        resources { srcDir 'src/generated/resources' }
+    }
+    
+    //Weird hack for the clientBonus and serverBonus run configurations; MDG only allows
+    //the runtime classpath of one source-set to populate the runtime classpath of a runconfig AFAIK.
+    bonus { runtimeClasspath += main.runtimeClasspath }
+}
+
+
+// Used in order to keep Zeta up to date.
+configurations.configureEach {
+    resolutionStrategy.cacheChangingModulesFor 1, 'hours'
+}
+
+neoForge {
+    version = deps.neoforge_version
+    
+    //our accesstransformer.cfg is in the default location (meta-inf/accesstransformer.cfg)
+    //so its path doesn't need to be manually configured in mdg
+    validateAccessTransformers = true
+    
+    mods {
+        quark {
+            sourceSet(sourceSets.main)
+        }
+    }
+    
+    runs {
+        configureEach {
+            //tag the new run configs just so we remember to click them instead of the old NeoGradle run configs
+            ideName = ideName.get() + " (MDG)"
+            
+            systemProperties.putAll ([
+              "mixin.debug.export": "true",
+              "forge.logging.markers": ["REGISTRIES"].join(","), //SCAN / REGISTRIES / REGISTRYDUMP
+              "forge.logging.console.level": org.slf4j.event.Level.DEBUG.toString(),
+              "quark.auditMixins": "true",
+            ])
+            
+            jvmArguments.addAll(
+              "-XX:+IgnoreUnrecognizedVMOptions", //not all VMs support this next flag:
+              "-XX:+AllowEnhancedClassRedefinition",
+            )
+        }
+        
+        client {
+            client()
+            gameDirectory = project.file("run")
+        }
+        
+        clientBonus {
+            client()
+            gameDirectory = project.file("run")
+            sourceSet = sourceSets.bonus
+        }
+        
+        server {
+            server()
+            gameDirectory = project.file("runServer")
+            programArgument("--nogui")
+        }
+        
+        serverBonus {
+            server()
+            gameDirectory = project.file("runServer")
+            programArgument("--nogui")
+            sourceSet = sourceSets.bonus
+        }
+        
+        data {
+            data()
+            gameDirectory = project.file('runs/data')
+            programArguments.addAll ([
+              '--mod', 'quark',
+              '--all',
+              '--output', file('src/generated/resources').getAbsolutePath(),
+              '--existing', file('src/main/resources').getAbsolutePath()
+            ])
+        }
+    }
+    
+    parchment {
+        minecraftVersion = "1.21.1"
+        mappingsVersion = "2024.11.17"
+    }
+}
+
+repositories {
+    mavenLocal()
+    
+    flatDir {
+        dirs 'localJars'
+    }
+    
+    //Mainly for pmd
+    mavenCentral()
+    
+    maven {
+        name = "blamejared"
+        url = "https://maven.blamejared.com"
+        content {
+            includeGroup("org.violetmoon.zeta")
+            includeGroup("mezz.jei")
+            includeGroup("noobanidus.mods.lootr")
+            includeGroup("blusunrize.immersiveengineering")
+        }
+    }
+    
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com"
+        content {
+            includeModule("com.terraformersmc", "biolith-neoforge")
+            includeModule("dev.emi", "emi-neoforge")
+        }
+    }
+    
+    maven {
+        name = "TheIllusiveC4"
+        url = "https://maven.theillusivec4.top/"
+        content {
+            includeGroup("top.theillusivec4.curios")
+        }
+    }
+    
+    maven {
+        name = "Create"
+        url = "https://maven.createmod.net"
+        content {
+            includeGroup("net.createmod.ponder")
+            includeGroup("dev.engine-room.flywheel")
+        }
+    }
+
+    maven {
+        url "https://maven.squiddev.cc"
+        content {
+            includeGroup("cc.tweaked")
+        }
+    }
+    
+    maven {
+        name = "cursemaven"
+        url = "https://www.cursemaven.com"
+        content {
+            includeGroup("curse.maven")
+        }
+    }
+    
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup("maven.modrinth")
+        }
+    }
+    
+    maven {
+        name = "Jitpack"
+        url = "https://jitpack.io"
+        content {
+            includeGroupByRegex("com\\.github\\..*")
+        }
+    }
+    
+    //K4Unl's mirror of other modding-related mavens, in case they are down.
+    //Should be checked last; should **not** be the primary source for any artifact.
+    maven {
+        name = "ModMaven"
+        url = "https://modmaven.dev/"
+        content {
+            includeGroup("org.violetmoon.zeta")
+            includeGroup("mezz.jei")
+//            includeModule("com.terraformersmc", "biolith-neoforge") //Not mirrored
+            includeModule("net.fabricmc", "sponge-mixin")
+            includeGroup("top.theillusivec4.curios")
+//            includeGroup("net.createmod.ponder") //Not mirrored
+        }
+    }
+}
+
+dependencies {
+    //Zeta
+    implementation("org.violetmoon.zeta:Zeta:${deps.zeta_version}-SNAPSHOT") {
+        setChanging(true)
+    }
+    
+    //Ponder - TODO, I think the plan is to jarJar this
+//    implementation("net.createmod.ponder:Ponder-NeoForge-${config.mc_version}:${deps.ponder_version}") { transitive = false }
+//    runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${config.mc_version}:${deps.flywheel_version}")
+    
+    //JEI
+    compileOnly("mezz.jei:jei-${config.mc_version}-neoforge-api:${deps.jei_version}")
+    runtimeOnly("mezz.jei:jei-${config.mc_version}-neoforge:${deps.jei_version}")
+    
+    //Curios
+    runtimeOnly("top.theillusivec4.curios:curios-neoforge:${deps.curios_version}")
+    compileOnly("top.theillusivec4.curios:curios-neoforge:${deps.curios_version}:api")
+    
+    //Biolith
+    implementation(jarJar("com.terraformersmc:biolith-neoforge:${deps.biolith_version}"))
+    
+    //Flan - TODO, integration disabled
+    implementation("curse.maven:flan-forge-493246:${deps.flan_curse_file_id}")
+    
+    //Lootr
+    implementation("noobanidus.mods.lootr:lootr-neoforge:${deps.lootr_version}")
+
+    // Spark, which while kinda an extra in a sense, I feel is vital enough to development and testing where it should be in.
+    runtimeOnly("maven.modrinth:spark:${deps.spark_modrinth_file_id}")
+
+    //Extra dev-env toys - only present in ClientBonus and ServerBonus run configs
+    bonusRuntimeOnly("curse.maven:just-enough-resources-jer-240630:${deps.just_enough_resources_curse_file_id}")
+    bonusRuntimeOnly("curse.maven:nofog-296468:${deps.nofog_curse_file_id}") //PLEASE WORK
+    bonusRuntimeOnly("dev.emi:emi-neoforge:${deps.emi_version}")
+    bonusRuntimeOnly("maven.modrinth:blueprint:${deps.blueprint_modrinth_file_id}") //for Woodworks
+    bonusRuntimeOnly("maven.modrinth:woodworks:${deps.woodworks_modrinth_file_id}")
+    bonusRuntimeOnly("curse.maven:farmers-delight-398521:${deps.farmers_delight_curse_file_id}")
+    bonusRuntimeOnly("cc.tweaked:cc-tweaked-${config.mc_version}-forge:${deps.cct_version}") // Tests for a specific RegistryAccess issue basically.
+    bonusRuntimeOnly("blusunrize.immersiveengineering:ImmersiveEngineering:${deps.ie_version}")
+}
+
+pmd {
+    toolVersion '6.42.0'
+    incrementalAnalysis = true
+    threads = Runtime.getRuntime().availableProcessors()
+    ruleSets = []
+    ruleSetFiles = files("spotless/pmd-ruleset.xml")
+    //consoleOutput = true //TODO: Extremely spammy because the damn thing hasnt been running for weeks
+}
+
+tasks.register("checkSyntax") {
+    group "verification"
+    dependsOn tasks.pmdMain
+}
+
+processResources {
+    // copy everything excluding psd files
+    from(sourceSets.main.resources.srcDirs) {
+        exclude '**/psd/**'
+        duplicatesStrategy 'include'
+    }
+    
+    // Formats 1.0-13.58 to 1.0-13 (removes the build number)
+    String zetaVer = deps.zeta_version.substring(0, deps.zeta_version.lastIndexOf('.'))
+    String curiosVer = deps.curios_version;
+
+    Map<String, ?> properties = Map.of(
+            "zeta_ver", zetaVer,
+            "curios_ver", curiosVer,
+            // Replaces FML's magic file.jarVersion string with the correct version at build time.
+            "file", [jarVersion: project.version]
+    )
+
+    properties.forEach((k, v) -> inputs.property(k, v))
+
+    filesMatching("META-INF/neoforge.mods.toml") {
+        expand properties
+    }
+}
+
+def parseConfig(File config) {
+    config.withReader {
+        def prop = new Properties()
+        prop.load(it)
+        return (new ConfigSlurper().parse(prop))
+    }
+}
+
+jar {
+     manifest {
+        attributes([
+            "Specification-Title": "${config.mod_id}",
+            "Specification-Vendor": "vazkii",
+            "Specification-Version": "1", // We are version 1 of ourselves
+            "Implementation-Title": "${config.mod_id}",
+            "Implementation-Version": "${version}",
+            "Implementation-Vendor" :"vazkii",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "MixinConfigs": "quark.mixins.json,quark_integrations.mixins.json"
+        ])
+    }
+
+    exclude "**/*.bat"
+    exclude "**/*.psd"
+    exclude "**/*.exe"
+    exclude "**/unused"
+    exclude "**/genscripts"
+    exclude ".cache"
+}
+
+//Omit all jar-in-jar dependencies for slimmer maven publishing
+tasks.register("pureJar", Jar) {
+    dependsOn tasks.jar
+    
+    archiveClassifier = "pure"
+    tasks.jar.outputs.files.forEach { j -> it.from(zipTree(j)) }
+    exclude "META-INF/jarjar/**"
+}
+
+tasks.register("sourcesJar", Jar) {
+    archiveClassifier = "sources"
+    from sourceSets.main.allJava
+}
+
+artifacts {
+    archives jar
+    archives pureJar
+    archives sourcesJar
+}
+
+publish.dependsOn(tasks.named("assemble"))
+publish.mustRunAfter(tasks.named("build"))
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId project.archivesBaseName
+            version project.version
+            from components.java
+
+            // Never publish any dependencies to maven
+            pom.withXml {
+                asNode().dependencies.dependency.each { dep ->
+                    println 'Surpressing artifact ' + dep.artifactId.last().value().last() + ' from maven dependencies.'
+                    assert dep.parent().remove(dep)
+                }
+            }
+            
+            artifact pureJar //doesn't contain jar-in-jars
+            artifact sourcesJar
+        }
+    }
+
+    repositories {
+        maven {
+            url "file://" + System.getenv("local_maven")
+        }
+
+    }
+}
+
+// Disables Gradle's custom module metadata from being published to maven. The
+// metadata includes mapped dependencies which are not reasonably consumable by
+// other mod developers.
+tasks.withType(GenerateModuleMetadata).configureEach {
+    enabled = false
+}
+
+allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile).configureEach {
+            options.compilerArgs << "-Xmaxerrs" << "5000"
+        }
+    }
+}

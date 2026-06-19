@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:dark_oak_planks"
+    },
+    "$": {
+      "tag": "minecraft:wool"
+    },
+    "/": {
+      "tag": "handcrafted:cushions"
+    },
+    "@": {
+      "tag": "handcrafted:sheets"
+    }
+  },
+  "pattern": [
+    " /@",
+    "#$$",
+    "###"
+  ],
+  "result": {
+    "item": "handcrafted:dark_oak_fancy_bed"
+  },
+  "show_notification": true
+}
