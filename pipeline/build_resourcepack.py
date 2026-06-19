@@ -4,7 +4,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config.paths import (
     DEPLOY_DIR,
+    DEPLOY_ENABLED,
     OUTPUT_ASSETS_DIR,
+    PACK_DESCRIPTION,
     PACK_FORMAT,
     PACK_NAME,
     PROJECT_ROOT,
@@ -71,7 +73,7 @@ def build_pack():
     pack_mcmeta = {
         "pack": {
             "pack_format": PACK_FORMAT,
-            "description": "32x upscaled Base-Wars mod textures",
+            "description": PACK_DESCRIPTION,
         }
     }
 
@@ -99,6 +101,26 @@ def deploy_pack(pack_root):
 
 
 if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Build Omni32 resource pack")
+    parser.add_argument(
+        "--deploy",
+        action="store_true",
+        help="Copy pack to ASSETCONVERTER_INSTANCE resourcepacks/",
+    )
+    parser.add_argument(
+        "--no-deploy",
+        action="store_true",
+        help="Skip instance deploy (default unless OMNI32_DEPLOY=1)",
+    )
+    args = parser.parse_args()
+
     root, total = build_pack()
-    deploy_pack(root)
-    print(f"[*] Done. {total} textures ready in-game.")
+    should_deploy = args.deploy or (DEPLOY_ENABLED and not args.no_deploy)
+    if should_deploy:
+        deploy_pack(root)
+        print(f"[*] Done. {total} textures deployed in-game.")
+    else:
+        print(f"[*] Done. {total} textures in {root}")
+        print("[*] Deploy skipped (set OMNI32_DEPLOY=1 or pass --deploy to copy to instance)")

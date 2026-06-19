@@ -4,10 +4,10 @@
 
 ## Upscaled namespaces (`output/assets/`)
 
-**86** namespaces already processed:
+**103** namespaces already processed:
 
 ```
-actuallyadditions, ae2, aether, biomeswevegone, railcraft, eternal_starlight, alexscaves, another_furniture, apotheosis, aquaculture, ars_nouveau, artifacts, bellsandwhistles, biomesoplenty, botania, brewinandchewin, chipped, comforts, cookingforblockheads, copycats, create, create_central_kitchen, create_connected, create_enchantment_industry, create_hypertube, create_jetpack, create_new_age, create_sa, createaddition, createbigcannons, createdeco, createendertransmission, createoreexcavation, deeperdarker, draconicevolution, enderio, evilcraft, farmersdelight, fluxnetworks, forbidden_arcanus, handcrafted, iceandfire, immersiveengineering, industrialforegoing, integrateddynamics, interiors, ironjetpacks, irons_spellbooks, jei, mcwbridges, mcwdoors, mcwfences, mcwlights, mcwroofs, mcwwindows, mekanism, mekanismgenerators, mekanismtools, minecolonies, mowziesmobs, mysticalagradditions, mysticalagriculture, occultism, pneumaticcraft, powah, productivebees, quark, railways, rechiseled, refinedstorage, reliquary, securitycraft, sliceanddice, sophisticatedbackpacks, sophisticatedstorage, storagedrawers, supplementaries, tconstruct, thermal, trackwork, trashcans, twilightforest, valkyrienskies, vs_clockwork, waystones, xnet
+actuallyadditions, ae2, aether, alexscaves, another_furniture, apotheosis, aquaculture, ars_nouveau, arseng, artifacts, bellsandwhistles, bigreactors, biomesoplenty, biomeswevegone, botania, brewinandchewin, chipped, comforts, cookingforblockheads, copycats, create, create_central_kitchen, create_connected, create_enchantment_industry, create_hypertube, create_jetpack, create_new_age, create_sa, createaddition, createbigcannons, createdeco, createendertransmission, createoreexcavation, creeperoverhaul, deeperdarker, draconicevolution, enderio, eternal_starlight, evilcraft, extrastorage, farmersdelight, fluxnetworks, forbidden_arcanus, functionalstorage, handcrafted, iceandfire, immersiveengineering, industrialforegoing, integrateddynamics, integratedterminals, interiors, ironfurnaces, ironjetpacks, irons_spellbooks, jei, mcwbridges, mcwdoors, mcwfences, mcwlights, mcwroofs, mcwwindows, mekanism, mekanismgenerators, mekanismtools, minecolonies, modern_industrialization, modularrouters, mowziesmobs, mysticalagradditions, mysticalagriculture, occultism, pneumaticcraft, powah, productivebees, productivetrees, quark, railcraft, railways, rechiseled, refinedstorage, relics, reliquary, rftoolsbase, rftoolsstorage, rftoolsutility, securitycraft, sliceanddice, sophisticatedbackpacks, sophisticatedstorage, storagedelight, storagedrawers, supplementaries, tconstruct, thermal, trackwork, trashcans, twilightforest, undergarden, valkyrienskies, vs_clockwork, waystones, wirelesschargers, xnet
 ```
 
 ## Summary
@@ -15,10 +15,10 @@ actuallyadditions, ae2, aether, biomeswevegone, railcraft, eternal_starlight, al
 | Metric | Value |
 |--------|------:|
 | ATM10 mods in research JSON | 477 |
-| Already upscaled (namespace match) | 86 |
+| Already upscaled (namespace match) | 103 |
 | ATM10 mods matched to upscaled set | 60 |
 | Remaining candidates (public GitHub/GitLab) | 170 |
-| `MOD_REPOS` entries | 98 |
+| `MOD_REPOS` entries | 104 |
 
 ## Top 15 — Next mods to upscale
 
@@ -30,18 +30,18 @@ Excludes libraries, QoL-only mods, and namespaces already present in `output/ass
 | 1 | `oh_the_biomes_weve_gone` **DONE** | https://github.com/Potion-Studios/Oh-The-Biomes-Weve-Gone.git | `main` | 1114 | **DONE** — namespace `biomeswevegone`, 1114 PNG upscaled |
 | 2 | `railcraft_reborn` **DONE** | https://github.com/railcraft-reborn/railcraft.git | `main` | 1084 | **DONE** — namespace `railcraft`, 1084 PNG upscaled |
 | 3 | `eternal_starlight` **DONE** | https://github.com/LeoMinecraftModding/eternal-starlight.git | `main` | 750 | **DONE** — namespace `eternal_starlight`, 1451 PNG upscaled |
-| 4 | `the_undergarden` | https://github.com/quek04/The-Undergarden.git | `main` | 680 | 48M CF; full dimension with mobs, gear, and biomes |
-| 5 | `productivetrees` | https://github.com/JDKDigital/productivetrees.git | `main` | 520 | 20M CF; pairs with Productive Bees already upscaled |
-| 6 | `extreme_reactors` | https://github.com/ZeroNoRyouki/ExtremeReactors2.git | `main` | 420 | Big Reactors successor; 94M CF, reactor GUI + multiblock parts |
-| 7 | `relics_mod` | https://github.com/SSKirillSS/relics.git | `main` | 280 | 57M CF; popular equipment/trinket mod (repo branch may need 1.20.1 tag) |
-| 8 | `modern_industrialization` | https://github.com/AztechMC/Modern-Industrialization.git | `main` | 310 | 20M+ CF downloads; storage, technology, utility; ~310 PNG |
-| 9 | `storage_delight` | https://github.com/axperty/storagedelight.git | `main` | 200 | 17M CF; Farmer's Delight storage addon |
-| 10 | `iron_furnaces` | https://github.com/Qelifern/IronFurnaces.git | `main` | 180 | 96M CF; tiered furnace blocks and GUIs |
-| 11 | `rftools_utility` | https://github.com/McJtyMods/RFToolsUtility.git | `main` | 180 | McJty suite; machines + screens in ATM10 |
-| 12 | `integrated_terminals` | https://github.com/CyclopsMC/IntegratedTerminals.git | `main` | 110 | 57M CF; CyclopsMC AE-style terminals addon |
-| 13 | `rftools_base` | https://github.com/McJtyMods/RFToolsBase.git | `main` | 120 | 50M+ CF downloads; technology, transportation; ~120 PNG |
-| 14 | `reliquified_artifacts` | https://github.com/Octo-Studios/rar-compat.git | `main` | 110 | 24M CF; Artifacts compat layer, ATM10 QoL gear |
-| 15 | `extrastorage` | https://github.com/Edivad99/ExtraStorage.git | `main` | 80 | 49M CF; Refined Storage expansion disks/parts |
+| 4 | `the_undergarden` **DONE** | https://github.com/quek04/The-Undergarden.git | `main` | 680 | **DONE** — namespace `undergarden`, 546 PNG upscaled |
+| 5 | `productivetrees` **DONE** | https://github.com/JDKDigital/productivetrees.git | `main` | 520 | **DONE** — namespace `productivetrees`, 3392 PNG upscaled |
+| 6 | `extreme_reactors` **DONE** | https://github.com/ZeroNoRyouki/ExtremeReactors2.git | `main` | 420 | **DONE** — namespace `bigreactors`, 293 PNG upscaled |
+| 7 | `relics_mod` **DONE** | https://github.com/SSKirillSS/relics.git | `main` | 280 | **DONE** — namespace `relics`, 348 PNG upscaled |
+| 8 | `modern_industrialization` **DONE** | https://github.com/AztechMC/Modern-Industrialization.git | `main` | 310 | **DONE** — namespace `modern_industrialization`, 1094 PNG upscaled |
+| 9 | `storage_delight` **DONE** | https://github.com/axperty/storagedelight.git | `main` | 200 | **DONE** — namespace `storagedelight`, 436 PNG upscaled |
+| 10 | `iron_furnaces` **DONE** | https://github.com/Qelifern/IronFurnaces.git | `main` | 180 | **DONE** — namespace `ironfurnaces`, 168 PNG upscaled |
+| 11 | `rftools_utility` **DONE** | https://github.com/McJtyMods/RFToolsUtility.git | `main` | 139 | **DONE** — namespace `rftoolsutility`, 139 PNG upscaled ||
+| 12 | `integrated_terminals` **DONE** | https://github.com/CyclopsMC/IntegratedTerminals.git | `main` | 11 | **DONE** — namespace `integratedterminals`, 11 PNG upscaled ||
+| 13 | `rftools_base` **DONE** | https://github.com/McJtyMods/RFToolsBase.git | `main` | 29 | **DONE** — namespace `rftoolsbase`, 29 PNG upscaled ||
+| 14 | `reliquified_artifacts` **DONE** | https://github.com/Octo-Studios/rar-compat.git | `main` | 348 | **DONE** — namespace `relics`, 348 PNG upscaled ||
+| 15 | `extrastorage` **DONE** | https://github.com/Edivad99/ExtraStorage.git | `main` | 45 | **DONE** — namespace `extrastorage`, 45 PNG upscaled ||
 
 ## Runners-up (#16–25)
 
@@ -73,13 +73,13 @@ These top candidates are **not** yet in `MOD_REPOS`:
 - ~~`oh_the_biomes_weve_gone`~~ **DONE** (`biomeswevegone`, 1114 PNG)
 - `railcraft_reborn` → `https://github.com/railcraft-reborn/railcraft.git` (`main`)
 - ~~`eternal_starlight`~~ **DONE** (`eternal_starlight`, 1451 PNG)
-- `the_undergarden` → `https://github.com/quek04/The-Undergarden.git` (`main`)
-- `productivetrees` → `https://github.com/JDKDigital/productivetrees.git` (`main`)
-- `extreme_reactors` → `https://github.com/ZeroNoRyouki/ExtremeReactors2.git` (`main`)
-- `relics_mod` → `https://github.com/SSKirillSS/relics.git` (`main`)
+- ~~`the_undergarden`~~ **DONE** (`undergarden`, 546 PNG)
+- ~~`productivetrees`~~ **DONE** (`productivetrees`, 3392 PNG)
+- ~~`extreme_reactors`~~ **DONE** (`bigreactors`, 293 PNG)
+- ~~`relics_mod`~~ **DONE** (`relics`, 348 PNG)
 - `modern_industrialization` → `https://github.com/AztechMC/Modern-Industrialization.git` (`main`)
-- `storage_delight` → `https://github.com/axperty/storagedelight.git` (`main`)
-- `iron_furnaces` → `https://github.com/Qelifern/IronFurnaces.git` (`main`)
+- ~~`storage_delight`~~ **DONE** (`storagedelight`, 436 PNG)
+- ~~`iron_furnaces`~~ **DONE** (`ironfurnaces`, 168 PNG)
 - `rftools_utility` → `https://github.com/McJtyMods/RFToolsUtility.git` (`main`)
 - `integrated_terminals` → `https://github.com/CyclopsMC/IntegratedTerminals.git` (`main`)
 - `rftools_base` → `https://github.com/McJtyMods/RFToolsBase.git` (`main`)

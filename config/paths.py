@@ -14,11 +14,20 @@ DATA_DIR = os.path.join(PROJECT_ROOT, "data")
 CACHE_DIR = os.path.join(PROJECT_ROOT, "local", "cache")
 JARS_DIR = os.path.join(PROJECT_ROOT, "local", "jars")
 
-PACK_NAME = "Base-Wars_32x"
-PACK_FORMAT = 15  # Minecraft 1.20.1
+# Omni32 — standalone 32× resource pack product line
+PACK_NAME = os.environ.get("OMNI32_PACK_NAME", "Omni32")
+PACK_FORMAT = int(os.environ.get("OMNI32_PACK_FORMAT", "15"))  # Minecraft 1.20.1
+PACK_DESCRIPTION = os.environ.get(
+    "OMNI32_PACK_DESCRIPTION",
+    "Omni32 — autonomous 32× upscaled mod textures",
+)
 
-# CurseForge instance — override with ASSETCONVERTER_INSTANCE env
+# Optional instance deploy (off by default — Omni32 is standalone)
+DEPLOY_ENABLED = os.environ.get("OMNI32_DEPLOY", "").lower() in ("1", "true", "yes")
 DEFAULT_INSTANCE = r"C:\Users\Bulkl\curseforge\minecraft\Instances\Base-Wars_Stripped"
 INSTANCE_DIR = os.environ.get("ASSETCONVERTER_INSTANCE", DEFAULT_INSTANCE)
 MODS_DIR = os.path.join(INSTANCE_DIR, "mods")
 DEPLOY_DIR = os.path.join(INSTANCE_DIR, "resourcepacks")
+
+# Future: multiple Omni32 pack variants (e.g. Omni32-Tech, Omni32-Decor)
+PACK_VARIANTS_DIR = os.path.join(OUTPUT_DIR, "packs")

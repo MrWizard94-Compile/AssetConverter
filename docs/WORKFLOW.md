@@ -1,16 +1,44 @@
 # Workflow
 
-Step-by-step guide for pulling mod sources, upscaling textures, building the resource pack, and deploying to the Base-Wars CurseForge instance.
+Step-by-step guide for the Omni32 asset engine: autonomous batch processing, manual per-step control, git flow, and mod queue maintenance.
 
 ## Principles (SOUL.md)
 
 - **Sources live in the repo** under `sources/` — never at the project root or outside git.
 - **Pull commits immediately** — `ac.py pull` runs `git_commit_sources.py` after every clone/extract.
-- **Upscale output is committed separately** — `output/assets/<namespace>/` is staged and committed by hand after each mod.
-- **Local-only paths** — `local/cache`, `local/jars`, and `tools/` stay off git; only `sources/` and `output/assets/` are versioned artifacts.
+- **Upscale commits by default** — `ac.py upscale` and the engine call `git_commit_sources.py` unless `--no-commit` is passed.
+- **Build does not commit** — `output/resourcepack/Omni32/` is a local build artifact; deploy is optional and local.
+- **Local-only paths** — `local/cache`, `local/jars`, and `tools/` stay off git; `sources/` and `output/assets/` are versioned artifacts.
 - **Registry is the source of truth** — every pullable mod must exist in `config/registry.py` before `ac.py pull` will succeed.
 
 ## Pipeline overview
+
+### Autonomous flow (recommended)
+
+```
+docs/MOD_QUEUE.md          pipeline/queue.py (QUEUE_PRIORITY)
+        │                           │
+        └──────── queue pick ───────┘
+                    │
+                    ▼
+         python ac.py next [--build]
+         python ac.py run <mod> [--build]
+                    │
+         pipeline/engine.py
+                    │
+    ┌───────────────┼───────────────┐
+    ▼               ▼               ▼
+ pull           upscale          build (optional)
+    │               │               │
+sources/<mod>/  output/assets/   output/resourcepack/Omni32/
+    │          <namespace>/              │
+    └─ git commit ─┴─ git commit ───────┘
+                              │
+                              ▼ (optional)
+              <instance>/resourcepacks/Omni32/
+```
+
+### Manual flow
 
 ```
 docs/MOD_QUEUE.md          config/registry.py
@@ -25,26 +53,83 @@ docs/MOD_QUEUE.md          config/registry.py
                     ▼
          python ac.py upscale <mod>
                     │
-         output/assets/<mod>/  ──git commit──►  repo
+         output/assets/<namespace>/  ──git commit──►  repo
                     │
                     ▼
-         python ac.py build
+         python ac.py build [--deploy]
                     │
-         output/resourcepack/Base-Wars_32x/
+         output/resourcepack/Omni32/
                     │
-                    ▼
-         <instance>/resourcepacks/Base-Wars_32x/   (in-game)
+                    ▼ (optional)
+         <instance>/resourcepacks/Omni32/
+```
+
+Product context: `docs/OMNI32.md`. Engine internals: `references/omni32-engine.md`.
+
+---
+
+## Autonomous workflow
+
+### Inspect the queue
+
+```powershell
+python ac.py queue
+```
+
+Shows:
+
+- **Done** — mods in `QUEUE_PRIORITY` with PNGs in `output/assets/<namespace>/textures/`
+- **Pending** — `ready` (registered, not complete) or `not_in_registry`
+- **Next** — first pending mod that will be processed by `ac.py next`
+
+### Process one or more mods
+
+```powershell
+# Next pending mod: pull → upscale → commit
+python ac.py next
+
+# Process three mods in priority order
+python ac.py next --count 3
+
+# Rebuild Omni32 after each mod
+python ac.py next --count 3 --build
+
+# Single mod by registry mod_id (skip pull if sources already present)
+python ac.py run relics_mod
+python ac.py run relics_mod --no-pull --build
+```
+
+### Engine flags
+
+| Flag | Effect |
+|------|--------|
+| `--method xbrz\|hq2x\|waifu2x` | Upscale algorithm (default: xbrz) |
+| `--no-commit` | Skip `git_commit_sources.py` after pull and upscale |
+| `--no-pull` | Skip pull step (`run` only) |
+| `--build` | Run `build_resourcepack.py` after upscale |
+
+When `--build` is used, deploy follows `OMNI32_DEPLOY` unless the engine sees `OMNI32_DEPLOY=0/false/no` (adds `--no-deploy` to build).
+
+### Typical overnight batch
+
+```powershell
+$env:OMNI32_DEPLOY = "1"    # optional: copy pack to instance after each build
+python ac.py next --count 10 --build
 ```
 
 ---
 
-## Step 1 — Pick a mod from the queue
+## Manual workflow
+
+Use manual steps when debugging registry entries, comparing upscale methods, or handling edge-case mods.
+
+### Step 1 — Pick a mod from the queue
 
 Open `docs/MOD_QUEUE.md`. The **Top 15** table lists ATM10 mods ranked by estimated PNG count, CurseForge popularity, and content weight.
 
 Before pulling, confirm:
 
-1. The `mod_id` is not already listed under **Upscaled namespaces** in `MOD_QUEUE.md`.
+1. The namespace is not already listed under **Upscaled namespaces** in `MOD_QUEUE.md`.
 2. The mod has a public repo (or is a known JAR-only / Modrinth entry).
 
 If the mod is **not** in `config/registry.py` `MOD_REPOS`, add it first (see Step 2).
@@ -57,30 +142,34 @@ python ac.py status
 
 This re-runs `scripts/_atm10_analyze.py` and prints gaps between ATM10, `output/assets/`, and `MOD_REPOS`.
 
----
-
-## Step 2 — Register the mod (new mods only)
+### Step 2 — Register the mod (new mods only)
 
 Edit `config/registry.py`:
 
 ```python
 MOD_REPOS = {
     # ...
-    "oh_the_biomes_weve_gone": "https://github.com/Potion-Studios/Oh-The-Biomes-Weve-Gone.git",
+    "relics_mod": "https://github.com/SSKirillSS/relics.git",
 }
 
 CLONE_BRANCHES = {
     # only if not default branch
-    "oh_the_biomes_weve_gone": "main",
+    "relics_mod": "main",
+}
+
+MOD_NAMESPACES = {
+    # when asset namespace differs from mod_id
+    "relics_mod": "relics",
 }
 ```
 
-Registry sections and when to use them:
+Registry sections:
 
 | Section | Use case |
 |---------|----------|
 | `MOD_REPOS` | Git clone URL for every pullable mod |
 | `CLONE_BRANCHES` | Non-default branch (target **1.20.1 / 1.20.x Forge**) |
+| `MOD_NAMESPACES` | mod_id → Minecraft asset namespace when they differ |
 | `JAR_ONLY_MODS` | No public source; extract textures from a named JAR |
 | `JAR_FALLBACK_MODS` | Repo exists but JAR has more textures — pick richer source |
 | `MODRINTH_JAR_MODS` | Closed-source Macaw's mods — download from Modrinth CDN |
@@ -88,86 +177,48 @@ Registry sections and when to use them:
 
 Jar paths resolve from `local/jars/` first, then the instance `mods/` folder (`config/paths.py` → `MODS_DIR`).
 
-Optional preflight after registration:
+Optional preflight:
 
 ```powershell
-python pipeline/audit_mod.py <mod_id>
+python pipeline/audit_mod.py relics_mod
 ```
 
-Reports PNG counts, size distribution, and predicted upscale strategy per `texture_policy.py`.
-
----
-
-## Step 3 — Pull sources
+### Step 3 — Pull sources
 
 ```powershell
-python ac.py pull <mod_id>
+python ac.py pull relics_mod
 
-# Examples
-python ac.py pull oh_the_biomes_weve_gone
-python ac.py pull create farmersdelight
-python ac.py pull thermal          # pulls 4 CoFH repos, reports merged texture count
+# Multiple mods
+python ac.py pull relics_mod modern_industrialization storage_delight
 ```
 
-### What `pull` does
+**What `pull` does:**
 
-1. **`pipeline/pull_mod_sources.py`**
-   - Looks up `mod_id` in `config/registry.py` `MOD_REPOS`.
-   - Shallow-clones (`git clone --depth 1`) into `sources/<mod>/` using `CLONE_BRANCHES` when set.
-   - Skips re-clone if textures already exist at the expected path.
-   - For `MODRINTH_JAR_MODS`, downloads the JAR to `local/jars/` and extracts `assets/<mod>/textures/` into a standard Gradle layout under `sources/<mod>/src/main/resources/`.
-   - For monorepo namespaces (`mekanismgenerators`, `mekanismtools`), clones the host repo (`mekanism`) once.
+1. `pipeline/pull_mod_sources.py` — shallow-clone into `sources/<mod>/`, or JAR extract for closed-source entries.
+2. `scripts/git_commit_sources.py` — `git add sources/<mod>/` and commit with message `pull: <mod>`.
 
-2. **`scripts/git_commit_sources.py`**
-   - `git add sources/<mod>/` (or host folder for monorepos)
-   - `git commit -m "pull: <mod_id>"`
-   - Prints `[=] No changes to commit` if the tree is unchanged.
-
-### Expected source layout
-
-Textures are discovered under paths matching:
-
-```
-sources/<repo>/.../assets/<namespace>/textures/**/*.png
-```
-
-Multi-root mods merge at upscale time:
-
-| Namespace | Source roots |
-|-----------|--------------|
-| `thermal` | `thermal_core`, `thermal_foundation`, `thermal_expansion`, `thermal_innovation` |
-| `mekanismgenerators` / `mekanismtools` | `sources/mekanism/` (monorepo) |
-| `enderio` | Multiple `assets/enderio/textures` trees inside one clone |
-
-### Pull failure checklist
-
-- `mod_id` missing from `MOD_REPOS` → add to `config/registry.py`.
-- Clone succeeded but 0 PNGs → wrong branch; update `CLONE_BRANCHES` or try `MODRINTH_JAR_MODS` / `JAR_FALLBACK_MODS`.
-- Closed-source mod → add JAR name to `JAR_ONLY_MODS` and place JAR in instance `mods/` or `local/jars/`.
-
----
-
-## Step 4 — Upscale
+### Step 4 — Upscale
 
 ```powershell
-python ac.py upscale <mod_id>
-
-# Default: xBRZ 2×
-python ac.py upscale oh_the_biomes_weve_gone
+python ac.py upscale relics_mod
 
 # Alternatives
 python ac.py upscale create --method hq2x
 python ac.py upscale botania --method waifu2x
+
+# Skip auto-commit
+python ac.py upscale relics_mod --no-commit
 ```
 
-### What `upscale` does
+**What `upscale` does:**
 
 `pipeline/run_upscale.py`:
 
-1. Discovers all texture roots via `find_source_texture_roots()`.
+1. Discovers texture roots via `find_source_texture_roots()`.
 2. Classifies each PNG with `texture_policy.classify_texture()`.
-3. Writes output to `output/assets/<namespace>/textures/`, preserving relative paths.
-4. Copies `.png.mcmeta` sidecars alongside their PNGs.
+3. Writes to `output/assets/<namespace>/textures/`, preserving relative paths.
+4. Copies `.png.mcmeta` sidecars alongside PNGs.
+5. Unless `--no-commit`, runs `git_commit_sources.py` (stages `output/assets/<namespace>/`).
 
 ### Upscale policy (`pipeline/texture_policy.py`)
 
@@ -179,112 +230,87 @@ python ac.py upscale botania --method waifu2x
 | Strip / odd aspect (long ≥ 4× short) | Nearest | 2× nearest-neighbor |
 | JEI / EMI / REI (`UI_MODS`) | Nearest | Layout-sensitive UI sprites |
 
-Default CLI method is **xbrz** — best for Minecraft pixel art. Use `hq2x` or `waifu2x` only when comparing quality on a specific mod.
+Default method is **xbrz**.
 
-### Git commit (upscale output)
-
-Pull auto-commits sources; upscale does **not**. Commit assets after verifying output:
+### Step 5 — Build pack
 
 ```powershell
-git add output/assets/<mod_id>
-git commit -m "upscale: <mod_id>"
-```
-
-For multi-namespace pulls (e.g. `thermal` writes one `thermal` folder), commit that namespace path.
-
----
-
-## Step 5 — Build and deploy
-
-```powershell
+# Build only (default)
 python ac.py build
+
+# Build and deploy to instance
+python ac.py build --deploy
+
+# Force skip deploy even when OMNI32_DEPLOY=1
+python ac.py build --no-deploy
 ```
 
-### What `build` does
+**What `build` does:**
 
 `pipeline/build_resourcepack.py`:
 
-1. **Build** — Creates `output/resourcepack/Base-Wars_32x/`:
-   - `assets/<namespace>/textures/` for every folder in `output/assets/`
-   - `pack.mcmeta` with `pack_format: 15` (Minecraft 1.20.1)
-2. **Deploy** — Copies the entire pack to:
+1. Creates `output/resourcepack/Omni32/` with all namespaces from `output/assets/`.
+2. Writes `pack.mcmeta` (`pack_format: 15`, description from `OMNI32_PACK_DESCRIPTION`).
+3. Deploys to `<ASSETCONVERTER_INSTANCE>/resourcepacks/Omni32/` **only** when `OMNI32_DEPLOY=1` or `--deploy` is passed (and not overridden by `--no-deploy`).
 
-   ```
-   <ASSETCONVERTER_INSTANCE>/resourcepacks/Base-Wars_32x/
-   ```
-
-   Default instance (`config/paths.py`):
-
-   ```
-   C:\Users\Bulkl\curseforge\minecraft\Instances\Base-Wars_Stripped\resourcepacks\Base-Wars_32x\
-   ```
-
-3. Prints texture and sidecar counts per namespace.
-
-Rebuild after **any** new upscale — `build` always packages **all** namespaces under `output/assets/`, not just the last mod.
+Rebuild after **any** new upscale — `build` packages **all** namespaces under `output/assets/`, not just the last mod.
 
 ### In-game verification
 
-1. Launch the Base-Wars instance in CurseForge.
-2. Options → Resource Packs → enable **Base-Wars_32x** (top of active list).
-3. Spot-check blocks/items from the mod you just upscaled.
+1. Ensure pack is in instance `resourcepacks/Omni32/` (manual copy or `--deploy`).
+2. Launch a 1.20.1 Forge instance with the underlying mods installed.
+3. Options → Resource Packs → enable **Omni32**.
+4. Spot-check blocks/items from the mod you just upscaled.
 
 ---
 
-## Git commit flow (complete)
-
-Two commit points per mod. Keep messages consistent for history grep.
+## Git commit flow
 
 | Stage | Command | Git action | Message pattern |
 |-------|---------|------------|-----------------|
-| Pull | `python ac.py pull <mod>` | Automatic | `pull: <mod>` |
-| Upscale | `python ac.py upscale <mod>` | Manual | `upscale: <mod>` |
-| Build | `python ac.py build` | None (deploy is local) | — |
+| Pull | `ac.py pull <mod>` | Automatic | `pull: <mod>` |
+| Upscale | `ac.py upscale <mod>` | Automatic (unless `--no-commit`) | `pull: <mod>` * |
+| Engine | `ac.py run` / `ac.py next` | Automatic (unless `--no-commit`) | `pull: <mod>` per commit call |
+| Build | `ac.py build` | None | — |
 
-### Single-mod example
+\* `git_commit_sources.py` uses the message `pull: <mod>` for both source and asset commits. It stages `sources/<host>/` and `output/assets/<namespace>/` when present.
+
+### Single-mod example (manual)
 
 ```powershell
 # 1. Register in config/registry.py (if new)
 
 # 2. Pull + auto-commit sources
-python ac.py pull oh_the_biomes_weve_gone
+python ac.py pull relics_mod
 
-# 3. Upscale
-python ac.py upscale oh_the_biomes_weve_gone
+# 3. Upscale + auto-commit assets
+python ac.py upscale relics_mod
 
-# 4. Commit upscaled assets
-git add output/assets/oh_the_biomes_weve_gone
-git commit -m "upscale: oh_the_biomes_weve_gone"
-
-# 5. Rebuild pack and deploy
-python ac.py build
+# 4. Rebuild pack (deploy optional)
+python ac.py build --deploy
 ```
 
-### Batch example (queue top 3)
+### Single-mod example (autonomous)
 
 ```powershell
-python ac.py pull oh_the_biomes_weve_gone railcraft_reborn eternal_starlight
-
-python ac.py upscale oh_the_biomes_weve_gone
-git add output/assets/oh_the_biomes_weve_gone
-git commit -m "upscale: oh_the_biomes_weve_gone"
-
-python ac.py upscale railcraft_reborn
-git add output/assets/railcraft_reborn
-git commit -m "upscale: railcraft_reborn"
-
-python ac.py upscale eternal_starlight
-git add output/assets/eternal_starlight
-git commit -m "upscale: eternal_starlight"
-
-python ac.py build
+python ac.py run relics_mod --build --deploy
 ```
+
+Equivalent to pull → commit → upscale → commit → build with deploy enabled.
+
+### Batch example (queue)
+
+```powershell
+python ac.py next --count 3 --build
+```
+
+Processes the next three pending mods from `QUEUE_PRIORITY` in order.
 
 ---
 
 ## Mod queue process
 
-`docs/MOD_QUEUE.md` is the working backlog. Maintain it in this loop:
+`docs/MOD_QUEUE.md` is the working backlog. `pipeline/queue.py` `QUEUE_PRIORITY` should stay aligned with the **Top 15** section.
 
 ### 1. Analyze
 
@@ -295,36 +321,35 @@ python ac.py status
 Cross-references:
 
 - `data/atm10_mods_raw.json` — full ATM10 mod list
-- `output/assets/` — what's already upscaled (83 namespaces)
+- `output/assets/` — what's already upscaled (89 namespaces)
 - `config/registry.py` `MOD_REPOS` — what's registered for pull
 
 ### 2. Prioritize
 
-`MOD_QUEUE.md` ranks candidates by:
-
-- Estimated PNG count (texture surface area)
-- CurseForge download count (player exposure)
-- Content weight (tech / magic / decoration mods over libraries)
-
-Mods in `SKIP_MODS` or without textures are excluded.
+`MOD_QUEUE.md` ranks candidates by PNG count, CurseForge exposure, and content weight. Mods in `SKIP_MODS` or without textures are excluded.
 
 ### 3. Register gaps
 
-Top queue entries not yet in `MOD_REPOS` are listed at the bottom of `MOD_QUEUE.md` under **Add to registry**. Copy each into `config/registry.py` before pulling.
+Top queue entries not yet in `MOD_REPOS` are listed under **Add to registry** in `MOD_QUEUE.md`. Copy each into `config/registry.py` before pulling.
 
 ### 4. Process
 
-For each mod, run Steps 3–5 above. Mark done informally by the namespace appearing in `MOD_QUEUE.md` **Upscaled namespaces** list (regenerate with `ac.py status` after batches).
+Autonomous: `python ac.py next` or `python ac.py next --count N --build`.
 
-### 5. Handle edge cases
+Manual: Steps 3–5 above.
+
+Check progress: `python ac.py queue`.
+
+### 5. Edge cases
 
 | Situation | Action |
 |-----------|--------|
 | ATM10 slug ≠ mod_id (e.g. `the_twilight_forest` → `twilightforest`) | Use `mod_id` / namespace from `MOD_REPOS`, not CurseForge slug |
+| mod_id ≠ asset namespace | Add `MOD_NAMESPACES` entry; upscale writes to mapped namespace |
 | Mod already upscaled under different folder name | Check **Upscaled namespaces** in `MOD_QUEUE.md` |
-| 1.21 NeoForge ATM10 vs 1.20.1 Forge clone | Branches in `CLONE_BRANCHES` target 1.20.1; textures are usually compatible |
-| Macaw's / closed-source | Already in `MODRINTH_JAR_MODS`; pull extracts from JAR |
-| Sparse GitHub repo | Add `JAR_FALLBACK_MODS` entry with instance JAR filename |
+| 1.21 NeoForge ATM10 vs 1.20.1 Forge clone | `CLONE_BRANCHES` target 1.20.1; textures usually compatible |
+| Macaw's / closed-source | `MODRINTH_JAR_MODS`; pull extracts from JAR |
+| Sparse GitHub repo | `JAR_FALLBACK_MODS` with instance JAR filename |
 
 ---
 
@@ -332,10 +357,14 @@ For each mod, run Steps 3–5 above. Mark done informally by the namespace appea
 
 | Command | Script(s) | Input | Output |
 |---------|-----------|-------|--------|
-| `python ac.py pull <mods...>` | `pull_mod_sources.py`, `git_commit_sources.py` | `config/registry.py` | `sources/<mod>/` + git commit |
-| `python ac.py upscale <mod> [--method xbrz\|hq2x\|waifu2x]` | `run_upscale.py` | `sources/` | `output/assets/<mod>/` |
-| `python ac.py build` | `build_resourcepack.py` | `output/assets/` | `output/resourcepack/Base-Wars_32x/` + instance deploy |
-| `python ac.py status` | `_atm10_analyze.py` | `data/`, `output/assets/`, registry | Console gap report |
+| `ac.py run <mod>` | `engine.py` | registry mod_id | full pipeline |
+| `ac.py next [--count N]` | `engine.py` | `queue.py` | N mods processed |
+| `ac.py queue` | `engine.py` | `queue.py` | console status |
+| `ac.py pull <mods...>` | `pull_mod_sources.py`, `git_commit_sources.py` | registry | `sources/<mod>/` + commit |
+| `ac.py upscale <mod>` | `run_upscale.py`, `git_commit_sources.py` | `sources/` | `output/assets/<namespace>/` + commit |
+| `ac.py build [--deploy]` | `build_resourcepack.py` | `output/assets/` | `output/resourcepack/Omni32/` [+ deploy] |
+| `ac.py status` | `_atm10_analyze.py` | `data/`, assets, registry | gap report |
+| `ac.py upload-batch <NN>` | `upload_sources_batch.py` | branch tables | upload branch |
 
 ---
 
@@ -343,22 +372,26 @@ For each mod, run Steps 3–5 above. Mark done informally by the namespace appea
 
 - [ ] Mod listed or prioritized in `docs/MOD_QUEUE.md`
 - [ ] `mod_id` + repo URL added to `config/registry.py` `MOD_REPOS`
+- [ ] `MOD_NAMESPACES` entry if namespace differs from mod_id
 - [ ] Branch added to `CLONE_BRANCHES` if not default
 - [ ] JAR fallback configured if repo is sparse or closed-source
+- [ ] `mod_id` added to `QUEUE_PRIORITY` in `pipeline/queue.py` (if using autonomous queue)
 - [ ] `python ac.py pull <mod_id>` — sources committed
 - [ ] `python pipeline/audit_mod.py <mod_id>` — optional preflight
-- [ ] `python ac.py upscale <mod_id>` — assets written
-- [ ] `git add output/assets/<mod_id> && git commit -m "upscale: <mod_id>"`
-- [ ] `python ac.py build` — pack deployed to instance
+- [ ] `python ac.py upscale <mod_id>` — assets written and committed
+- [ ] `python ac.py build` — pack built at `output/resourcepack/Omni32/`
+- [ ] Optional: `python ac.py build --deploy` — instance copy
 - [ ] In-game visual check
-- [ ] `python ac.py status` — refresh queue doc if processing a batch
+- [ ] `python ac.py status` — refresh queue doc after batches
 
 ---
 
 ## Related docs
 
+- `docs/OMNI32.md` — product vision, pack structure, autonomy roadmap
 - `docs/MOD_QUEUE.md` — ATM10 priority queue and registry gaps
-- `config/registry.py` — mod catalog (URLs, branches, JAR maps)
-- `config/paths.py` — paths and deployment target
+- `config/registry.py` — mod catalog (URLs, branches, JAR maps, namespaces)
+- `config/paths.py` — paths, pack name, deploy flags
 - `references/pipeline-architecture.md` — module-level data flow
-- `references/github-private-repo.md` — making the GitHub repo private
+- `references/omni32-engine.md` — engine design and environment variables
+- `references/git-branch-strategy.md` — `upload-batch` branch definitions

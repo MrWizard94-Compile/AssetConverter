@@ -1,16 +1,17 @@
-# AssetConverter
+# Omni32 Asset Engine
 
-Minecraft 1.20.1 Forge texture upscaling pipeline for the **Base-Wars** modpack. Clones mod source trees into the repo, upscales 16× pixel-art textures to 32× with xBRZ and size-aware policy, then builds and deploys the `Base-Wars_32x` resource pack to a CurseForge instance.
+**AssetConverter** is a standalone autonomous asset engine that produces **Omni32** — Minecraft 1.20.1 Forge resource pack(s) with 32× upscaled mod textures. Clone mod sources, upscale pixel art with xBRZ and size-aware policy, assemble the pack, and optionally deploy to a local instance.
 
-## Purpose
+This is **not** a modpack-specific tool. Omni32 is the product; any Forge 1.20.1 instance can use the output pack.
 
-AssetConverter automates three jobs that would otherwise be manual and error-prone:
+## What it does
 
-1. **Source acquisition** — clone public mod repos (or extract closed-source JARs) into `sources/` so textures are versioned in git, not scattered at the project root.
+1. **Source acquisition** — clone public mod repos (or extract closed-source JARs) into `sources/` so textures are versioned in git.
 2. **Upscale** — apply per-texture strategy (xBRZ, nearest-neighbor, or copy-as-is) and write results to `output/assets/<namespace>/`.
-3. **Pack + deploy** — assemble all upscaled namespaces into one resource pack and copy it into the Minecraft instance `resourcepacks/` folder.
+3. **Pack** — merge all upscaled namespaces into `output/resourcepack/Omni32/`.
+4. **Deploy (optional)** — copy the built pack to a CurseForge instance `resourcepacks/` folder when explicitly enabled.
 
-The mod catalog, clone branches, and JAR fallbacks live in `config/registry.py`. Work queue and ATM10 gap analysis live in `docs/MOD_QUEUE.md`.
+The mod catalog, clone branches, and JAR fallbacks live in `config/registry.py`. Work queue and ATM10 gap analysis live in `docs/MOD_QUEUE.md`. Product vision and autonomy roadmap: `docs/OMNI32.md`.
 
 ## Directory structure
 
@@ -20,30 +21,37 @@ AssetConverter/
 ├── ac.py                    # CLI entry point
 ├── mod_sources.py           # Shim re-exporting config.registry (legacy imports)
 ├── config/
-│   ├── paths.py             # All paths; env overrides
+│   ├── paths.py             # Paths, Omni32 pack name, deploy flags
 │   └── registry.py          # MOD_REPOS, CLONE_BRANCHES, jar fallbacks
-├── pipeline/                # Core pipeline modules
+├── pipeline/
+│   ├── engine.py            # Autonomous orchestrator (pull → upscale → commit → build)
+│   ├── queue.py             # QUEUE_PRIORITY, completion checks
 │   ├── pull_mod_sources.py  # Clone / extract → sources/
 │   ├── run_upscale.py       # Upscale one namespace
-│   ├── build_resourcepack.py# Package + deploy pack
+│   ├── build_resourcepack.py# Package Omni32 (+ optional deploy)
 │   ├── texture_policy.py    # Per-texture upscale strategy
 │   └── audit_mod.py         # Pre-flight texture audit
-├── scripts/                 # Git helpers, batch runners, ATM10 analysis
+├── scripts/
 │   ├── git_commit_sources.py
+│   ├── upload_sources_batch.py
 │   └── _atm10_analyze.py    # Invoked by `ac.py status`
 ├── sources/                 # Mod source trees (committed to repo)
 ├── output/
 │   ├── assets/              # Upscaled textures per namespace
-│   └── resourcepack/        # Built pack (Base-Wars_32x/)
+│   ├── resourcepack/        # Built pack (Omni32/)
+│   └── packs/               # Future: multiple Omni32 variants
 ├── local/                   # Machine-local only (not committed)
 │   ├── cache/               # Optional upscale cache
 │   └── jars/                # Downloaded Modrinth / fallback JARs
 ├── data/                    # ATM10 research JSON
 ├── docs/
-│   ├── WORKFLOW.md          # Step-by-step pipeline guide
+│   ├── OMNI32.md            # Product vision, pack structure, roadmap
+│   ├── WORKFLOW.md          # Autonomous + manual pipeline guide
 │   └── MOD_QUEUE.md         # Upscale priority queue
-├── references/              # External API / setup notes
-└── tools/                   # Native binaries (xBRZ, waifu2x) — not in git
+└── references/
+    ├── pipeline-architecture.md
+    ├── omni32-engine.md
+    └── git-branch-strategy.md
 ```
 
 **What belongs in the repo vs locally**
@@ -51,14 +59,14 @@ AssetConverter/
 | Path | In git? | Notes |
 |------|---------|-------|
 | `sources/` | Yes | Pulled mod trees; committed after every `pull` |
-| `output/assets/` | Yes | Upscaled textures; commit after each mod |
-| `output/resourcepack/` | Optional | Rebuilt by `build`; deploy copy is on the instance |
+| `output/assets/` | Yes | Upscaled textures; committed after upscale |
+| `output/resourcepack/` | Optional | Rebuilt by `build`; not required in git |
 | `local/` | No | Cache and downloaded JARs |
-| `tools/` | No | System / machine-specific binaries |
+| `tools/` | No | System / machine-specific binaries (xBRZ, waifu2x) |
 
 Sources **never** land at the project root. `ac.py pull` writes only under `sources/<mod>/`.
 
-## CLI usage
+## Quick start
 
 All commands run from the repo root:
 
@@ -66,101 +74,98 @@ All commands run from the repo root:
 cd C:\Users\Bulkl\OneDrive\Desktop\AssetConverter
 ```
 
-### `pull` — clone sources and git commit
+### Autonomous (recommended)
 
 ```powershell
-# One mod
-python ac.py pull oh_the_biomes_weve_gone
+# Show queue: done vs pending mods
+python ac.py queue
 
-# Multiple mods
-python ac.py pull create farmersdelight ae2
+# Process the next pending mod (pull → upscale → git commit)
+python ac.py next
+
+# Process 3 mods, rebuild pack after each
+python ac.py next --count 3 --build
+
+# Full pipeline for one registry mod_id
+python ac.py run relics_mod --build
 ```
 
-Runs `pipeline/pull_mod_sources.py` then `scripts/git_commit_sources.py`. Clones into `sources/<mod>/` using URLs and branches from `config/registry.py`. Closed-source Macaw's mods and sparse repos fall back to Modrinth JAR extraction (`MODRINTH_JAR_MODS`).
-
-### `upscale` — process one namespace
+### Manual steps
 
 ```powershell
-python ac.py upscale oh_the_biomes_weve_gone
-
-# Alternate methods (default: xbrz)
-python ac.py upscale create --method hq2x
-python ac.py upscale botania --method waifu2x
-```
-
-Reads textures from `sources/`, writes to `output/assets/<namespace>/textures/`. Multi-root mods (Thermal, Mekanism, EnderIO) are merged automatically via `find_source_texture_roots()`.
-
-### `build` — package and deploy resource pack
-
-```powershell
+python ac.py pull relics_mod
+python ac.py upscale relics_mod
 python ac.py build
 ```
 
-1. Copies every namespace under `output/assets/` into `output/resourcepack/Base-Wars_32x/assets/`
-2. Writes `pack.mcmeta` (format 15 — Minecraft 1.20.1)
-3. Deploys the pack to the instance `resourcepacks/` folder (see **Deployment** below)
+### Optional deploy
 
-### `status` — mod queue / gap analysis
+Deploy is **off by default**. Enable with env var or CLI flag:
 
 ```powershell
-python ac.py status
+# One-shot deploy
+python ac.py build --deploy
+
+# Or set for the session
+$env:OMNI32_DEPLOY = "1"
+python ac.py build
 ```
 
-Re-runs ATM10 mod-list analysis (`scripts/_atm10_analyze.py`) against `output/assets/` and `config/registry.py`. Use this to refresh `docs/MOD_QUEUE.md` priorities.
+## CLI reference
 
-## Workflow (summary)
+| Command | Description |
+|---------|-------------|
+| `ac.py run <mod>` | Autonomous pipeline: pull → upscale → commit [→ build] |
+| `ac.py next [--count N] [--build-last]` | Process next N mods; optional Omni32 rebuild after batch |
+| `ac.py stats` | Dashboard: namespaces, PNG count, discovered gaps |
+| `ac.py sync-queue` | Refresh `docs/MOD_QUEUE.md` from `output/assets/` |
+| `ac.py queue` | Show done vs pending mods and next target |
+| `ac.py pull <mods...>` | Clone sources into `sources/` and git commit |
+| `ac.py upscale <mod> [--method xbrz\|hq2x\|waifu2x]` | Upscale one namespace; auto-commits unless `--no-commit` |
+| `ac.py build [--deploy] [--no-deploy]` | Build `output/resourcepack/Omni32/`; deploy only when requested |
+| `ac.py status` | ATM10 gap analysis (registry vs `output/assets/`) |
+| `ac.py upload-batch <NN> [--push]` | Create/push sources upload branch (01–11) |
 
-Full step-by-step guide: `docs/WORKFLOW.md`.
+Full step-by-step guide: `docs/WORKFLOW.md`. Engine internals: `references/omni32-engine.md`.
 
-```
-pick mod from docs/MOD_QUEUE.md
-    → add to config/registry.py (if new)
-    → python ac.py pull <mod>      # sources/ + auto git commit
-    → python ac.py upscale <mod>   # output/assets/<mod>/
-    → git add output/assets/<mod> && git commit
-    → python ac.py build           # deploy to instance
-```
+## Output paths
 
-## Deployment path
+| Artifact | Path |
+|----------|------|
+| Upscaled textures | `output/assets/<namespace>/textures/` |
+| Built resource pack | `output/resourcepack/Omni32/` |
+| Deploy target (optional) | `<instance>/resourcepacks/Omni32/` |
 
-Defined in `config/paths.py`:
+Pack name defaults to `Omni32` (`config/paths.py` → `PACK_NAME`). Override with `OMNI32_PACK_NAME`.
 
-| Setting | Default |
-|---------|---------|
-| Instance | `C:\Users\Bulkl\curseforge\minecraft\Instances\Base-Wars_Stripped` |
-| Deploy target | `<instance>/resourcepacks/Base-Wars_32x/` |
-| Pack name | `Base-Wars_32x` |
-
-Override on other machines:
-
-```powershell
-$env:ASSETCONVERTER_INSTANCE = "D:\Games\minecraft\Instances\MyInstance"
-$env:ASSETCONVERTER_ROOT     = "D:\dev\AssetConverter"
-```
-
-`build` removes any existing `Base-Wars_32x` folder in `resourcepacks/` and copies the freshly built pack. Enable the pack in-game under Options → Resource Packs.
-
-## Environment overrides
+## Environment variables
 
 | Variable | Default | Purpose |
 |----------|---------|---------|
-| `ASSETCONVERTER_ROOT` | Repo root (parent of `config/`) | Relocate entire project |
-| `ASSETCONVERTER_INSTANCE` | CurseForge `Base-Wars_Stripped` path | Deploy target instance |
+| `OMNI32_PACK_NAME` | `Omni32` | Resource pack folder name |
+| `OMNI32_PACK_DESCRIPTION` | Omni32 tagline | `pack.mcmeta` description |
+| `OMNI32_PACK_FORMAT` | `15` | Minecraft 1.20.1 pack format |
+| `OMNI32_DEPLOY` | off | Set `1` / `true` / `yes` to deploy on `build` |
+| `ASSETCONVERTER_ROOT` | Repo root | Relocate entire project |
+| `ASSETCONVERTER_INSTANCE` | CurseForge instance path | Deploy target when deploy is enabled |
 
 ## Configuration reference
 
-- **`config/registry.py`** — `MOD_REPOS` (clone URLs), `CLONE_BRANCHES` (1.20.1 tags), `JAR_ONLY_MODS`, `JAR_FALLBACK_MODS`, `MODRINTH_JAR_MODS`, `SKIP_MODS`. Add new mods here before pulling.
-- **`config/paths.py`** — `SOURCES_DIR`, `OUTPUT_ASSETS_DIR`, `RESOURCEPACK_DIR`, `DEPLOY_DIR`, `PACK_FORMAT`.
-- **`docs/MOD_QUEUE.md`** — 83 mods done; prioritized list of ATM10 candidates still to add.
+- **`config/registry.py`** — `MOD_REPOS` (clone URLs), `MOD_NAMESPACES` (mod_id → asset namespace), `CLONE_BRANCHES`, `JAR_ONLY_MODS`, `JAR_FALLBACK_MODS`, `MODRINTH_JAR_MODS`, `SKIP_MODS`.
+- **`config/paths.py`** — `SOURCES_DIR`, `OUTPUT_ASSETS_DIR`, `RESOURCEPACK_DIR`, `PACK_NAME`, `DEPLOY_ENABLED`.
+- **`pipeline/queue.py`** — `QUEUE_PRIORITY` list synced with `docs/MOD_QUEUE.md` top section.
+- **`docs/MOD_QUEUE.md`** — 89 namespaces done; prioritized ATM10 candidates still to add.
 
 ## Status
 
-- **83** namespaces upscaled (65,500+ textures) — see `docs/MOD_QUEUE.md`
-- Next target: `oh_the_biomes_weve_gone` (~2,200 PNGs)
+- **89** namespaces upscaled — see `docs/MOD_QUEUE.md`
+- Next queue target: `relics_mod` (see `python ac.py queue`)
 
 ## Further reading
 
-- `docs/WORKFLOW.md` — pull → upscale → build → deploy, git flow, mod queue process
+- `docs/OMNI32.md` — product vision, pack structure, autonomy roadmap
+- `docs/WORKFLOW.md` — autonomous and manual workflows, git flow, mod queue process
 - `docs/MOD_QUEUE.md` — ATM10 priority table and registry gaps
 - `references/pipeline-architecture.md` — module map and data flow
+- `references/omni32-engine.md` — engine design, queue, environment variables
 - `SOUL.md` — project engineering standards

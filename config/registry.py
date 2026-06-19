@@ -18,6 +18,17 @@ MOD_NAMESPACES = {
     "integrated_terminals": "integratedterminals",
     "rftools_utility": "rftoolsutility",
     "rftools_base": "rftoolsbase",
+    "rftools_storage": "rftoolsstorage",
+    "ars_energistique": "arseng",
+    "wireless_chargers": "wirelesschargers",
+    "functional_storage": "functionalstorage",
+    "creeper_overhaul": "creeperoverhaul",
+    "thermal_core": "thermal",
+    "thermal_foundation": "thermal",
+    "thermal_expansion": "thermal",
+    "thermal_innovation": "thermal",
+    "mekanismgenerators": "mekanism",
+    "mekanismtools": "mekanism",
 }
 
 
@@ -138,6 +149,13 @@ MOD_REPOS = {
     "rftools_base": "https://github.com/McJtyMods/RFToolsBase.git",
     "reliquified_artifacts": "https://github.com/Octo-Studios/rar-compat.git",
     "extrastorage": "https://github.com/Edivad99/ExtraStorage.git",
+    # MOD_QUEUE runners-up
+    "ars_energistique": "https://github.com/62832/ArsEnergistique.git",
+    "rftools_storage": "https://github.com/McJtyMods/RFToolsStorage.git",
+    "wireless_chargers": "https://github.com/SuperMartijn642/WirelessChargers.git",
+    "functional_storage": "https://github.com/Buuz135/FunctionalStorage.git",
+    "creeper_overhaul": "https://github.com/bonsaistudi0s/Creeper-Overhaul.git",
+    "modularrouters": "https://github.com/desht/ModularRouters.git",
 }
 
 CLONE_BRANCHES = {
@@ -176,6 +194,10 @@ CLONE_BRANCHES = {
     "xnet": "1.20",
     "fluxnetworks": "1.20",
     "comforts": "1.20.x",
+    "modularrouters": "MC1.20.1-master",
+    "rftools_utility": "1.20",
+    "rftools_base": "1.20",
+    "rftools_storage": "1.20",
 }
 
 JAR_ONLY_MODS = {
