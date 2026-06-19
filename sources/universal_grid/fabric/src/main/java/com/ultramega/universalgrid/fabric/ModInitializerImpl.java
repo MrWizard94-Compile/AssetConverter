@@ -1,0 +1,140 @@
+package com.ultramega.universalgrid.fabric;
+
+import com.ultramega.universalgrid.common.AbstractModInitializer;
+import com.ultramega.universalgrid.common.ContentIds;
+import com.ultramega.universalgrid.common.PlatformProxy;
+import com.ultramega.universalgrid.common.packet.c2s.SetCursorPosStackPacket;
+import com.ultramega.universalgrid.common.packet.c2s.UpdateDisabledSlotPacket;
+import com.ultramega.universalgrid.common.packet.c2s.UseUniversalGridOnServerPacket;
+import com.ultramega.universalgrid.common.packet.s2c.SetCursorPosWindowPacket;
+import com.ultramega.universalgrid.common.packet.s2c.SetDisabledSlotPacket;
+import com.ultramega.universalgrid.common.packet.s2c.UseUniversalGridOnClientPacket;
+import com.ultramega.universalgrid.common.registry.CreativeModeTabItems;
+import com.ultramega.universalgrid.common.registry.Items;
+import com.ultramega.universalgrid.common.wirelessuniversalgrid.WirelessUniversalGridItem;
+
+import com.refinedmods.refinedstorage.common.api.RefinedStorageApi;
+import com.refinedmods.refinedstorage.common.content.DirectRegistryCallback;
+import com.refinedmods.refinedstorage.common.content.RegistryCallback;
+import com.refinedmods.refinedstorage.common.support.packet.PacketHandler;
+import com.refinedmods.refinedstorage.fabric.api.RefinedStoragePlugin;
+import com.refinedmods.refinedstorage.fabric.support.energy.ContainerItemContextEnergyItemContext;
+import com.refinedmods.refinedstorage.fabric.support.energy.EnergyStorageAdapter;
+
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import team.reborn.energy.api.EnergyStorage;
+
+public class ModInitializerImpl extends AbstractModInitializer implements RefinedStoragePlugin, ModInitializer {
+    @Override
+    public void onApiAvailable(final RefinedStorageApi refinedStorageApi) {
+        PlatformProxy.setConfigProvider(ConfigImpl::get);
+        PlatformProxy.loadPlatform(new PlatformImpl());
+        this.registerContent(refinedStorageApi);
+        this.registerCapabilities();
+        this.registerPackets();
+        this.registerPacketHandlers();
+        this.registerCreativeModeTabListener(refinedStorageApi);
+    }
+
+    private void registerContent(final RefinedStorageApi refinedStorageApi) {
+        final DirectRegistryCallback<Item> itemRegistryCallback = new DirectRegistryCallback<>(BuiltInRegistries.ITEM);
+        this.registerCustomItems(itemRegistryCallback, refinedStorageApi);
+        this.registerDataComponents(new DirectRegistryCallback<>(BuiltInRegistries.DATA_COMPONENT_TYPE));
+    }
+
+    private void registerCustomItems(final RegistryCallback<Item> callback,
+                                     final RefinedStorageApi refinedStorageApi) {
+        Items.INSTANCE.setWirelessUniversalGrid(
+            callback.register(ContentIds.WIRELESS_UNIVERSAL_GRID, () -> new WirelessUniversalGridItem(false) {
+                @Override
+                public boolean allowComponentsUpdateAnimation(final Player player,
+                                                              final InteractionHand hand,
+                                                              final ItemStack oldStack,
+                                                              final ItemStack newStack) {
+                    return AbstractModInitializer.allowComponentsUpdateAnimation(oldStack, newStack);
+                }
+            })
+        );
+        Items.INSTANCE.setCreativeWirelessUniversalGrid(
+            callback.register(ContentIds.CREATIVE_WIRELESS_UNIVERSAL_GRID, () -> new WirelessUniversalGridItem(true) {
+                @Override
+                public boolean allowComponentsUpdateAnimation(final Player player,
+                                                              final InteractionHand hand,
+                                                              final ItemStack oldStack,
+                                                              final ItemStack newStack) {
+                    return AbstractModInitializer.allowComponentsUpdateAnimation(oldStack, newStack);
+                }
+            })
+        );
+    }
+
+    private void registerCapabilities() {
+        this.registerEnergyItemProviders();
+    }
+
+    private void registerPackets() {
+        PayloadTypeRegistry.serverboundPlay().register(SetCursorPosStackPacket.PACKET_TYPE, SetCursorPosStackPacket.STREAM_CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(UpdateDisabledSlotPacket.PACKET_TYPE, UpdateDisabledSlotPacket.STREAM_CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(UseUniversalGridOnServerPacket.PACKET_TYPE, UseUniversalGridOnServerPacket.STREAM_CODEC);
+
+        PayloadTypeRegistry.clientboundPlay().register(SetCursorPosWindowPacket.PACKET_TYPE, SetCursorPosWindowPacket.STREAM_CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(SetDisabledSlotPacket.PACKET_TYPE, SetDisabledSlotPacket.STREAM_CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(UseUniversalGridOnClientPacket.PACKET_TYPE, UseUniversalGridOnClientPacket.STREAM_CODEC);
+    }
+
+    private void registerPacketHandlers() {
+        ServerPlayNetworking.registerGlobalReceiver(
+            SetCursorPosStackPacket.PACKET_TYPE,
+            wrapHandler(SetCursorPosStackPacket::handle)
+        );
+        ServerPlayNetworking.registerGlobalReceiver(
+            UpdateDisabledSlotPacket.PACKET_TYPE,
+            wrapHandler(UpdateDisabledSlotPacket::handle)
+        );
+        ServerPlayNetworking.registerGlobalReceiver(
+            UseUniversalGridOnServerPacket.PACKET_TYPE,
+            wrapHandler(UseUniversalGridOnServerPacket::handle)
+        );
+    }
+
+    private static <T extends CustomPacketPayload> ServerPlayNetworking.PlayPayloadHandler<T> wrapHandler(
+        final PacketHandler<T> handler
+    ) {
+        return (packet, ctx) -> handler.handle(packet, ctx::player);
+    }
+
+    private void registerEnergyItemProviders() {
+        EnergyStorage.ITEM.registerForItems(
+            (stack, context) -> new EnergyStorageAdapter(WirelessUniversalGridItem.createEnergyStorage(stack,
+                new ContainerItemContextEnergyItemContext(context))), Items.INSTANCE.getWirelessUniversalGrid());
+    }
+
+    private void registerCreativeModeTabListener(final RefinedStorageApi refinedStorageApi) {
+        final ResourceKey<CreativeModeTab> creativeModeTab = ResourceKey.create(
+            Registries.CREATIVE_MODE_TAB,
+            refinedStorageApi.getCreativeModeTabId()
+        );
+        CreativeModeTabEvents.modifyOutputEvent(creativeModeTab).register(
+            entries -> CreativeModeTabItems.addItems(entries::accept)
+        );
+    }
+
+    @Override
+    public void onInitialize() {
+        AutoConfig.register(ConfigImpl.class, Toml4jConfigSerializer::new);
+    }
+}

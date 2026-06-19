@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.ultramega.universalgrid.common.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "MixinAbstractAutocraftingMonitorContainerMenu",
+    "MixinAbstractBaseContainerMenu",
+    "MixinWirelessAutocraftingMonitorContainerMenu",
+    "MixinWirelessAutocraftingMonitorExtendedMenuProvider",
+    "MixinWirelessAutocraftingMonitorItem",
+    "AccessorRefinedStorageApiImpl",
+    "InvokerRefinedStorageApiProxy"
+  ],
+  "client": [
+    "MixinAbstractBaseScreen",
+    "MixinAbstractStretchingScreen",
+    "MixinAutocraftingMonitorScreen",
+    "AccessorGuiGraphicsExtractor"
+  ]
+}
