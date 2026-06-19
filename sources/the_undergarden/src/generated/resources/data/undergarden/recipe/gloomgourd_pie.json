@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:sugar",
+    "undergarden:gloomgourd",
+    "undergarden:glitterkelp"
+  ],
+  "result": {
+    "id": "undergarden:gloomgourd_pie"
+  }
+}

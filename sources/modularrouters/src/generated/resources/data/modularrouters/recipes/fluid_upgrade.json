@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "modularrouters:blank_upgrade"
+    },
+    "G": {
+      "tag": "forge:glass"
+    },
+    "U": {
+      "item": "minecraft:bucket"
+    }
+  },
+  "pattern": [
+    " U ",
+    "GBG"
+  ],
+  "result": {
+    "count": 3,
+    "item": "modularrouters:fluid_upgrade"
+  },
+  "show_notification": true
+}

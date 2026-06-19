@@ -1,0 +1,10 @@
+{
+  "type": "undergarden:infuser_conversion",
+  "category": "purifying",
+  "experience": 1.0,
+  "input": "undergarden:gronglet",
+  "result": {
+    "id": "undergarden:rogdoric_gronglet"
+  },
+  "slot_type": "rogdorium"
+}

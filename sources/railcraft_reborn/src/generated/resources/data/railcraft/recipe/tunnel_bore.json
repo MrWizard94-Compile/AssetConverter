@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:storage_blocks/steel"
+    },
+    "b": {
+      "item": "minecraft:minecart"
+    },
+    "c": {
+      "item": "minecraft:furnace"
+    },
+    "d": {
+      "item": "minecraft:chest_minecart"
+    }
+  },
+  "pattern": [
+    "aba",
+    "cbc",
+    " d "
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:tunnel_bore"
+  }
+}

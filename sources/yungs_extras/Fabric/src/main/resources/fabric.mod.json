@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "${mod_full_name}",
+  "description": "${mod_description}",
+  "authors": [
+    "YUNGNICKYOUNG",
+    "Acarii"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/yungs-extras-fabric",
+    "sources": "https://github.com/yungnickyoung/YUNGs-Extras",
+    "issues": "https://github.com/yungnickyoung/YUNGs-Extras/issues",
+    "discord": "discord.gg/rns3beq"
+  },
+  "license": "LGPLv3",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.yungnickyoung.minecraft.yungsextras.YungsExtrasFabric"
+    ]
+  },
+  "mixins": [
+    "yungsextras.mixins.json",
+    "yungsextras_fabric.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric": ">=${fabric_version}",
+    "minecraft": ">=${mc_version}",
+    "cloth-config2": ">=${clothconfig_version_fabric}",
+    "java": ">=17",
+    "yungsapi": ">=${mc_version}-Fabric-${yungsapi_version}"
+  },
+  "custom": {
+    "catalogue": {
+      "icon": {
+        "image": "icon.png"
+      },
+      "banner": "logo.png",
+      "background": "catalogue_background.png"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GMG",
+    " D ",
+    "GCG"
+  ],
+  "key": {
+    "G": "#c:dusts/glowstone",
+    "M": "integratedterminals:menril_glass",
+    "D": "integrateddynamics:part_display_panel",
+    "C": "minecraft:crafting_table"
+  },
+  "result": {
+    "id": "integratedterminals:part_terminal_crafting_job"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=north": { "model": "rftoolsstorage:block/storage_scanner" },
+    "facing=south": { "model": "rftoolsstorage:block/storage_scanner", "y": 180 },
+    "facing=west": { "model": "rftoolsstorage:block/storage_scanner", "y": 270 },
+    "facing=east": { "model": "rftoolsstorage:block/storage_scanner", "y": 90 },
+    "facing=up": { "model": "rftoolsstorage:block/storage_scanner", "x": -90 },
+    "facing=down": { "model": "rftoolsstorage:block/storage_scanner", "x": 90 }
+  }
+}

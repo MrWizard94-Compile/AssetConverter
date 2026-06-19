@@ -1,0 +1,28 @@
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+secrets.properties
+
+# other
+eclipse
+run
+logs
+run-data
+.noai
+.cache
+*.profileconfig.json

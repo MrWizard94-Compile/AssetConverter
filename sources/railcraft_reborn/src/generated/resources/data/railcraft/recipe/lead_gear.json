@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:ingots/lead"
+    },
+    "b": {
+      "item": "railcraft:bushing_gear"
+    }
+  },
+  "pattern": [
+    " a ",
+    "aba",
+    " a "
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:lead_gear"
+  }
+}

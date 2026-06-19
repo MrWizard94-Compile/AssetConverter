@@ -1,0 +1,48 @@
+{
+  "parent": "undergarden:undergarden/contract_utheric_infection",
+  "criteria": {
+    "has_eaten_rogdorium": {
+      "conditions": {
+        "item": {
+          "items": "undergarden:rogdorium"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    },
+    "has_eaten_rogdorium_nugget": {
+      "conditions": {
+        "item": {
+          "items": "undergarden:rogdorium_nugget"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    },
+    "has_purity_effect": {
+      "conditions": {
+        "effects": {
+          "undergarden:purity": {}
+        }
+      },
+      "trigger": "minecraft:effects_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.undergarden.cure_utheric_infection.desc"
+    },
+    "icon": {
+      "id": "undergarden:rogdorium"
+    },
+    "title": {
+      "translate": "advancement.undergarden.cure_utheric_infection.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_purity_effect",
+      "has_eaten_rogdorium",
+      "has_eaten_rogdorium_nugget"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

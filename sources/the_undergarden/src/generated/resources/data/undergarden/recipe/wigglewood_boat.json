@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "boat",
+  "key": {
+    "P": "undergarden:wigglewood_planks"
+  },
+  "pattern": [
+    "P P",
+    "PPP"
+  ],
+  "result": {
+    "id": "undergarden:wigglewood_boat"
+  }
+}

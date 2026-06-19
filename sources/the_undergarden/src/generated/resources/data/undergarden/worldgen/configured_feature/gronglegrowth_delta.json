@@ -1,0 +1,24 @@
+{
+  "type": "undergarden:delta",
+  "config": {
+    "contents": {
+      "Name": "minecraft:water",
+      "Properties": {
+        "level": "0"
+      }
+    },
+    "rim": {
+      "Name": "undergarden:sediment"
+    },
+    "rim_size": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 4,
+      "min_inclusive": 2
+    },
+    "size": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 4,
+      "min_inclusive": 3
+    }
+  }
+}

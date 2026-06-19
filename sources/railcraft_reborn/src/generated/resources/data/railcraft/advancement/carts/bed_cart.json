@@ -1,0 +1,27 @@
+{
+  "parent": "railcraft:carts/locomotive",
+  "criteria": {
+    "has_slept_in_rc_bed": {
+      "trigger": "railcraft:bed_cart_sleep"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.railcraft.carts.bed_cart.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:minecart"
+    },
+    "title": {
+      "translate": "advancements.railcraft.carts.bed_cart.name"
+    }
+  },
+  "requirements": [
+    [
+      "has_slept_in_rc_bed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

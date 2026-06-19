@@ -1,0 +1,68 @@
+{
+  "elements": [
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "undergarden:catacombs/interior2",
+        "processors": "undergarden:catacombs_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "undergarden:catacombs/interior3",
+        "processors": "undergarden:catacombs_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "undergarden:catacombs/interior4_new",
+        "processors": "undergarden:catacombs_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "undergarden:catacombs/interior_altar",
+        "processors": "undergarden:catacombs_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "undergarden:catacombs/interior_grass",
+        "processors": "undergarden:catacombs_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "undergarden:catacombs/interior_jail",
+        "processors": "undergarden:catacombs_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "undergarden:catacombs/interior_morgue",
+        "processors": "undergarden:catacombs_degradation",
+        "projection": "rigid"
+      },
+      "weight": 1
+    }
+  ],
+  "fallback": "minecraft:empty"
+}

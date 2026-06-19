@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "undergarden:tremblecrust_bricks",
+  "result": {
+    "id": "undergarden:tremblecrust_brick_wall"
+  }
+}

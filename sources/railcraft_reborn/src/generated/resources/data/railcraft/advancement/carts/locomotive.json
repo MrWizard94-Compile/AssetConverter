@@ -1,0 +1,34 @@
+{
+  "parent": "railcraft:carts/root",
+  "criteria": {
+    "has_locomotives": {
+      "conditions": {
+        "items": [
+          {
+            "items": "railcraft:steam_locomotive"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.railcraft.carts.locomotive.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "railcraft:steam_locomotive"
+    },
+    "title": {
+      "translate": "advancements.railcraft.carts.locomotive.name"
+    }
+  },
+  "requirements": [
+    [
+      "has_locomotives"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,39 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:directory",
+      "prefix": "entity/signal_aspect/",
+      "source": "entity/signal_aspect"
+    },
+    {
+      "type": "minecraft:directory",
+      "prefix": "entity/signal_box_aspect/",
+      "source": "entity/signal_box_aspect"
+    },
+    {
+      "type": "minecraft:directory",
+      "prefix": "entity/signal_box/",
+      "source": "entity/signal_box"
+    },
+    {
+      "type": "minecraft:directory",
+      "prefix": "entity/fluid_manipulator/",
+      "source": "entity/fluid_manipulator"
+    },
+    {
+      "type": "minecraft:directory",
+      "prefix": "entity/fluid_loader/",
+      "source": "entity/fluid_loader"
+    },
+    {
+      "type": "minecraft:directory",
+      "prefix": "entity/minecart/",
+      "source": "entity/minecart"
+    },
+    {
+      "type": "minecraft:directory",
+      "prefix": "entity/chest/",
+      "source": "entity/chest"
+    }
+  ]
+}

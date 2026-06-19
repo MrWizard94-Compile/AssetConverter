@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_ender_dust": {
+      "conditions": {
+        "items": [
+          {
+            "items": "railcraft:ender_dust"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "railcraft:force_track_emitter"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_ender_dust"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "railcraft:force_track_emitter"
+    ]
+  }
+}

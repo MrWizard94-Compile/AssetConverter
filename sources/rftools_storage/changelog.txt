@@ -1,0 +1,188 @@
+1.20-5.0.4:
+- Various Patchouli documentation updates and fixes
+
+1.20-5.0.3:
+- Update to latest McJtyLib
+
+1.20-5.0.2:
+- Possibly fixed a compatibility problem with the tablet and storage scanner
+
+1.20-5.0.1:
+- Fixed patchouli integration
+
+1.20-5.0.0:
+- Port to 1.20
+
+1.19-4.1.2:
+- Update for latest McJtyLib fixing the registryAccess() problem
+
+1.19-4.1.1:
+- Update to 1.19.4
+- 1.19.3 compatibility fix in McJtyLib
+
+1.19-4.1.0:
+- Updated to Latest McJtyLib and made compatible with 1.19.3
+
+1.19-4.0.3:
+- Fixed a problem with modular storage where the compact button would erase the entire contents of the storage if you pressed it while the card was unlocked. Fixed by letting it not do anything in that case
+
+1.19-4.0.2:
+- Compact works again (modular storage)
+
+1.19-4.0.1:
+- Fixed a problem with the crafting grid in the storage scanner and modular storage. If some items were missing it wasn't showing it correctly
+
+1.19-4.0.0:
+- Port to 1.19
+
+1.18-3.0.8:
+- Fixed a problem on servers where removing a storage module from the modular storage caused the client to disconnect if that storage module had more then 128 items in it
+
+1.18-3.0.7:
+- Port to 1.18.2
+
+1.18-3.0.6:
+- Apparently NEI sometimes gives wrong slot numbers to it's crafting recipe api. Added protection for that
+- Fixed a bug in modular storage crafting where it would fail if the number of desired items matched exactly
+
+1.18-3.0.5:
+- Fixed a serious duping bug in combination with the crafter
+
+1.18-3.0.4:
+- Fixed a problem with items not getting restored when breaking and placing blocks
+
+1.18-3.0.3:
+- Huge lag reduction when opening the modular storage user interface
+
+1.18-3.0.2:
+- Updates for McJtyLib and fixes
+
+1.18-3.0.1:
+- Fixed blocks not breaking correctly with iron pickaxe
+
+1.18-3.0.0:
+- First update to 1.18
+
+1.16-2.0.15:
+- Updated to latest version of McJtyLib
+
+1.16-2.0.14:
+- Updated to latest version of McJtyLib
+- Fixed the rendering of the storage scanner module
+
+1.16-2.0.13:
+- The storage scanner uses a better fake player that matches the name of the real player if online
+
+1.16-2.0.12:
+- By default the storage scanner will no longer be able to scan inventories that don't belong to the player that placed the storage scanner. There is a new scannerNoRestrictions configuration flag that you can use to go back to the old behaviour
+
+1.16-2.0.11:
+- The crafting grid in the modular storage and storage scanner shows the missing items again
+- Fixed a few tooltip problems in the modular storage block
+
+1.16-2.0.10:
+- Fixed a problem with the crafting grids on the modular storage and storage scanner. They would not allow storing recipes anymore
+- Fixed crafting in the modular storage or storage scanner with recipes that don't take up the full 3x3 grid
+
+1.16-2.0.9:
+- Update for McJtyLib tooltip rendering
+
+1.16-2.0.8:
+- Fixed JEI messing with the crafting grid part of the modular storage and storage scanner
+- Fixed a problem with tags for crafting in both the modular storage and storage scanner. i.e. a furnace can now be crafted from different types of cobblestone
+- Fixed a gui problem with modular storage with smaller fonts
+- Also locked the crafting grid
+
+1.16-2.0.7:
+- Added back support for the XNet channel support
+- To avoid an interaction bug with inventory tweaks the modular storage system has been modified to use a locking system where you have to lock you storage item before you can use the modular storage
+- The modular storage block can now actually use up to the right amount (so 100 items instead of only 97)
+
+1.16-2.0.6:
+- Fixed a problem with upgrading storage modules. The contents would be lost
+- New 'rftoolsstorage restore' command that you can use to restore a lost modular storage card
+
+1.16-2.0.5:
+- Update to latest McJtyLib
+
+1.16-2.0.4-beta:
+- Fixed a potential crash with the storage module item when hovering over it
+
+2.0.3-beta:
+- Fixed a problem on servers
+
+2.0.2-beta:
+- Safer client-side registrations (thread-safety)
+- Various cleanups and fixes
+
+2.0.1-beta:
+- Fixed a potential exploit which could be used to attack a server
+
+2.0.0-beta:
+- First port to 1.16.2
+
+1.1.7:
+- Fixed a potential exploit which could be used to attack a server
+
+1.1.6-beta:
+- JEI support for the storage scanner is working again
+
+1.1.5-beta:
+- Update for latest McJtyLib
+
+1.1.4-beta:
+- Fixed various problems with modular storage. It was mostly broken after last update
+
+1.1.3-beta:
+- Fixed a problem in the modular storage where shift-clicking an item into the storage from the gui would void items if the storage was full
+
+1.1.2-beta:
+- Fixed a crash in the tooltip of the storage modules
+
+1.1.1-beta:
+- Dependency fix
+
+1.1.0-beta:
+- Better tooltips
+- Re-implemented TOP support for all blocks
+- New 'sort mode' button in the Storage Scanner allowing you to sort the items in the list
+- Better layout for the Storage Scanner
+- Moved the dump and storage control modules from RFTools Utility to RFTools Storage
+- The Storage Scanner Module can now be inserted in the RFTools Base tablet giving remote access to the scanner
+- Fixed the recipes for the vanilla recipe book
+- Moved most of the configs from common to server (so that they are saved with the world and synced to the client)
+
+1.0.3-alpha:
+- Re-implemented the filter module for the Modular Storage
+
+1.0.2-alpha:
+- Fixed a problem where the storage scanner would not correctly show items with amounts greater than 127
+- Fixed a problem with these amounts not being rendered at the correct spot
+- Fixed another bug where trying to request an item of which there is a lot didn't actually do anything
+
+1.0.1-alpha:
+- Fixed a problem with the modular storage inventory slots not being moved properly in case of different gui scale
+
+1.0.0-alpha:
+- First port to 1.15.2
+
+0.0.7:
+- Updates to latest McJtyLib
+
+0.0.6:
+- Updates to latest McJtyLib
+- The storage scanner now also supports the information screen (currently only for the upcoming crafting manager)
+
+0.0.5:
+- Avoid a rare crash during model registration
+- Fixed a serious networking problem which could cause 'invalid discriminator spam' on servers
+
+0.0.4-alpha :
+- Fixed a networking problem on servers
+
+0.0.3-alpha:
+- Updates to the latest McJtyLib
+- The Storage Scanner is back!
+
+0.0.2-alpha:
+- First version of the modular storage block

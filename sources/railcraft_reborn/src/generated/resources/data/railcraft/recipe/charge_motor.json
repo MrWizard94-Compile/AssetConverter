@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:ingots/steel"
+    },
+    "b": {
+      "tag": "c:plates/tin"
+    },
+    "c": {
+      "item": "railcraft:charge_coil"
+    },
+    "d": {
+      "item": "railcraft:charge_terminal"
+    }
+  },
+  "pattern": [
+    " a ",
+    "bcb",
+    " d "
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:charge_motor"
+  }
+}

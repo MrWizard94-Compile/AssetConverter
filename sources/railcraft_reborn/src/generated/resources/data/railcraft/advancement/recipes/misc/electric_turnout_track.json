@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_electric_rail": {
+      "conditions": {
+        "items": [
+          {
+            "items": "railcraft:electric_rail"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "railcraft:electric_turnout_track"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_electric_rail"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "railcraft:electric_turnout_track"
+    ]
+  }
+}

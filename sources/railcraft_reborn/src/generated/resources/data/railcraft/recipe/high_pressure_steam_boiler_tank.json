@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:plates/steel"
+    },
+    "b": {
+      "tag": "c:plates/invar"
+    }
+  },
+  "pattern": [
+    "a",
+    "b",
+    "a"
+  ],
+  "result": {
+    "count": 2,
+    "id": "railcraft:high_pressure_steam_boiler_tank"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": "undergarden:stripped_wigglewood_log",
+    "|": "minecraft:iron_chain"
+  },
+  "pattern": [
+    "| |",
+    "###",
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "id": "undergarden:wigglewood_hanging_sign"
+  }
+}

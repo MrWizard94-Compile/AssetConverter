@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:plates/brass"
+    },
+    "b": {
+      "item": "railcraft:rebar"
+    }
+  },
+  "pattern": [
+    "aaa",
+    "b b",
+    "bbb"
+  ],
+  "result": {
+    "count": 6,
+    "id": "railcraft:frame"
+  }
+}

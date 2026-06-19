@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "id": "integratedterminals:part_terminal_storage"
+    },
+    "title": {
+      "translate": "advancement.integratedterminals.craft_storage_terminal"
+    },
+    "description": {
+      "translate": "advancement.integratedterminals.craft_storage_terminal.desc"
+    }
+  },
+  "parent": "integratedterminals:storage_terminal/menril_glass",
+  "criteria": {
+    "criteria_0": {
+      "trigger": "cyclopscore:item_crafted",
+      "conditions": {
+        "item": {
+          "items": ["integratedterminals:part_terminal_storage"]
+        }
+      }
+    }
+  }
+}

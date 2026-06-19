@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "minecraft:planks"
+    },
+    {
+      "item": "railcraft:track_parts"
+    },
+    {
+      "tag": "c:fence_gates"
+    },
+    {
+      "item": "railcraft:advanced_rail"
+    },
+    {
+      "tag": "c:dusts/redstone"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "railcraft:gated_track_kit"
+  }
+}

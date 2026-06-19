@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:ingots/brass"
+    },
+    "b": {
+      "tag": "c:plates/brass"
+    }
+  },
+  "pattern": [
+    " b ",
+    "aaa"
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:charge_terminal"
+  }
+}

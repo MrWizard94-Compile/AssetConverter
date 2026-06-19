@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "S": "undergarden:shiverstone"
+  },
+  "pattern": [
+    " I ",
+    "SSS"
+  ],
+  "result": {
+    "id": "minecraft:stonecutter"
+  }
+}

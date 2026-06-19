@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "railcraft:reinforced_rail"
+    },
+    "b": {
+      "item": "railcraft:stone_railbed"
+    }
+  },
+  "pattern": [
+    "aaa",
+    "aba",
+    "aaa"
+  ],
+  "result": {
+    "count": 16,
+    "id": "railcraft:reinforced_junction_track"
+  }
+}

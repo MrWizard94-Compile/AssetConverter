@@ -1,0 +1,10 @@
+{
+  "type": "undergarden:infuser_conversion",
+  "category": "purifying",
+  "experience": 1.0,
+  "input": "undergarden:utheric_cluster",
+  "result": {
+    "id": "undergarden:utherium_crystal"
+  },
+  "slot_type": "rogdorium"
+}

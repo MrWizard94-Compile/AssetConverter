@@ -1,0 +1,79 @@
+package org.cyclops.integratedterminals.core.terminalstorage.slot;
+
+import com.google.common.collect.Lists;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import org.cyclops.commoncapabilities.api.ingredient.IIngredientMatcher;
+import org.cyclops.commoncapabilities.api.ingredient.IngredientComponent;
+import org.cyclops.cyclopscore.client.gui.GuiGraphicsExtended;
+import org.cyclops.cyclopscore.helper.IModHelpers;
+import org.cyclops.integratedterminals.api.ingredient.IIngredientComponentTerminalStorageHandler;
+import org.cyclops.integratedterminals.api.terminalstorage.ITerminalStorageTabClient;
+import org.cyclops.integratedterminals.api.terminalstorage.crafting.ITerminalCraftingOption;
+import org.cyclops.integratedterminals.client.gui.container.ContainerScreenTerminalStorage;
+import org.cyclops.integratedterminals.core.terminalstorage.TerminalStorageTabIngredientComponentClient;
+import org.cyclops.integratedterminals.core.terminalstorage.crafting.HandlerWrappedTerminalCraftingOption;
+
+import javax.annotation.Nullable;
+import java.util.List;
+
+/**
+ * An ingredient slot for a crafting option.
+ * @param <T> The instance type.
+ * @param <M> The matching condition parameter.
+ * @author rubensworks
+ */
+public class TerminalStorageSlotIngredientCraftingOption<T, M> extends TerminalStorageSlotIngredient<T, M> {
+
+    private final HandlerWrappedTerminalCraftingOption<T> craftingOption;
+
+    public TerminalStorageSlotIngredientCraftingOption(IIngredientComponentTerminalStorageHandler<T, M> ingredientComponentViewHandler, T instance, HandlerWrappedTerminalCraftingOption<T> craftingOption) {
+        super(ingredientComponentViewHandler, instance);
+        this.craftingOption = craftingOption;
+    }
+
+    @Override
+    public void drawGuiContainerLayer(AbstractContainerScreen gui, GuiGraphicsExtractor guiGraphics, ContainerScreenTerminalStorage.DrawLayer layer,
+                                      float partialTick, int x, int y, int mouseX, int mouseY,
+                                      ITerminalStorageTabClient tab, int channel, @Nullable String label) {
+        IIngredientComponentTerminalStorageHandler<T, M> viewHandler = getIngredientComponentViewHandler();
+        if (layer == ContainerScreenTerminalStorage.DrawLayer.BACKGROUND) {
+            long maxQuantity = ((TerminalStorageTabIngredientComponentClient) tab).getMaxQuantity(channel);
+            viewHandler.getClient().drawInstance(guiGraphics, getInstance(), maxQuantity, null, gui, layer, partialTick, x, y, mouseX, mouseY, null);
+            drawCraftLabel(guiGraphics, x, y);
+        } else {
+            long maxQuantity = ((TerminalStorageTabIngredientComponentClient) tab).getMaxQuantity(channel);
+            getIngredientComponentViewHandler().getClient().drawInstance(guiGraphics, getInstance(), maxQuantity, label, gui, layer, partialTick, x, y, mouseX, mouseY, getTooltipLines());
+        }
+    }
+
+    protected List<Component> getTooltipLines() {
+        List<Component> tooltipLines = Lists.newArrayList();
+        tooltipLines.add(Component.translatable("gui.integratedterminals.terminal_storage.tooltip.requirements")
+                .withStyle(ChatFormatting.YELLOW));
+        ITerminalCraftingOption<T> option = getCraftingOption().getCraftingOption();
+        for (IngredientComponent<?, ?> inputComponent : option.getInputComponents()) {
+            IIngredientMatcher matcher = inputComponent.getMatcher();
+            for (Object inputInstance : option.getInputs(inputComponent)) {
+                if (!matcher.isEmpty(inputInstance)) {
+                    tooltipLines.add(Component.literal(String.format("%s- %s (%s)",
+                            ChatFormatting.GRAY, matcher.localize(inputInstance), matcher.getQuantity(inputInstance))));
+                }
+            }
+        }
+        return tooltipLines;
+    }
+
+    public HandlerWrappedTerminalCraftingOption<T> getCraftingOption() {
+        return craftingOption;
+    }
+
+    private void drawCraftLabel(GuiGraphicsExtractor guiGraphics, int x, int y) {
+        new GuiGraphicsExtended(guiGraphics).drawSlotText(Minecraft.getInstance().font,
+                ChatFormatting.GOLD + IModHelpers.get().getL10NHelpers().localize("gui.integratedterminals.terminal_storage.craft"), x, y - 11);
+    }
+
+}

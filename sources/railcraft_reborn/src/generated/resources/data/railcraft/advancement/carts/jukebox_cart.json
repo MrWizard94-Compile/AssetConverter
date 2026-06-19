@@ -1,0 +1,27 @@
+{
+  "parent": "railcraft:carts/locomotive",
+  "criteria": {
+    "stal_played": {
+      "trigger": "railcraft:jukebox_cart_play_music"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.railcraft.carts.jukebox_cart.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:minecart"
+    },
+    "title": {
+      "translate": "advancements.railcraft.carts.jukebox_cart.name"
+    }
+  },
+  "requirements": [
+    [
+      "stal_played"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

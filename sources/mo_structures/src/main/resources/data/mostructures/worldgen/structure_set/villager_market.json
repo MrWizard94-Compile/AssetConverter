@@ -1,0 +1,22 @@
+{
+  "structures": [
+    {
+      "structure": "mostructures:villager_market",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "mostructures:type",
+    "structure_set_to_avoid": [
+      "minecraft:villages",
+      "mostructures:killer_bunny_castle",
+      "mostructures:lighthouse",
+      "mostructures:moai",
+      "mostructures:pillager_factory",
+      "mostructures:barn_house"
+    ],
+    "spacing": 30,
+    "separation": 16,
+    "salt": 184939542
+  }
+}

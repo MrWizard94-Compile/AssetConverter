@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "neoforge:trimmed_armor",
+    "base_model": {
+      "type": "minecraft:model",
+      "model": "undergarden:item/cloggrum_helmet"
+    },
+    "base_trim_texture": "undergarden:trims/items/cloggrum_helmet_trim"
+  }
+}

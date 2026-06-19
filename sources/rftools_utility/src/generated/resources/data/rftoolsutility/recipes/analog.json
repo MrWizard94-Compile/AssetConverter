@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "rftoolsbase:machine_base"
+    },
+    "C": {
+      "item": "minecraft:comparator"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "rAC"
+  ],
+  "result": {
+    "item": "rftoolsutility:analog"
+  }
+}

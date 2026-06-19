@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "F": {
+      "item": "rftoolsbase:machine_frame"
+    },
+    "T": {
+      "item": "minecraft:redstone_torch"
+    },
+    "g": {
+      "item": "minecraft:gold_ingot"
+    },
+    "o": {
+      "tag": "forge:ender_pearls"
+    }
+  },
+  "pattern": [
+    "ToT",
+    "gFg",
+    "ToT"
+  ],
+  "result": {
+    "item": "rftoolsstorage:storage_scanner"
+  }
+}

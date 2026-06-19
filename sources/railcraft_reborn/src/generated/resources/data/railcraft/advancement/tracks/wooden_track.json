@@ -1,0 +1,34 @@
+{
+  "parent": "railcraft:tracks/manual_rolling_machine",
+  "criteria": {
+    "inv_changed": {
+      "conditions": {
+        "items": [
+          {
+            "items": "railcraft:strap_iron_track"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.railcraft.tracks.wooden_track.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "railcraft:strap_iron_track"
+    },
+    "title": {
+      "translate": "advancements.railcraft.tracks.wooden_track.name"
+    }
+  },
+  "requirements": [
+    [
+      "inv_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

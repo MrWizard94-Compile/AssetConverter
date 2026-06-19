@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:redstone_torch"
+    },
+    "b": {
+      "item": "railcraft:receiver_circuit"
+    },
+    "c": {
+      "item": "minecraft:stone_button"
+    }
+  },
+  "pattern": [
+    " a ",
+    "cbc"
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:signal_tuner"
+  }
+}

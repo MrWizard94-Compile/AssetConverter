@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:glass_blocks"
+    },
+    "b": {
+      "tag": "c:ingots/brass"
+    },
+    "c": {
+      "item": "railcraft:saltpeter_dust"
+    },
+    "d": {
+      "item": "minecraft:water_bucket"
+    }
+  },
+  "pattern": [
+    "aba",
+    "aca",
+    "ada"
+  ],
+  "result": {
+    "count": 6,
+    "id": "railcraft:white_strengthened_glass"
+  }
+}

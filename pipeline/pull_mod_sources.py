@@ -3,6 +3,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import os
+import shutil
 import subprocess
 import sys
 
@@ -115,6 +116,13 @@ def clone_mod(mod_id, repo_url):
         if mod_id in MODRINTH_JAR_MODS:
             return pull_from_modrinth_jar(mod_id)
         return False, 0
+
+    nested_git = os.path.join(dest, ".git")
+    if os.path.exists(nested_git):
+        if os.path.isdir(nested_git):
+            shutil.rmtree(nested_git, ignore_errors=True)
+        else:
+            os.remove(nested_git)
 
     tex_dir = find_source_textures_dir(mod_id)
     count = count_pngs(tex_dir) if os.path.isdir(tex_dir) else 0

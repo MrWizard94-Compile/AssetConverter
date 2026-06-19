@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "undergarden:cloggrum_ingot"
+  ],
+  "result": {
+    "count": 9,
+    "id": "undergarden:cloggrum_nugget"
+  }
+}

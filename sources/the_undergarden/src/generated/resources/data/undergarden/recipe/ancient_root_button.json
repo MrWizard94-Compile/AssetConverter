@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "group": "wooden_button",
+  "ingredients": [
+    "undergarden:ancient_root_planks"
+  ],
+  "result": {
+    "id": "undergarden:ancient_root_button"
+  }
+}

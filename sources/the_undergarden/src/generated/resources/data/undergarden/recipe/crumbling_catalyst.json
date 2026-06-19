@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "#c:ingots/cloggrum",
+    "D": "undergarden:depthrock",
+    "F": "#c:nuggets/forgotten_metal"
+  },
+  "pattern": [
+    "CDC",
+    "DFD",
+    "CDC"
+  ],
+  "result": {
+    "id": "undergarden:crumbling_catalyst"
+  }
+}

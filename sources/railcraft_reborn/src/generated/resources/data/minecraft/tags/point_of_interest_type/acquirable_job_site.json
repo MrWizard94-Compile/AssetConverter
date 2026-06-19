@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "railcraft:manual_rolling_machine_poi",
+      "required": false
+    },
+    {
+      "id": "railcraft:powered_rolling_machine_poi",
+      "required": false
+    }
+  ]
+}

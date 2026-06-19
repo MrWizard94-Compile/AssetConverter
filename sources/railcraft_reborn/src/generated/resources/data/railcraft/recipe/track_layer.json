@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:dyes/yellow"
+    },
+    "b": {
+      "item": "minecraft:redstone_lamp"
+    },
+    "c": {
+      "item": "minecraft:anvil"
+    },
+    "d": {
+      "tag": "c:storage_blocks/steel"
+    },
+    "e": {
+      "item": "minecraft:dispenser"
+    },
+    "f": {
+      "item": "minecraft:minecart"
+    }
+  },
+  "pattern": [
+    "aba",
+    "cdc",
+    "efe"
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:track_layer"
+  }
+}

@@ -1,0 +1,36 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT License https://github.com/McJtyMods/RFToolsUtility/blob/1.16/LICENCE"
+issueTrackerURL="http://github.com/McJtyMods/RFToolsUtility/issues"
+displayURL="http://github.com/McJtyMods/RFToolsUtility/"
+#logoFile="examplemod.png" #optional
+#credits="Thanks for this example mod goes to Java" #optional
+authors="McJty"
+
+[[mods]]
+modId="rftoolsutility"
+version="${file.jarVersion}"
+displayName="RFToolsUtility"
+#updateJSONURL="http://myurl.me/" #optional
+
+description='''
+Generic RFTools utilities
+'''
+[[dependencies.rftoolsutility]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.rftoolsutility]]
+    modId="mcjtylib"
+    mandatory=true
+    versionRange="[1.20-8.0.7,)"
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.rftoolsutility]]
+    modId="rftoolsbase"
+    mandatory=true
+    versionRange="[1.20-5.0.7,)"
+    ordering="AFTER"
+    side="BOTH"

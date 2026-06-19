@@ -1,0 +1,5 @@
+{
+  "type": "undergarden:item_infusing",
+  "input": "#c:armors",
+  "show_notification": false
+}

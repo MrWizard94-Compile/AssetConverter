@@ -1,0 +1,27 @@
+{
+  "parent": "railcraft:carts/root",
+  "criteria": {
+    "linked_carts": {
+      "trigger": "railcraft:cart_linking"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.railcraft.carts.link_carts.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "railcraft:steel_crowbar"
+    },
+    "title": {
+      "translate": "advancements.railcraft.carts.link_carts.name"
+    }
+  },
+  "requirements": [
+    [
+      "linked_carts"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

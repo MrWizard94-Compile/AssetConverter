@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "tag": "forge:chests"
+    },
+    "F": {
+      "item": "rftoolsbase:machine_frame"
+    },
+    "q": {
+      "item": "minecraft:quartz"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "rCr",
+    "qFq",
+    "rqr"
+  ],
+  "result": {
+    "item": "rftoolsstorage:modular_storage"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "railcraft:nickel_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "railcraft:nickel_ingot"
+  }
+}

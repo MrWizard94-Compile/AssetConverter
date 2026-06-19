@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:soul_sand"
+    },
+    "b": {
+      "item": "minecraft:nether_brick"
+    },
+    "c": {
+      "item": "minecraft:magma_cream"
+    }
+  },
+  "pattern": [
+    "aba",
+    "bcb",
+    "aba"
+  ],
+  "result": {
+    "count": 4,
+    "id": "railcraft:blast_furnace_bricks"
+  }
+}

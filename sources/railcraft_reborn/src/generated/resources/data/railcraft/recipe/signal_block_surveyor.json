@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:compass"
+    },
+    "b": {
+      "tag": "c:glass_panes"
+    },
+    "c": {
+      "item": "minecraft:stone_button"
+    },
+    "d": {
+      "tag": "c:dusts/redstone"
+    }
+  },
+  "pattern": [
+    " a ",
+    "cbc",
+    " d "
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:signal_block_surveyor"
+  }
+}

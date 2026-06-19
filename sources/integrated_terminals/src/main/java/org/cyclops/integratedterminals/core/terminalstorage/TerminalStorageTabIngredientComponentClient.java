@@ -1,0 +1,921 @@
+package org.cyclops.integratedterminals.core.terminalstorage;
+
+import com.google.common.base.Predicates;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import it.unimi.dsi.fastutil.ints.*;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import org.cyclops.commoncapabilities.api.ingredient.IIngredientMatcher;
+import org.cyclops.commoncapabilities.api.ingredient.IngredientComponent;
+import org.cyclops.cyclopscore.client.gui.image.Images;
+import org.cyclops.cyclopscore.helper.IModHelpers;
+import org.cyclops.cyclopscore.helper.StringHelpers;
+import org.cyclops.cyclopscore.ingredient.collection.IIngredientCollapsedCollectionMutable;
+import org.cyclops.cyclopscore.ingredient.collection.IngredientArrayList;
+import org.cyclops.cyclopscore.ingredient.collection.IngredientCollectionHelpers;
+import org.cyclops.cyclopscore.ingredient.collection.diff.IngredientCollectionDiff;
+import org.cyclops.cyclopscore.ingredient.collection.diff.IngredientCollectionDiffHelpers;
+import org.cyclops.integrateddynamics.api.ingredient.IIngredientComponentStorageObservable;
+import org.cyclops.integrateddynamics.api.network.IPositionedAddonsNetwork;
+import org.cyclops.integratedterminals.Capabilities;
+import org.cyclops.integratedterminals.IntegratedTerminals;
+import org.cyclops.integratedterminals.api.ingredient.IIngredientComponentTerminalStorageHandler;
+import org.cyclops.integratedterminals.api.ingredient.IIngredientInstanceSorter;
+import org.cyclops.integratedterminals.api.terminalstorage.*;
+import org.cyclops.integratedterminals.api.terminalstorage.crafting.ITerminalCraftingOption;
+import org.cyclops.integratedterminals.api.terminalstorage.event.TerminalStorageTabClientLoadButtonsEvent;
+import org.cyclops.integratedterminals.api.terminalstorage.event.TerminalStorageTabClientSearchFieldUpdateEvent;
+import org.cyclops.integratedterminals.client.gui.container.ContainerScreenTerminalStorage;
+import org.cyclops.integratedterminals.core.client.gui.CraftingOptionGuiData;
+import org.cyclops.integratedterminals.core.terminalstorage.button.TerminalButtonFilterCrafting;
+import org.cyclops.integratedterminals.core.terminalstorage.button.TerminalButtonScaleGui;
+import org.cyclops.integratedterminals.core.terminalstorage.button.TerminalButtonSort;
+import org.cyclops.integratedterminals.core.terminalstorage.crafting.HandlerWrappedTerminalCraftingOption;
+import org.cyclops.integratedterminals.core.terminalstorage.crafting.TerminalStorageTabIngredientCraftingHandlers;
+import org.cyclops.integratedterminals.core.terminalstorage.query.IIngredientQuery;
+import org.cyclops.integratedterminals.core.terminalstorage.slot.TerminalStorageSlotIngredient;
+import org.cyclops.integratedterminals.core.terminalstorage.slot.TerminalStorageSlotIngredientCraftingOption;
+import org.cyclops.integratedterminals.inventory.container.ContainerTerminalStorageBase;
+import org.cyclops.integratedterminals.network.packet.TerminalStorageIngredientSlotClickPacket;
+
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+/**
+ * A client-side storage terminal ingredient tab.
+ * @param <T> The instance type.
+ * @param <M> The matching condition parameter.
+ * @author rubensworks
+ */
+public class TerminalStorageTabIngredientComponentClient<T, M>
+        implements ITerminalStorageTabClient<TerminalStorageSlotIngredient<T, M>> {
+
+    static {
+        NeoForge.EVENT_BUS.register(TerminalStorageTabIngredientComponentClient.class);
+    }
+
+    private final Identifier name;
+    protected final IngredientComponent<T, M> ingredientComponent;
+    private final IIngredientComponentTerminalStorageHandler<T, M> ingredientComponentViewHandler;
+    private final ItemStack icon;
+    protected final ContainerTerminalStorageBase container;
+    private final List<ITerminalButton<?, ?, ?>> buttons;
+
+    private final Int2ObjectMap<IIngredientCollapsedCollectionMutable<T, M>> ingredientsUnsortedViews;
+    private final Int2ObjectMap<List<InstanceWithMetadata<T>>> filteredIngredientsViews;
+    private final Int2ObjectMap<Collection<HandlerWrappedTerminalCraftingOption<T>>> craftingOptions;
+
+    private final Int2LongMap maxQuantities;
+    private final Int2LongMap totalQuantities;
+    private final IntSet channels;
+    private boolean enabled;
+    private int activeSlotId;
+    private int activeSlotQuantity;
+    private int activeChannel;
+    private int lastChangeId;
+
+    @SubscribeEvent
+    public static void onToolTip(ItemTooltipEvent event) {
+        // If this tab is active, render the quantity in all player inventory item tooltips.
+        if (event.getEntity() != null && event.getEntity().containerMenu instanceof ContainerTerminalStorageBase) {
+            ContainerTerminalStorageBase<?> container = (ContainerTerminalStorageBase<?>) event.getEntity().containerMenu;
+            ITerminalStorageTabClient<?> tab = container.getTabsClient().get(container.getSelectedTab());
+            if (tab instanceof TerminalStorageTabIngredientComponentClient) {
+                IIngredientComponentTerminalStorageHandler handler = ((TerminalStorageTabIngredientComponentClient) tab).ingredientComponentViewHandler;
+                Object instance = handler.getInstance(event.getItemStack());
+                if (!(instance instanceof ItemStack)) {
+                    handler.addQuantityTooltip(event.getToolTip(), instance);
+                }
+            }
+        }
+    }
+
+    public TerminalStorageTabIngredientComponentClient(ContainerTerminalStorageBase container, Identifier name,
+                                                       IngredientComponent<?, ?> ingredientComponent) {
+        this.name = name;
+        this.ingredientComponent = (IngredientComponent<T, M>) ingredientComponent;
+        this.ingredientComponentViewHandler = this.ingredientComponent.getCapability(Capabilities.IngredientComponentTerminalStorageHandler.INGREDIENT)
+        .orElseThrow(() -> new IllegalStateException("Could not find an ingredient terminal storage handler"));
+        this.icon = ingredientComponentViewHandler.getIcon();
+        this.container = container;
+
+        List<ITerminalButton<?, ?, ?>> buttons = Lists.newArrayList();
+        loadButtons(buttons);
+        TerminalStorageTabClientLoadButtonsEvent event = new TerminalStorageTabClientLoadButtonsEvent(container, this, buttons);
+        NeoForge.EVENT_BUS.post(event);
+        this.buttons = event.getButtons();
+
+        this.ingredientsUnsortedViews = new Int2ObjectOpenHashMap<>();
+        this.filteredIngredientsViews = new Int2ObjectOpenHashMap<>();
+        this.craftingOptions = new Int2ObjectOpenHashMap<>();
+
+        this.maxQuantities = new Int2LongOpenHashMap();
+        this.totalQuantities = new Int2LongOpenHashMap();
+        this.enabled = false;
+        this.channels = new IntOpenHashSet();
+        resetActiveSlot();
+
+        this.lastChangeId = 0;
+
+    }
+
+    protected void loadButtons(List<ITerminalButton<?, ?, ?>> buttons) {
+        // Add all sorting buttons
+        for (IIngredientInstanceSorter<T> instanceSorter : ingredientComponentViewHandler.getInstanceSorters()) {
+            buttons.add(new TerminalButtonSort<>(instanceSorter, container.getGuiState(), this));
+        }
+
+        // Add all crafting-related buttons
+        if (!TerminalStorageTabIngredientCraftingHandlers.REGISTRY.getHandlers().isEmpty()) {
+            buttons.add(new TerminalButtonFilterCrafting<>(container.getGuiState(), this));
+        }
+
+        // Add other buttons
+        buttons.add(new TerminalButtonScaleGui<>(container.getGuiState(), this));
+    }
+
+    public IngredientComponent<T, M> getIngredientComponent() {
+        return ingredientComponent;
+    }
+
+    @Override
+    public void onSelect(int channel) {
+        // Reload search box
+        setInstanceFilter(channel, container.getGuiState().getSearch(getTabSettingsName().toString(), channel));
+
+        // Reload button states
+        for (ITerminalButton<?, ?, ?> button : getButtons()) {
+            button.reloadFromState();
+        }
+    }
+
+    @Override
+    public void onDeselect(int channel) {
+
+    }
+
+    @Override
+    public Identifier getName() {
+        return this.name;
+    }
+
+    @Override
+    public ItemStack getIcon() {
+        return this.icon;
+    }
+
+    @Override
+    public List<Component> getTooltip() {
+        return Lists.newArrayList(Component.translatable("gui.integratedterminals.terminal_storage.storage_name",
+                Component.translatable(this.ingredientComponent.getTranslationKey())));
+    }
+
+    @Override
+    public String getInstanceFilter(int channel) {
+        if (container.getGuiState().hasSearch(getTabSettingsName().toString(), channel)) {
+            return container.getGuiState().getSearch(getTabSettingsName().toString(), channel);
+        }
+        return "";
+    }
+
+    public Predicate<InstanceWithMetadata<T>> getInstanceFilterMetadata() {
+        for (ITerminalButton<?, ?, ?> button : this.buttons) {
+            if (button instanceof TerminalButtonFilterCrafting) {
+                return ((TerminalButtonFilterCrafting) button).getEffectiveFilter();
+            }
+        }
+
+        return Predicates.alwaysTrue();
+    }
+
+    public void resetFilteredIngredientsViews(int channel) {
+        filteredIngredientsViews.remove(channel);
+    }
+
+    @Override
+    public void setInstanceFilter(int channel, String filter) {
+        TerminalStorageTabClientSearchFieldUpdateEvent event = new TerminalStorageTabClientSearchFieldUpdateEvent(this, filter);
+        NeoForge.EVENT_BUS.post(event);
+        filter = event.getSearchString();
+        resetFilteredIngredientsViews(channel);
+        container.getGuiState().setSearch(getTabSettingsName().toString(), channel, filter.toLowerCase(Locale.ENGLISH));
+    }
+
+    public IIngredientCollapsedCollectionMutable<T, M> getRawUnfilteredIngredientsView(int channel) {
+        IIngredientCollapsedCollectionMutable<T, M> ingredientsView = ingredientsUnsortedViews.get(channel);
+        if (ingredientsView == null) {
+            ingredientsView = IngredientCollectionHelpers.createCollapsedCollection(getIngredientComponent());
+            ingredientsUnsortedViews.put(channel, ingredientsView);
+        }
+        return ingredientsView;
+    }
+
+    @Nullable
+    public Collection<HandlerWrappedTerminalCraftingOption<T>> getCraftingOptions(int channel) {
+        return craftingOptions.get(channel);
+    }
+
+    public List<InstanceWithMetadata<T>> createUnfilteredIngredientsView(int channel) {
+        // Convert raw ingredients view to list
+        List<InstanceWithMetadata<T>> enrichedIngredients = Lists.newArrayList();
+        for (T persistedIngredient : getRawUnfilteredIngredientsView(channel)) {
+            enrichedIngredients.add(new InstanceWithMetadata<>(persistedIngredient, null));
+        }
+
+        // Add all crafting option outputs
+        Collection<HandlerWrappedTerminalCraftingOption<T>> craftingOptions = getCraftingOptions(channel);
+        if (craftingOptions != null) {
+            for (HandlerWrappedTerminalCraftingOption<T> craftingOption : craftingOptions) {
+                for (T output : getUniqueCraftingOptionOutputs(craftingOption.getCraftingOption())) {
+                    enrichedIngredients.add(new InstanceWithMetadata<>(output, craftingOption));
+                }
+            }
+        }
+
+        return enrichedIngredients;
+    }
+
+    public Collection<T> getUniqueCraftingOptionOutputs(ITerminalCraftingOption<T> craftingOption) {
+        TreeSet<T> uniqueOutputs = Sets.newTreeSet(ingredientComponent.getMatcher());
+        Iterator<T> it = craftingOption.getOutputs();
+        while (it.hasNext()) {
+            uniqueOutputs.add(it.next());
+        }
+        return uniqueOutputs;
+    }
+
+    protected List<InstanceWithMetadata<T>> getFilteredIngredientsView(int channel) {
+        List<InstanceWithMetadata<T>> ingredientsView = filteredIngredientsViews.get(channel);
+        if (ingredientsView == null) {
+            ingredientsView = createUnfilteredIngredientsView(channel);
+
+            // Filter
+            ingredientsView = Lists.newArrayList(
+                    this.transformIngredientsView(ingredientsView.stream())
+                            .filter(im -> IIngredientQuery.parse(ingredientComponent, getInstanceFilter(channel)).test(im.getInstance()))
+                            .filter(getInstanceFilterMetadata())
+                            .collect(Collectors.toList()));
+
+            // Sort
+            Comparator<T> sorter = getInstanceSorter();
+            if (sorter != null) {
+                try {
+                    ingredientsView.sort(InstanceWithMetadata.createComparator(sorter));
+                } catch (IllegalArgumentException e) {
+                    // We deliberately ignore comparison violations
+                    // If this would cause issues, we'll need to do a deep-copy of all ingredients, which will impact performance
+                    // See https://github.com/CyclopsMC/IntegratedTerminals/issues/119
+                }
+            }
+
+            filteredIngredientsViews.put(channel, ingredientsView);
+        }
+        return ingredientsView;
+    }
+
+    protected Stream<InstanceWithMetadata<T>> transformIngredientsView(Stream<InstanceWithMetadata<T>> ingredientStream) {
+        return ingredientStream;
+    }
+
+    @Override
+    public List<TerminalStorageSlotIngredient<T, M>> getSlots(int channel, int offset, int limit) {
+        List<InstanceWithMetadata<T>> ingredients = getFilteredIngredientsView(channel);
+        int size = ingredients.size();
+        if (offset >= size) {
+            return Lists.newArrayList();
+        }
+        return ingredients.subList(offset, Math.min(offset + limit, size)).stream()
+                .map(instanceWithMetadata -> {
+                    T instance = instanceWithMetadata.getInstance();
+                    HandlerWrappedTerminalCraftingOption<T> craftingOption = instanceWithMetadata.getCraftingOption();
+                    if (craftingOption == null) {
+                        return new TerminalStorageSlotIngredient<>(ingredientComponentViewHandler, instance);
+                    } else {
+                        return new TerminalStorageSlotIngredientCraftingOption<>(ingredientComponentViewHandler, instance, craftingOption);
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    public Optional<T> getSlotInstance(int channel, int index) {
+        return getSlot(channel, index).map(TerminalStorageSlotIngredient::getInstance);
+    }
+
+    public Optional<TerminalStorageSlotIngredient<T, M>> getSlot(int channel, int index) {
+        if (index >= 0) {
+            List<TerminalStorageSlotIngredient<T, M>> lastSlots = getSlots(channel, index, 1);
+            if (!lastSlots.isEmpty()) {
+                return Optional.of(lastSlots.get(0));
+            }
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public int getSlotCount(int channel) {
+        return getFilteredIngredientsView(channel).size();
+    }
+
+    @Override
+    public String getStatus(int channel) {
+        return String.format(Locale.ROOT, "%,d / %,d", getTotalQuantity(channel), getMaxQuantity(channel));
+    }
+
+    /**
+     * Receiver an ingredients change event.
+     * @param channel A channel id.
+     * @param changeType A change type.
+     * @param ingredients A list of changed ingredients.
+     * @param enabled If this tab is enabled.
+     */
+    public synchronized void onChange(int channel, IIngredientComponentStorageObservable.Change changeType,
+                                      IngredientArrayList<T, M> ingredients, boolean enabled) {
+        this.lastChangeId++;
+
+        boolean wasEnabled = this.enabled;
+        this.enabled = enabled || this.craftingOptions.containsKey(channel);
+        if (channel != IPositionedAddonsNetwork.WILDCARD_CHANNEL) {
+            this.channels.add(channel);
+        }
+
+        // Remember the selected instance, as this change event might change its position or quantity.
+        // This is handled at the end of this method.
+        Optional<T> lastInstance = getSlotInstance(channel, this.activeSlotId);
+
+        // Apply the change to the wildcard channel as well
+        if (channel != IPositionedAddonsNetwork.WILDCARD_CHANNEL) {
+            onChange(IPositionedAddonsNetwork.WILDCARD_CHANNEL, changeType, ingredients, enabled);
+        }
+
+        // Calculate quantity-diff
+        long quantity = 0;
+        IIngredientMatcher<T, M> matcher = ingredients.getComponent().getMatcher();
+        for (T ingredient : ingredients) {
+            try {
+                quantity = Math.addExact(quantity, matcher.getQuantity(ingredient));
+            } catch (ArithmeticException e) {
+                quantity = Long.MAX_VALUE; // If we had an overflow, we're already at max quantity.
+            }
+            if (quantity == Long.MAX_VALUE) {
+                break;
+            }
+        }
+        if (changeType != IIngredientComponentStorageObservable.Change.ADDITION) {
+            quantity = -quantity;
+        }
+        long newQuantity = totalQuantities.get(channel) + quantity;
+        totalQuantities.put(channel, newQuantity);
+
+        // Apply diff
+        IIngredientCollapsedCollectionMutable<T, M> rawPersistedIngredients = getRawUnfilteredIngredientsView(channel);
+        IngredientCollectionDiff<T, M> diff = new IngredientCollectionDiff<>(
+                changeType == IIngredientComponentStorageObservable.Change.ADDITION ? ingredients : null,
+                changeType == IIngredientComponentStorageObservable.Change.DELETION ? ingredients : null,
+                false);
+        IngredientCollectionDiffHelpers.applyDiff(ingredientComponent, diff, rawPersistedIngredients);
+
+        // Persist changes
+        resetFilteredIngredientsViews(channel);
+
+        // Update the active instance by searching for its new position in the slots
+        // If this becomes a performance bottleneck, we could search _around_ the previous position.
+        updateActiveInstance(lastInstance, channel);
+
+        // Re-init screen if the tab was not yet enabled
+        if (!wasEnabled && enabled) {
+            this.container.selectedClientTabProvider.init();
+        }
+    }
+
+    protected void updateActiveInstance(Optional<T> lastInstance, int channel) {
+        if (lastInstance.isPresent() && this.activeChannel == channel) {
+            this.activeSlotId = findActiveSlotId(channel, lastInstance.get());
+            Optional<T> slotIngredient = getSlotInstance(channel, this.activeSlotId);
+            this.activeSlotQuantity = slotIngredient
+                    .map(t -> Math.min(this.activeSlotQuantity, IModHelpers.get().getBaseHelpers().castSafe(this.ingredientComponent.getMatcher().getQuantity(t))))
+                    .orElse(0);
+        }
+    }
+
+    public synchronized void addCraftingOptions(int channel, List<HandlerWrappedTerminalCraftingOption<T>> craftingOptions,
+                                                boolean reset, boolean firstChannel) {
+        // Remember the selected instance, as this change event might change its position or quantity.
+        // This is handled at the end of this method.
+        Optional<T> lastInstance = getSlotInstance(channel, this.activeSlotId);
+
+        // Apply the change to the wildcard channel as well
+        if (channel != IPositionedAddonsNetwork.WILDCARD_CHANNEL) {
+            addCraftingOptions(IPositionedAddonsNetwork.WILDCARD_CHANNEL, craftingOptions, reset && firstChannel, firstChannel);
+        }
+
+        boolean wasEnabled = this.enabled;
+        this.enabled = true;
+        if (channel != IPositionedAddonsNetwork.WILDCARD_CHANNEL) {
+            this.channels.add(channel);
+        }
+        Collection<HandlerWrappedTerminalCraftingOption<T>> existingOptions = this.craftingOptions.get(channel);
+        if (existingOptions == null || reset) {
+            this.craftingOptions.put(channel, Lists.newArrayList(craftingOptions));
+        } else {
+            existingOptions.addAll(craftingOptions);
+        }
+
+        // Persist changes
+        resetFilteredIngredientsViews(channel);
+
+        // Update the active instance by searching for its new position in the slots
+        // If this becomes a performance bottleneck, we could search _around_ the previous position.
+        updateActiveInstance(lastInstance, channel);
+
+        // Re-init screen if the tab was not yet enabled
+        if (!wasEnabled && enabled) {
+            this.container.selectedClientTabProvider.init();
+        }
+    }
+
+    protected int findActiveSlotId(int channel, T instance) {
+        IIngredientMatcher<T, M> matcher = this.ingredientComponent.getMatcher();
+        int newActiveSlot = 0;
+        M matchCondition = matcher.getExactMatchNoQuantityCondition();
+        List<TerminalStorageSlotIngredient<T, M>> slots = getSlots(channel, 0, Integer.MAX_VALUE);
+        for (TerminalStorageSlotIngredient<T, M> slot : slots) {
+            T ingredient = slot.getInstance();
+            if (matcher.matches(ingredient, instance, matchCondition)) {
+                return newActiveSlot;
+            }
+            newActiveSlot++;
+        }
+        return -1;
+    }
+
+    /**
+     * Called by the server when a (remainder) active storage ingredient needs to be set.
+     * @param channel The channel.
+     * @param activeInstance The active instance.
+     */
+    public synchronized void handleActiveIngredientUpdate(int channel, T activeInstance) {
+        IIngredientMatcher<T, M> matcher = this.ingredientComponent.getMatcher();
+        this.activeChannel = channel;
+        if (!matcher.isEmpty(activeInstance)) {
+            this.activeSlotId = findActiveSlotId(channel, activeInstance);
+            Optional<T> slotIngredient = getSlotInstance(channel, this.activeSlotId);
+            this.activeSlotQuantity += slotIngredient
+                    .map(t -> IModHelpers.get().getBaseHelpers().castSafe(matcher.getQuantity(activeInstance)))
+                    .orElse(0);
+        }
+    }
+
+    /**
+     * Get the total maximum allowed quantity in the given channel.
+     * @param channel A channel id.
+     * @return The max quantity.
+     */
+    public long getMaxQuantity(int channel) {
+        // Take the sum of all channels when requesting wildcard channel
+        if (channel == IPositionedAddonsNetwork.WILDCARD_CHANNEL) {
+            return Arrays.stream(getChannels()).mapToLong(this::getMaxQuantity).sum();
+        }
+        return maxQuantities.get(channel);
+    }
+
+    /**
+     * Set the max quantity in the given channel.
+     * @param channel A channel id.
+     * @param maxQuantity The new max quantity.
+     */
+    public void setMaxQuantity(int channel, long maxQuantity) {
+        this.maxQuantities.put(channel, maxQuantity);
+    }
+
+    /**
+     * Get the total instance quantities in the given channel.
+     * @param channel A channel id.
+     * @return The total quantity.
+     */
+    public long getTotalQuantity(int channel) {
+        return totalQuantities.get(channel);
+    }
+
+    @Override
+    public int[] getChannels() {
+        int[] channels = this.channels.toIntArray();
+        Arrays.sort(channels);
+        return channels;
+    }
+
+    @Override
+    public void resetActiveSlot() {
+        this.activeSlotId = -1;
+        this.activeSlotQuantity = 0;
+        this.activeChannel = -2;
+    }
+
+    @Override
+    public boolean handleClick(AbstractContainerMenu container, int channel, int hoveringStorageSlot, int mouseButton,
+                               boolean hasClickedOutside, boolean hasClickedInStorage, int hoveredContainerSlot,
+                               boolean isQuickMove) {
+        this.activeChannel = channel;
+
+        IIngredientMatcher<T, M> matcher = ingredientComponent.getMatcher();
+        Optional<TerminalStorageSlotIngredient<T, M>> hoveringStorageSlotObject = getSlot(channel, hoveringStorageSlot);
+        Optional<T> hoveringStorageInstance = hoveringStorageSlotObject.map(TerminalStorageSlotIngredient::getInstance);
+        boolean validHoveringStorageSlot = hoveringStorageInstance.isPresent();
+        boolean isCraftingOption = hoveringStorageSlotObject.isPresent() && hoveringStorageSlotObject.get() instanceof TerminalStorageSlotIngredientCraftingOption;
+        IIngredientComponentTerminalStorageHandler<T, M> viewHandler = this.getViewHandler();
+        boolean shift = IModHelpers.get().getMinecraftClientHelpers().isShifted();
+        boolean transferFullSelection = true;
+
+        Player player = Minecraft.getInstance().player;
+        boolean initiateCraftingOption = false;
+        if (mouseButton == 0 || mouseButton == 1 || mouseButton == 2) {
+            TerminalClickType clickType = null;
+            long moveQuantity = this.activeSlotQuantity;
+            long movePlayerQuantity = 0;
+            boolean reset = false; // So that a reset occurs after the packet is sent
+            if (validHoveringStorageSlot && container.getCarried().isEmpty() && activeSlotId < 0) {
+                if (isCraftingOption) {
+                    // Craft
+                    initiateCraftingOption = true;
+                } else {
+                    if (shift) {
+                        // Quick move single or max quantity from storage to player
+                        clickType = mouseButton == 2 ? TerminalClickType.STORAGE_QUICK_MOVE_INCREMENTAL : TerminalClickType.STORAGE_QUICK_MOVE;
+                    } else {
+                        // Pick up
+                        this.activeSlotId = hoveringStorageSlot;
+                        this.activeSlotQuantity = Math.min((int) ingredientComponent.getMatcher()
+                                        .getQuantity(hoveringStorageInstance.orElse(matcher.getEmptyInstance())),
+                                viewHandler.getInitialInstanceMovementQuantity());
+                        if (mouseButton == 1) {
+                            this.activeSlotQuantity = (int) Math.ceil((double) this.activeSlotQuantity / 2);
+                        } else if (mouseButton == 2) {
+                            this.activeSlotQuantity = 1;
+                        }
+                    }
+                }
+            } else if (hoveredContainerSlot >= 0 && !container.getSlot(hoveredContainerSlot).getItem().isEmpty() && isQuickMove) {
+                // Quick move max quantity from player to storage
+                clickType = mouseButton == 2 ? TerminalClickType.PLAYER_QUICK_MOVE_INCREMENTAL : TerminalClickType.PLAYER_QUICK_MOVE;
+            } else if (hasClickedInStorage && !container.getCarried().isEmpty()) {
+                // Move into storage
+                clickType = TerminalClickType.PLAYER_PLACE_STORAGE;
+                if (mouseButton == 0) {
+                    movePlayerQuantity = viewHandler.getActivePlayerStackQuantity(player.getInventory(), container);
+                } else if (mouseButton == 1) {
+                    movePlayerQuantity = viewHandler.getIncrementalInstanceMovementQuantity();
+                } else {
+                    movePlayerQuantity = (int) Math.ceil((double) viewHandler.getActivePlayerStackQuantity(player.getInventory(), container) / 2);
+                }
+                viewHandler.drainActivePlayerStackQuantity(player.getInventory(), container, movePlayerQuantity);
+                resetActiveSlot();
+            } else if (activeSlotId >= 0) {
+                // We have a storage slot selected
+                if (hasClickedOutside) {
+                    // Throw
+                    clickType = TerminalClickType.STORAGE_PLACE_WORLD;
+                    reset = true;
+                } else if (hoveredContainerSlot >= 0) {
+                    // Insert into player inventory
+                    clickType = TerminalClickType.STORAGE_PLACE_PLAYER;
+                    if (mouseButton == 0) {
+                        reset = true;
+                        moveQuantity = this.activeSlotQuantity;
+                    } else if (mouseButton == 1) {
+                        transferFullSelection = false;
+                        moveQuantity = viewHandler.getIncrementalInstanceMovementQuantity();
+                    } else {
+                        transferFullSelection = false;
+                        moveQuantity = (int) Math.ceil((double) this.activeSlotQuantity / 2);
+                    }
+                    this.activeSlotQuantity -= moveQuantity;
+                } else if (hasClickedInStorage) {
+                    if ((mouseButton == 0 || mouseButton == 2) && this.activeSlotId == hoveringStorageSlot) {
+                        // Increase the active quantity
+                        this.activeSlotQuantity = (int) Math.min(ingredientComponent.getMatcher().getQuantity(hoveringStorageInstance.get()),
+                                this.activeSlotQuantity + (shift ? viewHandler.getInitialInstanceMovementQuantity()
+                                        : viewHandler.getIncrementalInstanceMovementQuantity()));
+                    } else if (mouseButton == 1) {
+                        // Decrease active quantity
+                        this.activeSlotQuantity = Math.max(0, this.activeSlotQuantity - (shift ? viewHandler.getInitialInstanceMovementQuantity()
+                                : viewHandler.getIncrementalInstanceMovementQuantity()));
+                        if (this.activeSlotQuantity == 0) {
+                            activeSlotId = -1;
+                        }
+                    } else {
+                        // Deselect slot
+                        resetActiveSlot();
+                    }
+                } else {
+                    // Deselect slot
+                    resetActiveSlot();
+                }
+
+                if (moveQuantity == 0) {
+                    activeSlotId = -1;
+                }
+            }
+            if (initiateCraftingOption) {
+                ContainerTerminalStorageBase<?> containerTerminalStorage = ((ContainerTerminalStorageBase<?>) container);
+                CraftingOptionGuiData<T, M, ?> craftingOptionData = new CraftingOptionGuiData(ingredientComponent, this.getName().toString(), channel,
+                        ((TerminalStorageSlotIngredientCraftingOption<T, M>) hoveringStorageSlotObject.get()).getCraftingOption(), 1, null,
+                        containerTerminalStorage.getLocation(), containerTerminalStorage.getLocationInstance());
+                if (shift) {
+                    containerTerminalStorage.sendOpenCraftingPlanGuiPacketToServer(player.level().registryAccess(), craftingOptionData);
+                } else {
+                    containerTerminalStorage.sendOpenCraftingJobAmountGuiPacketToServer(player.level().registryAccess(), craftingOptionData);
+                }
+            } else if (clickType != null) {
+                T activeInstance = matcher.getEmptyInstance();
+                if (activeSlotId >= 0) {
+                    TerminalStorageSlotIngredient<T, M> slot = getSlots(channel, activeSlotId, 1).stream().findFirst().orElse(null);
+                    if (slot != null) {
+                        activeInstance = matcher.withQuantity(slot.getInstance(), moveQuantity);
+                    }
+                }
+                IntegratedTerminals._instance.getPacketHandler().sendToServer(new TerminalStorageIngredientSlotClickPacket<>(
+                        player.level().registryAccess(),
+                        this.getName().toString(), ingredientComponent, clickType, channel,
+                        hoveringStorageInstance.orElse(matcher.getEmptyInstance()),
+                        hoveredContainerSlot, movePlayerQuantity, activeInstance, transferFullSelection));
+                if (reset) {
+                    resetActiveSlot();
+                }
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean handleScroll(AbstractContainerMenu container, int channel, int hoveringStorageSlot, double delta,
+                                boolean hasClickedOutside, boolean hasClickedInStorage, int hoveredContainerSlot) {
+        this.activeChannel = channel;
+
+        Optional<TerminalStorageSlotIngredient<T, M>> hoveringStorageSlotObject = getSlot(channel, hoveringStorageSlot);
+        Optional<T> hoveringStorageInstance = hoveringStorageSlotObject.map(TerminalStorageSlotIngredient::getInstance);
+        boolean validHoveringStorageSlot = hoveringStorageInstance.isPresent();
+        boolean isCraftingOption = hoveringStorageSlotObject.isPresent() && hoveringStorageSlotObject.get() instanceof TerminalStorageSlotIngredientCraftingOption;
+        IIngredientComponentTerminalStorageHandler<T, M> viewHandler = this.getViewHandler();
+        boolean shift = IModHelpers.get().getMinecraftClientHelpers().isShifted();
+
+        boolean increment = delta < 0;
+        if (hasClickedInStorage && validHoveringStorageSlot && !isCraftingOption) {
+            // Select the current slot if none is selected
+            if (activeSlotId < 0) {
+                this.activeSlotId = hoveringStorageSlot;
+                this.activeSlotQuantity = 0;
+            }
+
+            // Only change quantity if hovering over the selected slot
+            if (this.activeSlotId == hoveringStorageSlot) {
+                if (increment) {
+                    // Increase the active quantity
+                    this.activeSlotQuantity = (int) Math.min(ingredientComponent.getMatcher().getQuantity(hoveringStorageInstance.get()),
+                            this.activeSlotQuantity + (shift ? viewHandler.getInitialInstanceMovementQuantity()
+                                    : viewHandler.getIncrementalInstanceMovementQuantity()));
+                } else {
+                    // Decrease active quantity
+                    this.activeSlotQuantity = Math.max(0, this.activeSlotQuantity - (shift ? viewHandler.getInitialInstanceMovementQuantity()
+                            : viewHandler.getIncrementalInstanceMovementQuantity()));
+                    if (this.activeSlotQuantity == 0) {
+                        activeSlotId = -1;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public int getActiveSlotId() {
+        return this.activeSlotId;
+    }
+
+    @Override
+    public int getActiveSlotQuantity() {
+        return this.activeSlotQuantity;
+    }
+
+    @Override
+    public void setActiveSlotQuantity(int quantity) {
+        this.activeSlotQuantity = quantity;
+        if (quantity == 0) {
+            this.activeSlotId = -1;
+        }
+    }
+
+    @Override
+    public List<ITerminalButton<?, ?, ?>> getButtons() {
+        return this.buttons;
+    }
+
+    @Nullable
+    public Comparator<T> getInstanceSorter() {
+        Comparator<T> sorter = null;
+
+        // Chain all effective sorters from buttons of type TerminalButtonSort
+        for (ITerminalButton<?, ?, ?> button : this.buttons) {
+            if (button instanceof TerminalButtonSort) {
+                Comparator<T> partSorter = ((TerminalButtonSort<T>) button).getEffectiveSorter();
+                if (partSorter != null) {
+                    if (sorter == null) {
+                        sorter = partSorter;
+                    } else {
+                        sorter = sorter.thenComparing(partSorter);
+                    }
+                }
+            }
+        }
+
+        if (sorter != null) {
+            // Make comparators 0-equals-safe
+            sorter = sorter.thenComparing(ingredientComponent.getMatcher());
+        }
+
+        return sorter;
+    }
+
+    @Override
+    public ITerminalRowColumnProvider getRowColumnProvider() {
+        for (ITerminalButton<?, ?, ?> button : this.buttons) {
+            if (button instanceof TerminalButtonScaleGui) {
+                return ((TerminalButtonScaleGui<?>) button).getRowColumnProvider();
+            }
+        }
+        throw new IllegalStateException("Could not find a TerminalButtonScaleGui registered on storage tab " + this.getName());
+    }
+
+    @Override
+    public void onCommonSlotRender(AbstractContainerScreen gui, GuiGraphicsExtractor guiGraphics, ContainerScreenTerminalStorage.DrawLayer layer, float partialTick,
+                                   int x, int y, int mouseX, int mouseY, int slot, ITerminalStorageTabCommon tabCommon) {
+        TerminalStorageTabIngredientComponentCommon tab = (TerminalStorageTabIngredientComponentCommon) tabCommon;
+
+        if (slot >= tab.getVariableSlotNumberStart() && slot < tab.getVariableSlotNumberEnd()) {
+            List<Component> errors = Lists.newArrayList();
+            errors.addAll(tab.getGlobalErrors());
+            errors.addAll(tab.getLocalErrors(slot));
+
+            if (!errors.isEmpty()) {
+                if (layer == ContainerScreenTerminalStorage.DrawLayer.BACKGROUND) {
+                    Images.ERROR.draw(guiGraphics, x + 2, y + 2);
+                } else {
+                    if (IModHelpers.get().getRenderHelpers().isPointInRegion(x, y, IModHelpers.get().getGuiHelpers().getSlotSize(), IModHelpers.get().getGuiHelpers().getSlotSize(), mouseX, mouseY)) {
+                        IModHelpers.get().getGuiHelpers().drawTooltip(gui, guiGraphics, errors.stream()
+                                .map(Component::getString)
+                                .map(s -> StringHelpers.splitLines(s, IModHelpers.get().getL10NHelpers().getMaxTooltipLineLength(),
+                                        ChatFormatting.RED.toString()))
+                                .flatMap(List::stream)
+                                .map(Component::literal)
+                                .collect(Collectors.toList()), x + 10, y);
+                    }
+                }
+            }
+        }
+    }
+
+    protected IIngredientComponentTerminalStorageHandler<T, M> getViewHandler() {
+        return this.ingredientComponentViewHandler;
+    }
+
+    @Override
+    public boolean isSlotValidForDraggingInto(int channel, Slot slot) {
+        IIngredientComponentTerminalStorageHandler<T, M> viewHandler = getViewHandler();
+
+        ItemStack stack = slot.getItem();
+        if (!viewHandler.isInstance(stack)) {
+            return false;
+        }
+
+        T stackInstance = viewHandler.getInstance(stack);
+        Optional<T> activeInstance = getSlotInstance(channel, getActiveSlotId());
+        IIngredientMatcher<T, M> matcher = ingredientComponent.getMatcher();
+        if (!activeInstance.isPresent() ||
+                (!matcher.isEmpty(stackInstance) &&
+                        !matcher.matches(stackInstance, activeInstance.get(), matcher.getExactMatchNoQuantityCondition()))
+                || matcher.getQuantity(stackInstance) == viewHandler.getMaxQuantity(stack)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int computeDraggingQuantity(Set<Slot> dragSlots, int dragMode, ItemStack stack, int quantity) {
+        int instanceQuantity = 0;
+        switch (dragMode) {
+            case 0:
+                instanceQuantity = Mth.floor((float)quantity / (float)dragSlots.size());
+                break;
+            case 1:
+                instanceQuantity = getViewHandler().getIncrementalInstanceMovementQuantity();
+                break;
+            case 2:
+                instanceQuantity = IModHelpers.get().getBaseHelpers().castSafe(getViewHandler().getMaxQuantity(stack));
+        }
+
+        return instanceQuantity;
+    }
+
+    @Override
+    public int dragIntoSlot(AbstractContainerMenu container, int channel, Slot slot, int quantity, boolean simulate) {
+        if (!simulate) {
+            // We temporarily set the activeSlotQuantity to a fixed value, and reset the old value afterwards.
+            int oldActiveSlotId = this.activeSlotId;
+            int activeSlotQuantityOld = this.activeSlotQuantity;
+
+            this.activeSlotQuantity = quantity;
+            this.handleClick(container, channel, getActiveSlotId(), 0, false, false, slot.index, false);
+
+            this.activeSlotId = oldActiveSlotId;
+            this.activeSlotQuantity = activeSlotQuantityOld;
+        }
+
+        IIngredientComponentTerminalStorageHandler<T, M> viewHandler = getViewHandler();
+        ItemStack stack = slot.getItem();
+        T stackInstance = viewHandler.getInstance(stack);
+        IIngredientMatcher<T, M> matcher = ingredientComponent.getMatcher();
+        int instanceQuantity = IModHelpers.get().getBaseHelpers().castSafe(matcher.getQuantity(stackInstance));
+        int maxQuantity = IModHelpers.get().getBaseHelpers().castSafe(viewHandler.getMaxQuantity(stack));
+        int freeQuantity = maxQuantity - instanceQuantity;
+        return Math.min(Math.max(0, quantity), freeQuantity);
+    }
+
+    public void resetScale() {
+        // Re-init screen to enforce new scale
+        container.selectedClientTabProvider.init();
+    }
+
+    public int getLastChangeId() {
+        return lastChangeId;
+    }
+
+    public static class InstanceWithMetadata<T> {
+
+        private final T instance;
+        @Nullable
+        private final HandlerWrappedTerminalCraftingOption<T> craftingOption;
+
+        public InstanceWithMetadata(T instance, @Nullable HandlerWrappedTerminalCraftingOption<T> craftingOption) {
+            this.instance = instance;
+            this.craftingOption = craftingOption;
+        }
+
+        public T getInstance() {
+            return instance;
+        }
+
+        @Nullable
+        public HandlerWrappedTerminalCraftingOption<T> getCraftingOption() {
+            return craftingOption;
+        }
+
+        public static <T> Comparator<InstanceWithMetadata<T>> createComparator(Comparator<T> comparator) {
+            return (o1, o2) -> {
+                int comp = comparator.compare(o1.getInstance(), o2.getInstance());
+                if (comp == 0) {
+                    HandlerWrappedTerminalCraftingOption<T> c1 = o1.getCraftingOption();
+                    HandlerWrappedTerminalCraftingOption<T> c2 = o2.getCraftingOption();
+                    if (c1 == null) {
+                        if (c2 == null) {
+                            return 0;
+                        } else {
+                            return -1;
+                        }
+                    } else {
+                        if (c2 == null) {
+                            return 1;
+                        } else {
+                            return c1.getCraftingOption().compareTo(c2.getCraftingOption());
+                        }
+                    }
+                }
+                return comp;
+            };
+        }
+
+    }
+
+}

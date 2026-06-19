@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:storage_blocks/steel"
+    },
+    "b": {
+      "tag": "c:ingots/steel"
+    }
+  },
+  "pattern": [
+    "aaa",
+    " b ",
+    "bbb"
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:steel_anvil"
+  }
+}

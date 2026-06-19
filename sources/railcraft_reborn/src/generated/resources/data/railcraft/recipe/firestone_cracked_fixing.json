@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "railcraft:raw_firestone"
+    },
+    "L": {
+      "item": "minecraft:lava_bucket"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "S": {
+      "item": "railcraft:cracked_firestone"
+    }
+  },
+  "pattern": [
+    "LFL",
+    "RSR",
+    "LRL"
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:refined_firestone"
+  }
+}

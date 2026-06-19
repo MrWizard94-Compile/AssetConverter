@@ -1,0 +1,27 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+
+authors = "90, dkmk100"
+license = "LGPLv3.0"
+
+updateJSONURL = "https://mod-manifest.jarva.dev/manifest/curseforge/905641/neoforge"
+issueTrackerURL = "https://github.com/62832/ArsEnergique/issues"
+displayURL = "https://github.com/62832/ArsEnergique"
+
+[[mods]]
+modId = "arseng"
+version = "$version"
+displayName = "Ars Énergistique"
+description = '''Bringing magic to the digital age.
+Adds digital source storage, P2P transport and various other cross-compatibility improvements to Ars Nouveau and AE2.'''
+
+[[mixins]]
+config = "arseng.mixins.json"
+
+[[dependencies.arseng]]
+modId = "ae2"
+versionRange = "[19,)"
+
+[[dependencies.arseng]]
+modId = "ars_nouveau"
+versionRange = "[5.2,)"

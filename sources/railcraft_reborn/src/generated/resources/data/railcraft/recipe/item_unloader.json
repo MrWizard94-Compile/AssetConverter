@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:cobblestone"
+    },
+    "b": {
+      "item": "railcraft:item_detector"
+    },
+    "c": {
+      "item": "minecraft:hopper"
+    }
+  },
+  "pattern": [
+    "aaa",
+    "aba",
+    "aca"
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:item_unloader"
+  }
+}

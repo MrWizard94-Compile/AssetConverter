@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "railcraft:advanced_rail"
+    },
+    "b": {
+      "item": "railcraft:standard_rail"
+    },
+    "c": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "aca",
+    "aba",
+    "aca"
+  ],
+  "result": {
+    "count": 8,
+    "id": "railcraft:elevator_track"
+  }
+}

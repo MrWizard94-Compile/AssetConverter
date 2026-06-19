@@ -1,0 +1,36 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT License https://github.com/McJtyMods/RFToolsStorage/blob/1.16/LICENCE"
+issueTrackerURL="http://github.com/McJtyMods/RFToolsStorage/issues"
+displayURL="http://github.com/McJtyMods/RFToolsStorage/"
+#logoFile="examplemod.png" #optional
+#credits="Thanks for this example mod goes to Java" #optional
+authors="McJty"
+
+[[mods]]
+modId="rftoolsstorage"
+version="${file.jarVersion}"
+displayName="RFToolsStorage"
+#updateJSONURL="http://myurl.me/" #optional
+
+description='''
+Everything related to storage
+'''
+[[dependencies.rftoolsstorage]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.rftoolsstorage]]
+    modId="mcjtylib"
+    mandatory=true
+    versionRange="[1.20-8.0.7,)"
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.rftoolsstorage]]
+    modId="rftoolsbase"
+    mandatory=true
+    versionRange="[1.20-5.0.7,)"
+    ordering="AFTER"
+    side="BOTH"

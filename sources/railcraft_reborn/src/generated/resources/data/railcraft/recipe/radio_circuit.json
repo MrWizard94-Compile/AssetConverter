@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "tag": "c:slimeballs"
+    },
+    "G": {
+      "tag": "c:ingots/gold"
+    },
+    "L": {
+      "tag": "c:gems/lapis"
+    },
+    "R": {
+      "item": "minecraft:repeater"
+    },
+    "S": {
+      "tag": "c:dusts/redstone"
+    },
+    "W": {
+      "item": "minecraft:blue_wool"
+    }
+  },
+  "pattern": [
+    " RW",
+    "BGS",
+    "WSL"
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:radio_circuit"
+  }
+}

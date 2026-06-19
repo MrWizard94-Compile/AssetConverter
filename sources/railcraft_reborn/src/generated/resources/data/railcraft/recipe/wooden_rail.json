@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "railcraft:wooden_tie"
+    },
+    {
+      "tag": "c:ingots/iron"
+    }
+  ],
+  "result": {
+    "count": 6,
+    "id": "railcraft:wooden_rail"
+  }
+}

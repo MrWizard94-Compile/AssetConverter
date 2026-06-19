@@ -1,0 +1,163 @@
+package mods.railcraft.world.entity;
+
+import mods.railcraft.api.core.RailcraftConstants;
+import mods.railcraft.world.entity.vehicle.CargoMinecart;
+import mods.railcraft.world.entity.vehicle.EnergyMinecart;
+import mods.railcraft.world.entity.vehicle.TankMinecart;
+import mods.railcraft.world.entity.vehicle.TrackLayer;
+import mods.railcraft.world.entity.vehicle.TrackRelayer;
+import mods.railcraft.world.entity.vehicle.TrackRemover;
+import mods.railcraft.world.entity.vehicle.TrackUndercutter;
+import mods.railcraft.world.entity.vehicle.TunnelBore;
+import mods.railcraft.world.entity.vehicle.VoidChestMinecart;
+import mods.railcraft.world.entity.vehicle.WorldSpikeMinecart;
+import mods.railcraft.world.entity.vehicle.locomotive.CreativeLocomotive;
+import mods.railcraft.world.entity.vehicle.locomotive.ElectricLocomotive;
+import mods.railcraft.world.entity.vehicle.locomotive.SteamLocomotive;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+public class RailcraftEntityTypes {
+
+  private static final DeferredRegister<EntityType<?>> deferredRegister =
+      DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, RailcraftConstants.ID);
+
+  public static void register(IEventBus modEventBus) {
+    deferredRegister.register(modEventBus);
+  }
+
+  public static final DeferredHolder<EntityType<?>, EntityType<TankMinecart>> TANK_MINECART =
+      deferredRegister.register("tank_minecart",
+          () -> create("tank_minecart",
+              EntityType.Builder
+                  .<TankMinecart>of(TankMinecart::new, MobCategory.MISC)
+                  .clientTrackingRange(256)
+                  .updateInterval(2)
+                  .sized(0.98F, 0.7F)));
+
+  public static final DeferredHolder<EntityType<?>, EntityType<CargoMinecart>> CARGO_MINECART =
+      deferredRegister.register("cargo_minecart",
+          () -> create("cargo_minecart",
+              EntityType.Builder
+                  .<CargoMinecart>of(CargoMinecart::new, MobCategory.MISC)
+                  .clientTrackingRange(256)
+                  .updateInterval(2)
+                  .sized(0.98F, 0.7F)));
+
+  public static final DeferredHolder<EntityType<?>, EntityType<EnergyMinecart>> ENERGY_MINECART =
+      deferredRegister.register("energy_minecart",
+          () -> create("energy_minecart",
+              EntityType.Builder
+                  .<EnergyMinecart>of(EnergyMinecart::new, MobCategory.MISC)
+                  .clientTrackingRange(256)
+                  .updateInterval(2)
+                  .sized(0.98F, 0.7F)));
+
+  public static final DeferredHolder<EntityType<?>, EntityType<VoidChestMinecart>> VOID_CHEST_MINECART =
+      deferredRegister.register("void_chest_minecart",
+          () -> create("void_chest_minecart",
+              EntityType.Builder
+                  .<VoidChestMinecart>of(VoidChestMinecart::new, MobCategory.MISC)
+                  .clientTrackingRange(256)
+                  .updateInterval(2)
+                  .sized(0.98F, 0.7F)));
+
+  public static final DeferredHolder<EntityType<?>, EntityType<TrackRemover>> TRACK_REMOVER =
+      deferredRegister.register("track_remover",
+          () -> create("track_remover",
+              EntityType.Builder
+                  .<TrackRemover>of(TrackRemover::new, MobCategory.MISC)
+                  .clientTrackingRange(256)
+                  .updateInterval(2)
+                  .sized(0.98F, 0.7F)));
+
+  public static final DeferredHolder<EntityType<?>, EntityType<TrackLayer>> TRACK_LAYER =
+      deferredRegister.register("track_layer",
+          () -> create("track_layer",
+              EntityType.Builder
+                  .<TrackLayer>of(TrackLayer::new, MobCategory.MISC)
+                  .clientTrackingRange(256)
+                  .updateInterval(2)
+                  .sized(0.98F, 0.7F)));
+
+  public static final DeferredHolder<EntityType<?>, EntityType<TrackRelayer>> TRACK_RELAYER =
+      deferredRegister.register("track_relayer",
+          () -> create("track_relayer",
+              EntityType.Builder
+                  .<TrackRelayer>of(TrackRelayer::new, MobCategory.MISC)
+                  .clientTrackingRange(256)
+                  .updateInterval(2)
+                  .sized(0.98F, 0.7F)));
+
+  public static final DeferredHolder<EntityType<?>, EntityType<TrackUndercutter>> TRACK_UNDERCUTTER =
+      deferredRegister.register("track_undercutter",
+          () -> create("track_undercutter",
+              EntityType.Builder
+                  .<TrackUndercutter>of(TrackUndercutter::new, MobCategory.MISC)
+                  .clientTrackingRange(256)
+                  .updateInterval(2)
+                  .sized(0.98F, 0.7F)));
+
+  public static final DeferredHolder<EntityType<?>, EntityType<WorldSpikeMinecart>> WORLD_SPIKE =
+      deferredRegister.register("world_spike_minecart",
+          () -> create("world_spike_minecart",
+              EntityType.Builder
+                  .<WorldSpikeMinecart>of(WorldSpikeMinecart::new, MobCategory.MISC)
+                  .clientTrackingRange(256)
+                  .updateInterval(2)
+                  .sized(0.98F, 0.7F)));
+
+  public static final DeferredHolder<EntityType<?>, EntityType<TunnelBore>> TUNNEL_BORE =
+      deferredRegister.register("tunnel_bore",
+          () -> create("tunnel_bore",
+              EntityType.Builder
+                  .<TunnelBore>of(TunnelBore::new, MobCategory.MISC)
+                  .clientTrackingRange(256)
+                  .updateInterval(2)
+                  .sized(TunnelBore.LENGTH, TunnelBore.HEIGHT)));
+
+  public static final DeferredHolder<EntityType<?>, EntityType<CreativeLocomotive>> CREATIVE_LOCOMOTIVE =
+      deferredRegister.register("creative_locomotive",
+          () -> create("creative_locomotive",
+              EntityType.Builder
+                  .<CreativeLocomotive>of(CreativeLocomotive::new, MobCategory.MISC)
+                  .clientTrackingRange(256)
+                  .updateInterval(2)
+                  .sized(0.98F, 1F)));
+
+  public static final DeferredHolder<EntityType<?>, EntityType<ElectricLocomotive>> ELECTRIC_LOCOMOTIVE =
+      deferredRegister.register("electric_locomotive",
+          () -> create("electric_locomotive",
+              EntityType.Builder
+                  .<ElectricLocomotive>of(ElectricLocomotive::new, MobCategory.MISC)
+                  .clientTrackingRange(256)
+                  .updateInterval(2)
+                  .sized(0.98F, 1F)));
+
+  public static final DeferredHolder<EntityType<?>, EntityType<SteamLocomotive>> STEAM_LOCOMOTIVE =
+      deferredRegister.register("steam_locomotive",
+          () -> create("steam_locomotive",
+              EntityType.Builder
+                  .<SteamLocomotive>of(SteamLocomotive::new, MobCategory.MISC)
+                  .clientTrackingRange(256)
+                  .updateInterval(2)
+                  .sized(0.98F, 1F)));
+
+  public static final DeferredHolder<EntityType<?>, EntityType<FirestoneItemEntity>> FIRESTONE =
+      deferredRegister.register("firestone",
+          () -> create("firestone",
+              EntityType.Builder
+                  .<FirestoneItemEntity>of(FirestoneItemEntity::new, MobCategory.MISC)
+                  .setTrackingRange(64)
+                  .setUpdateInterval(20)));
+
+  private static <T extends Entity> EntityType<T> create(String registryName,
+      EntityType.Builder<T> builder) {
+    return builder.build(RailcraftConstants.rl(registryName).toString());
+  }
+}

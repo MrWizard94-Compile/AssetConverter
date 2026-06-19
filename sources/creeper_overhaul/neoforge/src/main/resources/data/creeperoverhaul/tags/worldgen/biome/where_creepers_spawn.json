@@ -1,0 +1,22 @@
+{
+  "values": [
+    "#c:is_beach",
+    "#c:is_snowy",
+    "#c:is_desert",
+    "#c:is_hill",
+    "#c:is_savanna",
+    "#c:is_badlands",
+    "#c:is_mushroom",
+    "#c:is_taiga",
+    "#c:is_mountain",
+    "#creeperoverhaul:is_cave",
+    "#c:is_jungle",
+    "#c:is_swamp",
+    "#c:is_dark_forest",
+    "#c:is_birch_forest",
+
+    "minecraft:lukewarm_ocean",
+    "minecraft:deep_lukewarm_ocean",
+    "minecraft:warm_ocean"
+  ]
+}

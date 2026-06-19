@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": "undergarden:utherium_crystal",
+    "/": "#c:rods/wooden"
+  },
+  "pattern": [
+    "##",
+    " /",
+    " /"
+  ],
+  "result": {
+    "id": "undergarden:utherium_hoe"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "values": [
+    "railcraft:analog_signal_controller_box",
+    "railcraft:elevator_track",
+    "#railcraft:aspect_emitter",
+    "#railcraft:aspect_receiver",
+    "#railcraft:signal",
+    "#railcraft:switch_track_actuator",
+    "#minecraft:rails",
+    "#railcraft:detector"
+  ]
+}

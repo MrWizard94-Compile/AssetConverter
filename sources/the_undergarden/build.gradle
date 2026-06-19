@@ -1,0 +1,205 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+plugins {
+	id 'java-library'
+	id 'eclipse'
+	id 'idea'
+	id 'maven-publish'
+	id 'net.neoforged.moddev' version '2.0.140'
+}
+
+def secrets = new Properties()
+def secretsFile = file('secrets.properties')
+if (secretsFile.exists()) {
+    secretsFile.withInputStream {
+        stream -> secrets.load(stream)
+    }
+
+    fileTree("secrets").matching {
+        include "**/*.properties"
+    }.each {
+        File file ->
+            file.withInputStream {
+                stream -> secrets.load(stream)
+            }
+    }
+}
+
+idea {
+	module {
+		downloadJavadoc = true
+		downloadSources = true
+	}
+}
+
+version = project.undergarden_version
+group = 'quek.undergarden'
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
+
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs << "-Xlint:all,-classfile,-processing,-deprecation,-this-escape" << "-Werror"
+	options.encoding = 'UTF-8'
+}
+
+base {
+	archivesName = 'The_Undergarden-'+project.minecraft_version
+}
+
+sourceSets {
+	data {
+		compileClasspath += main.compileClasspath + main.output
+
+		java {
+			srcDirs = ['src/main/java', 'src/data/java']
+		}
+		resources {
+			srcDirs = ['src/main/resources']
+		}
+	}
+}
+
+configurations {
+	dataImplementation.extendsFrom implementation
+}
+
+neoForge {
+	// we need the subprojects to evaluate first so that the sourceSets are properly constructed
+	evaluationDependsOnChildren()
+
+	version = project.neo_version
+	validateAccessTransformers = true
+
+	addModdingDependenciesTo sourceSets.data
+
+	mods {
+		"${project.mod_id}" {
+			it.sourceSet this.sourceSets.main
+		}
+
+		"${project.mod_id}-data" {
+			it.sourceSet this.sourceSets.main
+			it.sourceSet this.sourceSets.data
+		}
+	}
+
+	def mainMod = mods."${project.mod_id}"
+	def dataMod = mods."${project.mod_id}-data"
+
+	runs {
+		configureEach {
+			logLevel = org.slf4j.event.Level.DEBUG
+			loadedMods = [mainMod]
+		}
+
+		client {
+			client()
+			systemProperty 'neoforge.enabledGameTestNamespaces', "${project.mod_id}"
+			if (secrets.getProperty("uuid")) {
+				programArguments.addAll(
+					'--username', secrets.getProperty("username"),
+					'--uuid', secrets.getProperty("uuid"),
+					'--accessToken', "",
+					'--xuid', ""
+				)
+			}
+		}
+
+		server {
+			server()
+			systemProperty 'neoforge.enabledGameTestNamespaces', "${project.mod_id}"
+			programArgument '--nogui'
+		}
+
+		data {
+			clientData()
+			programArguments.addAll '--mod', "${project.mod_id}", '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+			sourceSet = this.sourceSets.data
+			loadedMods = [dataMod]
+		}
+	}
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+repositories {
+	maven {
+		// location of the maven that hosts JEI files since January 2023
+		name = "Jared's maven"
+		url = "https://maven.blamejared.com/"
+	}
+	maven {
+		// location of a maven mirror for JEI files, as a fallback
+		name = "ModMaven"
+		url = "https://modmaven.dev"
+	}
+	maven {
+		name = "Curse Maven"
+		url "https://cursemaven.com"
+	}
+	maven {
+		name = "TerraformersMC"
+		url = "https://maven.terraformersmc.com/"
+	}
+	maven {
+		name = "Create Maven"
+		url = "https://maven.createmod.net"
+	}
+
+}
+
+dependencies {
+	compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+	compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
+	runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+//
+//	compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
+//	runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
+//
+//	compileOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
+//	compileOnly("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
+//	compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
+//
+	implementation "curse.maven:jade-324717:${project.jade_version}"
+//	runtimeOnly "curse.maven:better-advancements-272515:${project.better_advancements_version}"
+//	runtimeOnly "curse.maven:spark-361579:6225208"
+//
+	runtimeOnly "curse.maven:worldedit-225608:8037379"
+
+	compileOnly "curse.maven:irisshaders-455508:7867946"
+}
+
+processResources {
+	def ver = project.version
+	filesMatching("META-INF/neoforge.mods.toml") {
+		expand([
+			'file': [
+				'jarVersion': ver
+			]
+		])
+	}
+	exclude ".cache"
+	def lazyTree = providers.provider {
+		fileTree(dir: getOutputs().getFiles().getAsPath(), includes: ["**/*.json", "**/*.mcmeta"])
+	}
+	doLast {
+		lazyTree.get().each {
+			File file -> file.setText(JsonOutput.toJson(new JsonSlurper().parse(file)))
+		}
+	}
+}
+
+tasks.named('jar', Jar).configure {
+	manifest {
+		attributes([
+				"Specification-Title"     : "${project.mod_id}",
+				"Specification-Vendor"    : "quek",
+				"Specification-Version"   : "1",
+				"Implementation-Title"    : project.name,
+				"Implementation-Version"  : project.jar.archiveVersion,
+				"Implementation-Vendor"   : "quek",
+				"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+		])
+	}
+}

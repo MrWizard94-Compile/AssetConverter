@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_steel_hoe": {
+      "conditions": {
+        "items": [
+          {
+            "items": "railcraft:steel_hoe"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "railcraft:blast_furnace/blasting_steel_hoe"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_steel_hoe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "railcraft:blast_furnace/blasting_steel_hoe"
+    ]
+  }
+}

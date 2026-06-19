@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "modularrouters:blank_upgrade"
+    },
+    {
+      "tag": "minecraft:stone_bricks"
+    },
+    {
+      "tag": "forge:ingots/brick"
+    }
+  ],
+  "result": {
+    "item": "modularrouters:stack_upgrade"
+  }
+}

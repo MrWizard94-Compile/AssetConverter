@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:ingots/steel"
+    },
+    "b": {
+      "tag": "c:storage_blocks/diamond"
+    }
+  },
+  "pattern": [
+    "aaa",
+    "aba",
+    "aaa"
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:diamond_tunnel_bore_head"
+  }
+}

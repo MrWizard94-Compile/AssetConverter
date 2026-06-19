@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "package": "quek.undergarden.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "EntityRenderDispatcherMixin",
+    "GuiMixin",
+    "LivingEntityRendererMixin"
+  ],
+  "mixins": [
+    "ItemStackMixin",
+    "fluid.EntityMixin",
+    "fluid.LivingEntityMixin"
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "entries": [
+    {
+      "enum": "net/minecraft/world/item/Rarity",
+      "name": "UNDERGARDEN_FORGOTTEN",
+      "constructor": "(ILjava/lang/String;Ljava/util/function/UnaryOperator;)V",
+      "parameters": {
+        "class": "quek/undergarden/UGEnumExtensions",
+        "method": "FORGOTTEN"
+      }
+    },
+    {
+      "enum": "net/minecraft/world/item/Rarity",
+      "name": "UNDERGARDEN_ROGDORIUM",
+      "constructor": "(ILjava/lang/String;Ljava/util/function/UnaryOperator;)V",
+      "parameters": {
+        "class": "quek/undergarden/UGEnumExtensions",
+        "method": "ROGDORIUM"
+      }
+    },
+    {
+      "enum": "net/minecraft/world/item/Rarity",
+      "name": "UNDERGARDEN_UTHERIUM",
+      "constructor": "(ILjava/lang/String;Ljava/util/function/UnaryOperator;)V",
+      "parameters": {
+        "class": "quek/undergarden/UGEnumExtensions",
+        "method": "UTHERIUM"
+      }
+    },
+    {
+      "enum": "net/minecraft/world/inventory/RecipeBookType",
+      "name": "UNDERGARDEN_INFUSER",
+      "constructor": "()V",
+      "parameters": {
+        "class": "quek/undergarden/UGEnumExtensions",
+        "field": "INFUSER"
+      }
+    },
+    {
+      "enum": "net/minecraft/client/gui/Gui$HeartType",
+      "name": "UNDERGARDEN_VIRULENT",
+      "constructor": "(Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;)V",
+      "parameters": {
+        "class": "quek/undergarden/UGEnumExtensions",
+        "method": "VIRULENT_HEARTS"
+      }
+    },
+    {
+      "enum": "net/minecraft/world/entity/MobCategory",
+      "name": "UNDERGARDEN_STUPID_MOB_CATEGORY",
+      "constructor": "(Ljava/lang/String;IZZI)V",
+      "parameters": {
+        "class": "quek/undergarden/UGEnumExtensions",
+        "field": "STUPID_MOB_CATEGORY"
+      }
+    },
+    {
+      "enum": "net/minecraft/client/resources/model/EquipmentClientInfo$LayerType",
+      "name": "UNDERGARDEN_DWELLER_SADDLE",
+      "constructor": "(Ljava/lang/String;)V",
+      "parameters": {
+        "class": "quek/undergarden/client/UGClientEnumExtensions",
+        "field": "DWELLER_SADDLE"
+      }
+    },
+    {
+      "enum": "net/minecraft/client/model/HumanoidModel$ArmPose",
+      "name": "UNDERGARDEN_BATTLEAXE_ARM_POSE",
+      "constructor": "(ZZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
+      "parameters": {
+        "class": "quek/undergarden/client/UGClientEnumExtensions",
+        "field": "BATTLEAXE_ARM_POSE"
+      }
+    }
+  ]
+}

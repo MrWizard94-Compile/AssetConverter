@@ -1,0 +1,33 @@
+{
+	"texture_size": [32, 32],
+	"textures": {
+		"pebble": "undergarden:block/depthrock_pebbles",
+		"particle": "undergarden:block/depthrock_pebbles"
+	},
+	"elements": [
+		{
+			"from": [4, 0, 3],
+			"to": [10, 4, 9],
+			"faces": {
+				"north": {"uv": [3, 5, 6, 7], "texture": "#pebble"},
+				"east": {"uv": [5.5, 0, 8.5, 2], "texture": "#pebble"},
+				"south": {"uv": [5.5, 2, 8.5, 4], "texture": "#pebble"},
+				"west": {"uv": [0, 6, 3, 8], "texture": "#pebble"},
+				"up": {"uv": [3, 3, 0, 0], "texture": "#pebble"},
+				"down": {"uv": [3, 3, 0, 6], "texture": "#pebble"}
+			}
+		},
+		{
+			"from": [6, 0, 9],
+			"to": [11, 3, 14],
+			"faces": {
+				"north": {"uv": [6, 4, 8.5, 5.5], "texture": "#pebble"},
+				"east": {"uv": [6, 5.5, 8.5, 7], "texture": "#pebble"},
+				"south": {"uv": [3, 7, 5.5, 8.5], "texture": "#pebble"},
+				"west": {"uv": [5.5, 7, 8, 8.5], "texture": "#pebble"},
+				"up": {"uv": [5.5, 2.5, 3, 0], "texture": "#pebble"},
+				"down": {"uv": [5.5, 2.5, 3, 5], "texture": "#pebble"}
+			}
+		}
+	]
+}

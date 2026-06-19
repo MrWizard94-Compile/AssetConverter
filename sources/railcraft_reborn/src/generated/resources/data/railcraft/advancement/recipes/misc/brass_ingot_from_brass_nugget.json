@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_brass_nugget": {
+      "conditions": {
+        "items": [
+          {
+            "items": "railcraft:brass_nugget"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "railcraft:brass_ingot_from_brass_nugget"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_brass_nugget"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "railcraft:brass_ingot_from_brass_nugget"
+    ]
+  }
+}

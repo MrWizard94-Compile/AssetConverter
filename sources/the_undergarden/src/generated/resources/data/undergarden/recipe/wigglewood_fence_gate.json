@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "wooden_fence_gate",
+  "key": {
+    "#": "minecraft:stick",
+    "W": "undergarden:wigglewood_planks"
+  },
+  "pattern": [
+    "#W#",
+    "#W#"
+  ],
+  "result": {
+    "id": "undergarden:wigglewood_fence_gate"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "railcraft:strengthened_glass"
+    },
+    "b": {
+      "item": "minecraft:white_dye"
+    }
+  },
+  "pattern": [
+    "aaa",
+    "aba",
+    "aaa"
+  ],
+  "result": {
+    "count": 8,
+    "id": "railcraft:white_strengthened_glass"
+  }
+}

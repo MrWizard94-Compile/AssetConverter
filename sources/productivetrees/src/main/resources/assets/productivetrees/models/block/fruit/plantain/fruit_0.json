@@ -1,0 +1,21 @@
+{
+  "textures": {
+    "banana": "productivetrees:block/fruit/plantain/plantain",
+    "particle": "#banana"
+  },
+  "elements": [
+    {
+      "name": "stalk",
+      "from": [7.5, 2, 7.5],
+      "to": [8.5, 16, 8.5],
+      "faces": {
+        "north": {"uv": [15, 0, 16, 14], "texture": "#banana"},
+        "east": {"uv": [15, 0, 16, 14], "texture": "#banana"},
+        "south": {"uv": [15, 0, 16, 14], "texture": "#banana"},
+        "west": {"uv": [15, 0, 16, 14], "texture": "#banana"},
+        "up": {"uv": [15, 2, 16, 3], "texture": "#banana"},
+        "down": {"uv": [15, 3, 16, 4], "texture": "#banana"}
+      }
+    }
+  ]
+}

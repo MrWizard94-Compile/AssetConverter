@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:bowl",
+    "undergarden:veil_mushroom",
+    "undergarden:veil_mushroom",
+    "undergarden:veil_mushroom"
+  ],
+  "result": {
+    "id": "undergarden:veiled_stew"
+  }
+}

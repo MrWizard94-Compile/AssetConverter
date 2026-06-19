@@ -1,0 +1,10 @@
+{
+  "type": "undergarden:infuser_conversion",
+  "category": "corrupting",
+  "experience": 1.0,
+  "input": "undergarden:gronglet",
+  "result": {
+    "id": "undergarden:utheric_gronglet"
+  },
+  "slot_type": "utherium"
+}

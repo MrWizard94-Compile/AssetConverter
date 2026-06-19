@@ -1,0 +1,12 @@
+{
+  "type": "integrateddynamics:mechanical_drying_basin",
+  "input_fluid": {
+    "id": "integrateddynamics:menril_resin",
+    "amount": 1000
+  },
+  "input_item": "#c:glass_blocks/colorless",
+  "duration": 20,
+  "output_item": {
+    "id": "integratedterminals:menril_glass"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "railcraft:charge_terminal"
+    },
+    "b": {
+      "item": "railcraft:charge_spool_medium"
+    },
+    "c": {
+      "item": "railcraft:nickel_electrode"
+    },
+    "d": {
+      "tag": "c:dusts/saltpeter"
+    },
+    "e": {
+      "item": "railcraft:iron_electrode"
+    },
+    "f": {
+      "item": "minecraft:water_bucket"
+    }
+  },
+  "pattern": [
+    "aba",
+    "cde",
+    "cfe"
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:nickel_iron_battery"
+  }
+}

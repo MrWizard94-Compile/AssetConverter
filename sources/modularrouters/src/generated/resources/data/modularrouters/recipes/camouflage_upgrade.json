@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "modularrouters:blank_upgrade"
+    },
+    {
+      "tag": "forge:dyes/red"
+    },
+    {
+      "tag": "forge:dyes/green"
+    },
+    {
+      "tag": "forge:dyes/blue"
+    }
+  ],
+  "result": {
+    "item": "modularrouters:camouflage_upgrade"
+  }
+}

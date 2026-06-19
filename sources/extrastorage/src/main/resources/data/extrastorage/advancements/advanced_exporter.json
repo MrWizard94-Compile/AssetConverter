@@ -1,0 +1,38 @@
+{
+  "parent": "refinedstorage:exporting",
+  "display": {
+    "announce_to_chat": false,
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "extrastorage:advanced_exporter"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.extrastorage.advanced_exporter"
+    },
+    "description": {
+      "translate": "advancements.extrastorage.advanced_exporter.desc"
+    }
+  },
+  "criteria": {
+    "inv_changed": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "extrastorage:advanced_exporter"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "inv_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

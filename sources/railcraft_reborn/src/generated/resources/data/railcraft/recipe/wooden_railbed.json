@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "railcraft:wooden_tie"
+    },
+    {
+      "item": "railcraft:wooden_tie"
+    },
+    {
+      "item": "railcraft:wooden_tie"
+    },
+    {
+      "item": "railcraft:wooden_tie"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:wooden_railbed"
+  }
+}

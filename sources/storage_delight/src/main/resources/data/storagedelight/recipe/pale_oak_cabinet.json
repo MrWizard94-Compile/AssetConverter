@@ -1,0 +1,25 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:mod_loaded",
+        "modid": "farmersdelight"
+      }
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AAA",
+    "B B",
+    "AAA"
+  ],
+  "key": {
+    "A": "minecraft:pale_oak_slab",
+    "B": "minecraft:pale_oak_trapdoor"
+  },
+  "result": {
+    "id": "storagedelight:pale_oak_cabinet"
+  }
+}

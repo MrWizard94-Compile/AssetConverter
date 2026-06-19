@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:plates/tin"
+    },
+    "b": {
+      "tag": "c:dusts/ender_pearl"
+    },
+    "c": {
+      "item": "railcraft:charge_coil"
+    },
+    "d": {
+      "tag": "c:storage_blocks/diamond"
+    }
+  },
+  "pattern": [
+    "aba",
+    "cdc",
+    "aba"
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:force_track_emitter"
+  }
+}

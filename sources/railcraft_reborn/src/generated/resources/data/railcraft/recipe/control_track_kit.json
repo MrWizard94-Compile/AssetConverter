@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "minecraft:planks"
+    },
+    {
+      "item": "railcraft:track_parts"
+    },
+    {
+      "item": "railcraft:advanced_rail"
+    },
+    {
+      "tag": "c:dusts/redstone"
+    }
+  ],
+  "result": {
+    "count": 16,
+    "id": "railcraft:control_track_kit"
+  }
+}

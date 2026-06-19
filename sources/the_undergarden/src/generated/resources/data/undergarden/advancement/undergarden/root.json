@@ -1,0 +1,25 @@
+{
+  "criteria": {
+    "tick": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "undergarden:block/depthrock_bricks",
+    "description": "",
+    "icon": {
+      "id": "undergarden:deepturf_block"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancement.undergarden.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "tick"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

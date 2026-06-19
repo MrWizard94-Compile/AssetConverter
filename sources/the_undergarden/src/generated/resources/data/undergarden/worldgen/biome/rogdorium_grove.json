@@ -1,0 +1,73 @@
+{
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "additions": {
+        "sound": "undergarden:ambient.abyss_addition",
+        "tick_chance": 0.00555
+      },
+      "loop": "undergarden:ambient.abyss",
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "undergarden:ambient.mood",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "undergarden:rogdorium_wisp"
+        },
+        "probability": 0.01
+      }
+    ],
+    "minecraft:visual/fog_color": "#445b87",
+    "minecraft:visual/fog_end_distance": 100.0
+  },
+  "carvers": "undergarden:undergarden_cave",
+  "downfall": 0.0,
+  "effects": {
+    "foliage_color": "#1b3aa9",
+    "grass_color": "#1b3aa9",
+    "water_color": "#053922"
+  },
+  "features": [
+    [
+      "undergarden:ancient_root_extra"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "undergarden:rogdorium_ore_extra"
+    ],
+    [],
+    [],
+    [
+      "undergarden:deepturf_patch",
+      "undergarden:shimmerweed_patch",
+      "undergarden:tall_deepturf_patch",
+      "undergarden:tall_shimmerweed_patch",
+      "undergarden:droopvine_patch",
+      "undergarden:miserabell_patch",
+      "undergarden:smogstem_tree_sparse",
+      "undergarden:smogstem_bush"
+    ]
+  ],
+  "has_precipitation": false,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [],
+    "axolotls": [],
+    "creature": [],
+    "misc": [],
+    "monster": [],
+    "undergarden:stupid": [],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "temperature": 0.8
+}

@@ -1,0 +1,26 @@
+{
+  "parent": "railcraft:carts/locomotive",
+  "criteria": {
+    "has_exploded_track": {
+      "trigger": "railcraft:surprise"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.railcraft.carts.surprise.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:minecart"
+    },
+    "title": {
+      "translate": "advancements.railcraft.carts.surprise.name"
+    }
+  },
+  "requirements": [
+    [
+      "has_exploded_track"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

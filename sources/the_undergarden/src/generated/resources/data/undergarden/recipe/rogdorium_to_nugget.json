@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "undergarden:rogdorium"
+  ],
+  "result": {
+    "count": 9,
+    "id": "undergarden:rogdorium_nugget"
+  }
+}

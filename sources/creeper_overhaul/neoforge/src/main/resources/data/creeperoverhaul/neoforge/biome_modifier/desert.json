@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#c:is_desert",
+  "spawners" : {
+    "type": "creeperoverhaul:desert_creeper",
+    "weight": 75,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

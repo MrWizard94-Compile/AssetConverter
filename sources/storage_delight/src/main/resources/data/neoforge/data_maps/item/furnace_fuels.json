@@ -1,0 +1,424 @@
+{
+  "values": {
+    "storagedelight:oak_drawer": {
+      "burn_time": 300
+    },
+    "storagedelight:oak_drawer_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:oak_drawer_with_books": {
+      "burn_time": 300
+    },
+    "storagedelight:small_oak_drawers": {
+      "burn_time": 300
+    },
+    "storagedelight:oak_bookshelf_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:glass_oak_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:oak_cabinet_with_glass_doors": {
+      "burn_time": 300
+    },
+    "storagedelight:oak_single_door_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:oak_cabinet_with_polished_deepslate_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:oak_cabinet_with_polished_andesite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:oak_cabinet_with_polished_tuff_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:oak_cabinet_with_polished_blackstone_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:oak_cabinet_with_polished_diorite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:oak_cabinet_with_stone_bricks_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:birch_drawer": {
+      "burn_time": 300
+    },
+    "storagedelight:birch_drawer_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:birch_drawer_with_books": {
+      "burn_time": 300
+    },
+    "storagedelight:small_birch_drawers": {
+      "burn_time": 300
+    },
+    "storagedelight:birch_bookshelf_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:glass_birch_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:birch_cabinet_with_glass_doors": {
+      "burn_time": 300
+    },
+    "storagedelight:birch_single_door_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:birch_cabinet_with_polished_deepslate_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:birch_cabinet_with_polished_andesite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:birch_cabinet_with_polished_tuff_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:birch_cabinet_with_polished_blackstone_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:birch_cabinet_with_polished_diorite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:birch_cabinet_with_stone_bricks_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:spruce_drawer": {
+      "burn_time": 300
+    },
+    "storagedelight:spruce_drawer_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:spruce_drawer_with_books": {
+      "burn_time": 300
+    },
+    "storagedelight:small_spruce_drawers": {
+      "burn_time": 300
+    },
+    "storagedelight:spruce_bookshelf_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:glass_spruce_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:spruce_cabinet_with_glass_doors": {
+      "burn_time": 300
+    },
+    "storagedelight:spruce_single_door_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:spruce_cabinet_with_polished_deepslate_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:spruce_cabinet_with_polished_andesite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:spruce_cabinet_with_polished_tuff_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:spruce_cabinet_with_polished_blackstone_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:spruce_cabinet_with_polished_diorite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:spruce_cabinet_with_stone_bricks_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:jungle_drawer": {
+      "burn_time": 300
+    },
+    "storagedelight:jungle_drawer_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:jungle_drawer_with_books": {
+      "burn_time": 300
+    },
+    "storagedelight:small_jungle_drawers": {
+      "burn_time": 300
+    },
+    "storagedelight:jungle_bookshelf_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:glass_jungle_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:jungle_cabinet_with_glass_doors": {
+      "burn_time": 300
+    },
+    "storagedelight:jungle_single_door_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:jungle_cabinet_with_polished_deepslate_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:jungle_cabinet_with_polished_andesite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:jungle_cabinet_with_polished_tuff_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:jungle_cabinet_with_polished_blackstone_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:jungle_cabinet_with_polished_diorite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:jungle_cabinet_with_stone_bricks_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:acacia_drawer": {
+      "burn_time": 300
+    },
+    "storagedelight:acacia_drawer_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:acacia_drawer_with_books": {
+      "burn_time": 300
+    },
+    "storagedelight:small_acacia_drawers": {
+      "burn_time": 300
+    },
+    "storagedelight:acacia_bookshelf_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:glass_acacia_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:acacia_cabinet_with_glass_doors": {
+      "burn_time": 300
+    },
+    "storagedelight:acacia_single_door_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:acacia_cabinet_with_polished_deepslate_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:acacia_cabinet_with_polished_andesite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:acacia_cabinet_with_polished_tuff_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:acacia_cabinet_with_polished_blackstone_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:acacia_cabinet_with_polished_diorite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:acacia_cabinet_with_stone_bricks_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:dark_oak_drawer": {
+      "burn_time": 300
+    },
+    "storagedelight:dark_oak_drawer_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:dark_oak_drawer_with_books": {
+      "burn_time": 300
+    },
+    "storagedelight:small_dark_oak_drawers": {
+      "burn_time": 300
+    },
+    "storagedelight:dark_oak_bookshelf_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:glass_dark_oak_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:dark_oak_cabinet_with_glass_doors": {
+      "burn_time": 300
+    },
+    "storagedelight:dark_oak_single_door_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:dark_oak_cabinet_with_polished_deepslate_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:dark_oak_cabinet_with_polished_andesite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:dark_oak_cabinet_with_polished_tuff_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:dark_oak_cabinet_with_polished_blackstone_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:dark_oak_cabinet_with_polished_diorite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:dark_oak_cabinet_with_stone_bricks_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:mangrove_drawer": {
+      "burn_time": 300
+    },
+    "storagedelight:mangrove_drawer_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:mangrove_drawer_with_books": {
+      "burn_time": 300
+    },
+    "storagedelight:small_mangrove_drawers": {
+      "burn_time": 300
+    },
+    "storagedelight:mangrove_bookshelf_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:glass_mangrove_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:mangrove_cabinet_with_glass_doors": {
+      "burn_time": 300
+    },
+    "storagedelight:mangrove_single_door_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:mangrove_cabinet_with_polished_deepslate_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:mangrove_cabinet_with_polished_andesite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:mangrove_cabinet_with_polished_tuff_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:mangrove_cabinet_with_polished_blackstone_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:mangrove_cabinet_with_polished_diorite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:mangrove_cabinet_with_stone_bricks_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:cherry_drawer": {
+      "burn_time": 300
+    },
+    "storagedelight:cherry_drawer_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:cherry_drawer_with_books": {
+      "burn_time": 300
+    },
+    "storagedelight:small_cherry_drawers": {
+      "burn_time": 300
+    },
+    "storagedelight:cherry_bookshelf_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:glass_cherry_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:cherry_cabinet_with_glass_doors": {
+      "burn_time": 300
+    },
+    "storagedelight:cherry_single_door_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:cherry_cabinet_with_polished_deepslate_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:cherry_cabinet_with_polished_andesite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:cherry_cabinet_with_polished_tuff_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:cherry_cabinet_with_polished_blackstone_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:cherry_cabinet_with_polished_diorite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:cherry_cabinet_with_stone_bricks_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:pale_oak_drawer": {
+      "burn_time": 300
+    },
+    "storagedelight:pale_oak_drawer_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:pale_oak_drawer_with_books": {
+      "burn_time": 300
+    },
+    "storagedelight:small_pale_oak_drawers": {
+      "burn_time": 300
+    },
+    "storagedelight:pale_oak_bookshelf_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:glass_pale_oak_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:pale_oak_cabinet_with_glass_doors": {
+      "burn_time": 300
+    },
+    "storagedelight:pale_oak_single_door_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:pale_oak_cabinet_with_polished_deepslate_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:pale_oak_cabinet_with_polished_andesite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:pale_oak_cabinet_with_polished_tuff_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:pale_oak_cabinet_with_polished_blackstone_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:pale_oak_cabinet_with_polished_diorite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:pale_oak_cabinet_with_stone_bricks_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:bamboo_drawer": {
+      "burn_time": 300
+    },
+    "storagedelight:bamboo_drawer_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:bamboo_drawer_with_books": {
+      "burn_time": 300
+    },
+    "storagedelight:small_bamboo_drawers": {
+      "burn_time": 300
+    },
+    "storagedelight:bamboo_bookshelf_with_door": {
+      "burn_time": 300
+    },
+    "storagedelight:glass_bamboo_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:bamboo_cabinet_with_glass_doors": {
+      "burn_time": 300
+    },
+    "storagedelight:bamboo_single_door_cabinet": {
+      "burn_time": 300
+    },
+    "storagedelight:bamboo_cabinet_with_polished_deepslate_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:bamboo_cabinet_with_polished_andesite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:bamboo_cabinet_with_polished_tuff_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:bamboo_cabinet_with_polished_blackstone_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:bamboo_cabinet_with_polished_diorite_countertop": {
+      "burn_time": 300
+    },
+    "storagedelight:bamboo_cabinet_with_stone_bricks_countertop": {
+      "burn_time": 300
+    }
+  }
+}

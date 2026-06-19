@@ -1,0 +1,106 @@
+package quek.undergarden.block;
+
+import com.mojang.serialization.MapCodec;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jspecify.annotations.Nullable;
+import quek.undergarden.block.entity.GrongletBlockEntity;
+import quek.undergarden.registry.UGSoundEvents;
+
+public class GrongletBlock extends BaseEntityBlock {
+
+	public static final MapCodec<GrongletBlock> CODEC = simpleCodec(GrongletBlock::new);
+	public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
+
+	private static final VoxelShape UP_SHAPE = Block.box(0.0F, 0.0F, 0.0F, 16.0F, 4.0F, 16.0F);
+	private static final VoxelShape DOWN_SHAPE = Block.box(0.0F, 12.0F, 0.0F, 16.0F, 16.0F, 16.0F);
+	private static final VoxelShape NORTH_SHAPE = Block.box(0.0F, 0.0F, 12.0F, 16.0F, 16.0F, 16.0F);
+	private static final VoxelShape EAST_SHAPE = Block.box(0.0F, 0.0F, 0.0F, 4.0F, 16.0F, 16.0F);
+	private static final VoxelShape SOUTH_SHAPE = Block.box(0.0F, 0.0F, 0.0F, 16.0F, 16.0F, 4.0F);
+	private static final VoxelShape WEST_SHAPE = Block.box(12.0F, 0.0F, 0.0F, 16.0F, 16.0F, 16.0F);
+
+	public GrongletBlock(Properties properties) {
+		super(properties);
+		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.UP));
+	}
+
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return CODEC;
+	}
+
+	@Override
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		return switch (state.getValue(FACING)) {
+			case DOWN -> DOWN_SHAPE;
+			case NORTH -> NORTH_SHAPE;
+			case EAST -> EAST_SHAPE;
+			case SOUTH -> SOUTH_SHAPE;
+			case WEST -> WEST_SHAPE;
+			default -> UP_SHAPE;
+		};
+	}
+
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(FACING);
+	}
+
+	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		Direction direction = context.getClickedFace();
+		BlockState state = context.getLevel().getBlockState(context.getClickedPos().relative(direction.getOpposite()));
+		return state.is(this) && state.getValue(FACING) == direction ? this.defaultBlockState().setValue(FACING, direction.getOpposite()) : this.defaultBlockState().setValue(FACING, direction);
+	}
+
+	@Override
+	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+		Direction direction = state.getValue(FACING);
+		return canSupportCenter(level, pos.relative(direction.getOpposite()), state.getValue(GrongletBlock.FACING));
+	}
+
+	@Override
+	protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction directionToNeighbor, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
+		return state.getValue(FACING).getOpposite() == directionToNeighbor && !state.canSurvive(level, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, level, ticks, pos, directionToNeighbor, neighborPos, neighborState, random);
+	}
+
+	@Override
+	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+		if (random.nextInt(20) == 0) {
+			level.playLocalSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, UGSoundEvents.GRONGLET_AMBIENT.get(), SoundSource.BLOCKS, 1.0F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F, false);
+		}
+	}
+
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new GrongletBlockEntity(pos, state);
+	}
+
+	@Override
+	public boolean onCaughtFire(BlockState state, Level level, BlockPos pos, @Nullable Direction direction, @Nullable LivingEntity igniter) {
+		if (!level.isClientSide()) {
+			RandomSource random = level.getRandom();
+			level.playSound(null, pos, UGSoundEvents.GRONGLET_BURN.get(), SoundSource.BLOCKS, 1.0F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
+			return true;
+		}
+		return false;
+	}
+}

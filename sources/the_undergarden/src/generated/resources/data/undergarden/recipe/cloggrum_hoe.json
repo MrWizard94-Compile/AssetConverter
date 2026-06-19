@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": "undergarden:cloggrum_ingot",
+    "/": "#c:rods/wooden"
+  },
+  "pattern": [
+    "##",
+    " /",
+    " /"
+  ],
+  "result": {
+    "id": "undergarden:cloggrum_hoe"
+  }
+}

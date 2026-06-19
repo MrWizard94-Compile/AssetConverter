@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "railcraft:standard_rail"
+    },
+    "b": {
+      "item": "railcraft:wooden_railbed"
+    }
+  },
+  "pattern": [
+    "aaa",
+    "aab",
+    "aaa"
+  ],
+  "result": {
+    "count": 16,
+    "id": "railcraft:iron_wye_track"
+  }
+}

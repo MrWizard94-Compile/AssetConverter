@@ -1,0 +1,41 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:mod_loaded",
+        "modid": "farmersdelight"
+      }
+    }
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_pale_oak_trapdoor": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:pale_oak_trapdoor"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "storagedelight:pale_oak_cabinet"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_pale_oak_trapdoor"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "storagedelight:pale_oak_cabinet"
+    ]
+  }
+}

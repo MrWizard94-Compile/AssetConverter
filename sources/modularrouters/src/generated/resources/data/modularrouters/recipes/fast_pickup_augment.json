@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "modularrouters:augment_core"
+    },
+    {
+      "item": "minecraft:fishing_rod"
+    }
+  ],
+  "result": {
+    "item": "modularrouters:fast_pickup_augment"
+  }
+}

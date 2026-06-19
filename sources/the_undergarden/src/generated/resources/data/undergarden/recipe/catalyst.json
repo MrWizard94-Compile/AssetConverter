@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "#c:ingots/copper",
+    "E": "#c:ender_pearls",
+    "S": "#c:stones"
+  },
+  "pattern": [
+    "CSC",
+    "SES",
+    "CSC"
+  ],
+  "result": {
+    "id": "undergarden:catalyst"
+  }
+}

@@ -1,0 +1,58 @@
+package edivad.extrastorage.setup;
+
+import com.refinedmods.refinedstorage.common.api.RefinedStorageApi;
+import edivad.extrastorage.ExtraStorage;
+import edivad.extrastorage.autocrafting.advancedautocrafter.CrafterTier;
+import edivad.extrastorage.storage.AdvancedFluidStorageVariant;
+import edivad.extrastorage.storage.AdvancedItemStorageVariant;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+public class CreativeModeTabs {
+
+  private static final DeferredRegister<CreativeModeTab> TABS =
+      DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ExtraStorage.ID);
+
+  private static final DeferredHolder<CreativeModeTab, CreativeModeTab> MAIN_TAB =
+      TABS.register("main_tab", () -> CreativeModeTab.builder()
+          .withTabsBefore(RefinedStorageApi.INSTANCE.getCreativeModeTabId())
+          .title(Component.literal(ExtraStorage.MODNAME))
+          .icon(() -> new ItemStack(ESBlocks.CRAFTER.get(CrafterTier.GOLD).get()))
+          .displayItems((params, output) -> {
+            for (var tier : CrafterTier.values()) {
+              output.accept(ESItems.CRAFTER.get(tier).get());
+            }
+            for (var type : AdvancedItemStorageVariant.values()) {
+              output.accept(ESItems.ITEM_STORAGE.get(type).get());
+            }
+            for (var type : AdvancedFluidStorageVariant.values()) {
+              output.accept(ESItems.FLUID_STORAGE.get(type).get());
+            }
+            for (var type : AdvancedItemStorageVariant.values()) {
+              output.accept(ESItems.ITEM_STORAGE_PART.get(type).get());
+            }
+            for (var type : AdvancedFluidStorageVariant.values()) {
+              output.accept(ESItems.FLUID_STORAGE_PART.get(type).get());
+            }
+            for (var type : AdvancedItemStorageVariant.values()) {
+              output.accept(ESItems.ITEM_DISK.get(type).get());
+            }
+            for (var type : AdvancedFluidStorageVariant.values()) {
+              output.accept(ESItems.FLUID_DISK.get(type).get());
+            }
+            output.accept(ESItems.ADVANCED_IMPORTER.get());
+            output.accept(ESItems.ADVANCED_EXPORTER.get());
+            output.accept(ESItems.RAW_NEURAL_PROCESSOR.get());
+            output.accept(ESItems.NEURAL_PROCESSOR.get());
+          })
+          .build());
+
+  public static void register(IEventBus modEventBus) {
+    TABS.register(modEventBus);
+  }
+}

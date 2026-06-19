@@ -1,0 +1,23 @@
+name: Crowdin Upload
+
+on:
+  push:
+    paths: [ 'src/generated/resources/assets/railcraft/lang/**' ]
+    branches: [ 1.21.x ]
+  workflow_dispatch:
+
+jobs:
+  crowdin-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Crowdin Push
+        uses: crowdin/github-action@v2
+        with:
+          upload_sources: true
+          upload_translations: false
+          download_translations: false
+        env:
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}

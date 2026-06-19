@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "M": "undergarden:blue_mogmoss"
+  },
+  "pattern": [
+    "MM"
+  ],
+  "result": {
+    "count": 3,
+    "id": "undergarden:blue_mogmoss_rug"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "minecraft:planks"
+    },
+    {
+      "item": "railcraft:track_parts"
+    },
+    {
+      "item": "minecraft:piston"
+    },
+    {
+      "tag": "c:storage_blocks/steel"
+    },
+    {
+      "tag": "c:storage_blocks/steel"
+    },
+    {
+      "tag": "c:dusts/redstone"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:launcher_track_kit"
+  }
+}

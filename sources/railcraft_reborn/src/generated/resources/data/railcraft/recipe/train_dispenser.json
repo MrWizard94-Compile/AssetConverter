@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:redstone"
+    },
+    "b": {
+      "tag": "railcraft:crowbar"
+    },
+    "c": {
+      "item": "railcraft:cart_dispenser"
+    }
+  },
+  "pattern": [
+    "aba",
+    "bcb",
+    "aba"
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:train_dispenser"
+  }
+}

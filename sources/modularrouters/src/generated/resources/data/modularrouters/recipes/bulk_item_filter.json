@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "tag": "forge:gems/diamond"
+    },
+    "G": {
+      "tag": "forge:glass"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "M": {
+      "item": "modularrouters:blank_module"
+    }
+  },
+  "pattern": [
+    "IGI",
+    "MDM",
+    "IGI"
+  ],
+  "result": {
+    "item": "modularrouters:bulk_item_filter"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_electric_rail": {
+      "conditions": {
+        "items": [
+          {
+            "items": "railcraft:electric_rail"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_stone_railbed": {
+      "conditions": {
+        "items": [
+          {
+            "items": "railcraft:stone_railbed"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "railcraft:electric_track"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_electric_rail",
+      "has_stone_railbed"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "railcraft:electric_track"
+    ]
+  }
+}

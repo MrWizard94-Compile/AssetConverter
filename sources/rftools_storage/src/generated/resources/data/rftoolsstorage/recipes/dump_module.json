@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "X": {
+      "tag": "minecraft:wooden_buttons"
+    },
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    " X ",
+    "rir",
+    " X "
+  ],
+  "result": {
+    "item": "rftoolsstorage:dump_module"
+  }
+}

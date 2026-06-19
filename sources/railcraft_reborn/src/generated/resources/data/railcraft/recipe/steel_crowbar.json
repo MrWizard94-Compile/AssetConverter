@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:ingots/steel"
+    },
+    "b": {
+      "tag": "c:dyes/red"
+    }
+  },
+  "pattern": [
+    " ba",
+    "bab",
+    "ab "
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:steel_crowbar"
+  }
+}

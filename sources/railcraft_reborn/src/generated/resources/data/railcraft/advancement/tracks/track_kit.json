@@ -1,0 +1,27 @@
+{
+  "parent": "railcraft:tracks/regular_track",
+  "criteria": {
+    "has_used_track_kit": {
+      "trigger": "railcraft:use_track_kit"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.railcraft.tracks.track_kit.desc"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "railcraft:buffer_stop_track_kit"
+    },
+    "title": {
+      "translate": "advancements.railcraft.tracks.track_kit.name"
+    }
+  },
+  "requirements": [
+    [
+      "has_used_track_kit"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

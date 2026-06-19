@@ -1,0 +1,38 @@
+modLoader = "javafml"
+loaderVersion = "${loader_version_range}"
+license = "GNU AGPLv3"
+issueTrackerURL = "https://github.com/Edivad99/ExtraStorage/issues"
+
+[[mods]]
+  modId = "extrastorage"
+  version = "${mod_version}"
+  displayName = "ExtraStorage"
+  updateJSONURL = "https://api.modrinth.com/updates/extrastorage/forge_updates.json?neoforge=include"
+  modUrl = "https://www.curseforge.com/minecraft/mc-mods/extrastorage"
+  authors = "Edivad99"
+  description = "ExtraStorage adds new blocks to Refined Storage"
+
+[[dependencies.extrastorage]]
+  modId = "neoforge"
+  type = "required"
+  versionRange = "${neo_version_range}"
+  ordering = "NONE"
+  side = "BOTH"
+[[dependencies.extrastorage]]
+  modId = "minecraft"
+  type = "required"
+  versionRange = "${minecraft_version_range}"
+  ordering = "NONE"
+  side = "BOTH"
+[[dependencies.extrastorage]]
+  modId = "refinedstorage"
+  type = "required"
+  versionRange = "${refinedstorage_version_range}"
+  ordering = "NONE"
+  side = "BOTH"
+[[dependencies.extrastorage]]
+  modId = "edivadlib"
+  type = "required"
+  versionRange = "${edivadlib_version_range}"
+  ordering = "NONE"
+  side = "BOTH"

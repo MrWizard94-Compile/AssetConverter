@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "D": "undergarden:deepsoil",
+    "P": "undergarden:depthrock_pebble"
+  },
+  "pattern": [
+    "DP",
+    "PD"
+  ],
+  "result": {
+    "count": 4,
+    "id": "undergarden:coarse_deepsoil"
+  }
+}

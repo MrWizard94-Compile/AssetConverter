@@ -1,0 +1,32 @@
+{
+  "parent": "undergarden:undergarden/root",
+  "criteria": {
+    "has_catalyst": {
+      "conditions": {
+        "items": [
+          {
+            "items": "undergarden:catalyst"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.undergarden.catalyst.desc"
+    },
+    "icon": {
+      "id": "undergarden:catalyst"
+    },
+    "title": {
+      "translate": "advancement.undergarden.catalyst.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_catalyst"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

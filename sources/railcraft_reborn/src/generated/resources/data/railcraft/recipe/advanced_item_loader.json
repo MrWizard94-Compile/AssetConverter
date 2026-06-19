@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:ingots/steel"
+    },
+    "b": {
+      "item": "minecraft:redstone"
+    },
+    "c": {
+      "item": "railcraft:item_loader"
+    },
+    "d": {
+      "item": "railcraft:steel_shovel"
+    }
+  },
+  "pattern": [
+    "aba",
+    "bcb",
+    "ada"
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:advanced_item_loader"
+  }
+}

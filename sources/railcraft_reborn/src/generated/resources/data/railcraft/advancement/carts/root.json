@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "inv_changed": {
+      "conditions": {
+        "items": [
+          {
+            "items": "railcraft:iron_crowbar"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.railcraft.carts.root.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "railcraft:diamond_crowbar"
+    },
+    "title": {
+      "translate": "advancements.railcraft.carts.root.name"
+    }
+  },
+  "requirements": [
+    [
+      "inv_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

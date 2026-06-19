@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "railcraft:low_pressure_steam_boiler_tank"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "railcraft:blocks/low_pressure_steam_boiler_tank"
+}

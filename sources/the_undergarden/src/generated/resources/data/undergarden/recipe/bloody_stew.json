@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:bowl",
+    "undergarden:blood_mushroom",
+    "undergarden:blood_mushroom",
+    "undergarden:blood_mushroom"
+  ],
+  "result": {
+    "id": "undergarden:bloody_stew"
+  }
+}

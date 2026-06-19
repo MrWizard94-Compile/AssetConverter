@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "undergarden:utherium_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "undergarden:utherium_crystal"
+  }
+}

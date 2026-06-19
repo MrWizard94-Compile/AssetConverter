@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_slag": {
+      "conditions": {
+        "items": [
+          {
+            "items": "railcraft:slag"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "railcraft:bag_of_cement_slag"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_slag"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "railcraft:bag_of_cement_slag"
+    ]
+  }
+}

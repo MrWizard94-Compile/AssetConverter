@@ -1,0 +1,8 @@
+{
+  "type": "undergarden:boulder",
+  "config": {
+    "state": {
+      "Name": "undergarden:depthrock"
+    }
+  }
+}

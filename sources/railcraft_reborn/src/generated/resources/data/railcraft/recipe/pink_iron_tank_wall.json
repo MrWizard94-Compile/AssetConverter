@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "railcraft:iron_tank_wall"
+    },
+    "b": {
+      "item": "minecraft:pink_dye"
+    }
+  },
+  "pattern": [
+    "aaa",
+    "aba",
+    "aaa"
+  ],
+  "result": {
+    "count": 8,
+    "id": "railcraft:pink_iron_tank_wall"
+  }
+}

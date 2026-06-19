@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "minecraft:planks"
+    },
+    {
+      "item": "railcraft:track_parts"
+    },
+    {
+      "item": "minecraft:stone_pressure_plate"
+    },
+    {
+      "tag": "c:dusts/redstone"
+    }
+  ],
+  "result": {
+    "count": 8,
+    "id": "railcraft:detector_track_kit"
+  }
+}

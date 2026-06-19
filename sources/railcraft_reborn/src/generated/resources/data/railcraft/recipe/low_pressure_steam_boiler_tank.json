@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:plates/iron"
+    },
+    "b": {
+      "tag": "c:plates/invar"
+    }
+  },
+  "pattern": [
+    "a",
+    "b",
+    "a"
+  ],
+  "result": {
+    "count": 2,
+    "id": "railcraft:low_pressure_steam_boiler_tank"
+  }
+}

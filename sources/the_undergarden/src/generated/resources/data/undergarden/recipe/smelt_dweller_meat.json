@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.35,
+  "ingredient": "undergarden:raw_dweller_meat",
+  "result": {
+    "id": "undergarden:dweller_steak"
+  }
+}

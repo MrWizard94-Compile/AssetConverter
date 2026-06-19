@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:ingots/lead"
+    },
+    "b": {
+      "item": "minecraft:redstone_block"
+    },
+    "c": {
+      "item": "minecraft:minecart"
+    }
+  },
+  "pattern": [
+    "aba",
+    "bcb",
+    "aba"
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:energy_minecart"
+  }
+}

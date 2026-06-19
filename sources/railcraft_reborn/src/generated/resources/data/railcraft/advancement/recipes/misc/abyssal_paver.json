@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_abyssal_bricks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "railcraft:abyssal_bricks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "railcraft:abyssal_paver"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_abyssal_bricks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "railcraft:abyssal_paver"
+    ]
+  }
+}

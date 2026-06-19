@@ -1,0 +1,33 @@
+{
+  "gui_light": "front",
+  "textures": {
+    "particle": "undergarden:block/raw_cloggrum_block"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [ 45, 155, 0 ],
+      "translation": [ -3.49, 18, 4 ],
+      "scale": [ 1, 1, 1 ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [ 45, 155, 0 ],
+      "translation": [ 11.51, 14, 8.5 ],
+      "scale": [ 1, 1, 1 ]
+    },
+    "firstperson_righthand": {
+      "rotation": [ 0, 180, -5 ],
+      "translation": [ -13, 12, -11 ],
+      "scale": [ 1.25, 1.25, 1.25 ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [ 0, 180, -5 ],
+      "translation": [ 7, 13.75, -11 ],
+      "scale": [ 1.25, 1.25, 1.25 ]
+    },
+    "gui": {
+      "rotation": [ 15, -25, -5 ],
+      "translation": [ 2, 6, 0 ],
+      "scale": [ 0.475, 0.475, 0.475 ]
+    }
+  }
+}

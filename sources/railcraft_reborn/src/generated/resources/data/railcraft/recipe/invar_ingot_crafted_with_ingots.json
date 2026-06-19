@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:ingots/nickel"
+    },
+    "b": {
+      "tag": "c:ingots/iron"
+    }
+  },
+  "pattern": [
+    "ab",
+    "b "
+  ],
+  "result": {
+    "count": 3,
+    "id": "railcraft:invar_ingot"
+  }
+}

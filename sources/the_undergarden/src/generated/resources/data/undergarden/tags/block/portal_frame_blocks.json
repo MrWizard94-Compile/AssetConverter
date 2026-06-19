@@ -1,0 +1,25 @@
+{
+  "values": [
+    "minecraft:stone_bricks",
+    "minecraft:mossy_stone_bricks",
+    "minecraft:cracked_stone_bricks",
+    "minecraft:chiseled_stone_bricks",
+    "minecraft:deepslate_bricks",
+    "minecraft:cracked_deepslate_bricks",
+    "minecraft:deepslate_tiles",
+    "minecraft:cracked_deepslate_tiles",
+    "minecraft:polished_deepslate",
+    "minecraft:reinforced_deepslate",
+    "undergarden:polished_depthrock",
+    "undergarden:depthrock_bricks",
+    "undergarden:cracked_depthrock_bricks",
+    "undergarden:chiseled_depthrock_bricks",
+    "undergarden:depthrock_tiles",
+    "undergarden:shiverstone_bricks",
+    "undergarden:cracked_shiverstone_bricks",
+    "undergarden:chiseled_shiverstone_bricks",
+    "undergarden:polished_sediment_stone",
+    "undergarden:sediment_stone_bricks",
+    "undergarden:chiseled_sediment_stone"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "type": "undergarden:infuser_conversion",
+  "category": "purifying",
+  "experience": 1.0,
+  "input": "undergarden:ancient_root",
+  "result": {
+    "id": "undergarden:denizen_totem"
+  },
+  "slot_type": "rogdorium"
+}

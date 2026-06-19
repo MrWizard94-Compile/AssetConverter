@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:glass_panes"
+    },
+    "b": {
+      "item": "railcraft:receiver_circuit"
+    },
+    "c": {
+      "tag": "c:ingots/steel"
+    },
+    "d": {
+      "tag": "c:leathers"
+    }
+  },
+  "pattern": [
+    "aba",
+    "c c",
+    "ddd"
+  ],
+  "result": {
+    "count": 1,
+    "id": "railcraft:goggles"
+  }
+}
