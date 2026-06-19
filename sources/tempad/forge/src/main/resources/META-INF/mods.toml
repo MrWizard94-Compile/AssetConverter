@@ -1,0 +1,42 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+license = "ARR"
+issueTrackerURL = "https://github.com/terrarium-earth/Tempad/issues"
+
+[[mods]]
+modId = "tempad"
+version = "${version}"
+displayName = "Tempad"
+displayURL = "https://modrinth.com/mod/tempad"
+logoFile = "icon.png"
+authors = "CodexAdrian"
+credits = "MsRandom1, ThatGravyBoat, Kekie6, AlexNijjar, ShrimpPixels, Jooosh, abused_master"
+description = "Create a portal to anywhere from anywhere!"
+
+[[dependencies.tempad]]
+modId = "forge"
+mandatory = true
+versionRange = "[47.1.0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.tempad]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.tempad]]
+modId = "resourcefullib"
+mandatory = true
+versionRange = "[2.1.7,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.tempad]]
+modId = "resourcefulconfig"
+mandatory = true
+versionRange = "[2.0.0,)"
+ordering = "NONE"
+side = "BOTH"
