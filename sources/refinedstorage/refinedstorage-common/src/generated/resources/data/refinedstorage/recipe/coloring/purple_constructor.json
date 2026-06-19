@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "purple",
+  "ingredient": "#refinedstorage:constructors",
+  "result": "refinedstorage:purple_constructor"
+}

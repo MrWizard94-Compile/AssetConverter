@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "lime",
+  "ingredient": "#refinedstorage:autocrafter_managers",
+  "result": "refinedstorage:lime_autocrafter_manager"
+}

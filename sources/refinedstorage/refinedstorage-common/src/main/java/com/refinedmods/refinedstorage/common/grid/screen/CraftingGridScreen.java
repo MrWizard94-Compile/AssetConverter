@@ -1,0 +1,230 @@
+package com.refinedmods.refinedstorage.common.grid.screen;
+
+import com.refinedmods.refinedstorage.common.Platform;
+import com.refinedmods.refinedstorage.common.content.KeyMappings;
+import com.refinedmods.refinedstorage.common.grid.AbstractCraftingGridContainerMenu;
+import com.refinedmods.refinedstorage.common.grid.CraftingGridMatrixCloseBehavior;
+import com.refinedmods.refinedstorage.common.support.tooltip.HelpClientTooltipComponent;
+import com.refinedmods.refinedstorage.common.support.widget.CustomButton;
+import com.refinedmods.refinedstorage.common.util.ClientPlatformUtil;
+
+import java.util.List;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ResultContainer;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import org.jspecify.annotations.Nullable;
+
+import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createIdentifier;
+import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createTranslation;
+import static net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED;
+
+public class CraftingGridScreen extends AbstractGridScreen<AbstractCraftingGridContainerMenu> {
+    private static final Identifier TEXTURE = createIdentifier("textures/gui/crafting_grid.png");
+
+    private static final WidgetSprites CLEAR_BUTTON_TO_PLAYER_INVENTORY_SPRITES = new WidgetSprites(
+        createIdentifier("widget/move_down"),
+        createIdentifier("widget/move_down_disabled"),
+        createIdentifier("widget/move_down_focused"),
+        createIdentifier("widget/move_down_disabled")
+    );
+    private static final WidgetSprites CLEAR_BUTTON_TO_NETWORK_SPRITES = new WidgetSprites(
+        createIdentifier("widget/move_up"),
+        createIdentifier("widget/move_up_disabled"),
+        createIdentifier("widget/move_up_focused"),
+        createIdentifier("widget/move_up_disabled")
+    );
+    private static final Identifier CRAFTING_MATRIX_FILTERING_SLOT_HIGHLIGHT = createIdentifier(
+        "crafting_grid/crafting_matrix_filtering_slot_highlight"
+    );
+
+    @Nullable
+    private CustomButton clearToNetworkButton;
+
+    private boolean filteringBasedOnCraftingMatrixItems;
+
+    public CraftingGridScreen(final AbstractCraftingGridContainerMenu menu,
+                              final Inventory inventory,
+                              final Component title) {
+        super(menu, inventory, title, 156, 193, 229);
+        this.inventoryLabelY = 134;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+
+        final int clearToNetworkButtonX = getClearButtonX(0);
+        final int clearToInventoryButtonX = getClearButtonX(1);
+        final int clearButtonY = topPos + imageHeight - bottomHeight + 4;
+
+        clearToNetworkButton = createClearButton(clearToNetworkButtonX, clearButtonY, false);
+        setClearToNetworkButtonActive(getMenu().isActive());
+        getMenu().setActivenessListener(this::setClearToNetworkButtonActive);
+        addRenderableWidget(clearToNetworkButton);
+        addRenderableWidget(createClearButton(clearToInventoryButtonX, clearButtonY, true));
+    }
+
+    private int getClearButtonX(final int i) {
+        return leftPos + 81 + ((CLEAR_BUTTON_SIZE + 2) * i);
+    }
+
+    @Override
+    public void extractBackground(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY,
+                                  final float partialTicks) {
+        super.extractBackground(graphics, mouseX, mouseY, partialTicks);
+        if (filteringBasedOnCraftingMatrixItems) {
+            renderCraftingMatrixFilteringHighlights(graphics);
+        }
+    }
+
+    private void renderCraftingMatrixFilteringHighlights(final GuiGraphicsExtractor graphics) {
+        for (final Slot slot : getMenu().getCraftingMatrixSlots()) {
+            if (!slot.hasItem()) {
+                continue;
+            }
+            graphics.blitSprite(
+                GUI_TEXTURED,
+                CRAFTING_MATRIX_FILTERING_SLOT_HIGHLIGHT,
+                leftPos + slot.x - 1,
+                topPos + slot.y - 1,
+                18,
+                18
+            );
+        }
+    }
+
+    @Override
+    protected void containerTick() {
+        super.containerTick();
+        final boolean mayFilterOnCraftingMatrixItems = hoveredSlot != null
+            && hoveredSlot.container instanceof ResultContainer
+            && minecraft.hasShiftDown()
+            && ClientPlatformUtil.isCommandOrControlDown();
+        if (mayFilterOnCraftingMatrixItems && !filteringBasedOnCraftingMatrixItems) {
+            filteringBasedOnCraftingMatrixItems = true;
+            getMenu().filterBasedOnCraftingMatrixItems();
+            if (searchField != null) {
+                searchField.setEditable(false);
+            }
+        } else if (!mayFilterOnCraftingMatrixItems && filteringBasedOnCraftingMatrixItems) {
+            getMenu().stopFilteringBasedOnCraftingMatrixItems();
+            filteringBasedOnCraftingMatrixItems = false;
+            if (searchField != null) {
+                searchField.setEditable(true);
+            }
+        }
+    }
+
+    private void setClearToNetworkButtonActive(final boolean active) {
+        if (clearToNetworkButton == null) {
+            return;
+        }
+        clearToNetworkButton.active = active;
+    }
+
+    private CustomButton createClearButton(final int x, final int y, final boolean toPlayerInventory) {
+        final MutableComponent text = createTranslation(
+            "gui",
+            "crafting_grid.move." + (toPlayerInventory ? "inventory" : "network")
+        );
+        final KeyMapping keyMapping = getClearButtonKeyMapping(toPlayerInventory);
+        if (keyMapping != null) {
+            text.append("\n").append(keyMapping.getTranslatedKeyMessage().copy().withStyle(ChatFormatting.GRAY));
+        }
+        final WidgetSprites widgetSprites = toPlayerInventory
+            ? CLEAR_BUTTON_TO_PLAYER_INVENTORY_SPRITES
+            : CLEAR_BUTTON_TO_NETWORK_SPRITES;
+        final CustomButton button = new CustomButton(
+            x,
+            y,
+            CLEAR_BUTTON_SIZE,
+            CLEAR_BUTTON_SIZE,
+            widgetSprites,
+            b -> getMenu().clear(toPlayerInventory),
+            text
+        );
+        button.setTooltip(Tooltip.create(text));
+        return button;
+    }
+
+    @Nullable
+    private KeyMapping getClearButtonKeyMapping(final boolean toPlayerInventory) {
+        return toPlayerInventory
+            ? wrapUnbound(KeyMappings.INSTANCE.getClearCraftingGridMatrixToInventory())
+            : wrapUnbound(KeyMappings.INSTANCE.getClearCraftingGridMatrixToNetwork());
+    }
+
+    @Nullable
+    private KeyMapping wrapUnbound(@Nullable final KeyMapping keyMapping) {
+        return keyMapping == null || keyMapping.isUnbound() ? null : keyMapping;
+    }
+
+    @Override
+    public boolean keyPressed(final KeyEvent event) {
+        final KeyMapping clearToInventory = KeyMappings.INSTANCE.getClearCraftingGridMatrixToInventory();
+        final KeyMapping clearToNetwork = KeyMappings.INSTANCE.getClearCraftingGridMatrixToNetwork();
+        if (clearToInventory != null && Platform.INSTANCE.isKeyDown(clearToInventory)) {
+            getMenu().clear(true);
+        } else if (clearToNetwork != null && Platform.INSTANCE.isKeyDown(clearToNetwork)) {
+            getMenu().clear(false);
+        }
+        return super.keyPressed(event);
+    }
+
+    @Override
+    public void onClose() {
+        final CraftingGridMatrixCloseBehavior behavior = Platform.INSTANCE.getConfig()
+            .getCraftingGrid()
+            .getCraftingMatrixCloseBehavior();
+        if (behavior == CraftingGridMatrixCloseBehavior.CLEAR_TO_NETWORK) {
+            getMenu().clear(false);
+        } else if (behavior == CraftingGridMatrixCloseBehavior.CLEAR_TO_INVENTORY) {
+            getMenu().clear(true);
+        }
+        super.onClose();
+    }
+
+    @Override
+    protected Identifier getTexture() {
+        return TEXTURE;
+    }
+
+    @Override
+    protected void extractTooltip(final GuiGraphicsExtractor graphics, final int x, final int y) {
+        final boolean hoveredSlotValidForHelp = hoveredSlot != null
+            && hoveredSlot.container instanceof ResultContainer
+            && hoveredSlot.hasItem();
+        if (getMenu().getCarried().isEmpty() && hoveredSlotValidForHelp && !filteringBasedOnCraftingMatrixItems) {
+            final ItemStack stack = hoveredSlot.getItem();
+            final List<Component> lines = getTooltipFromContainerItem(stack);
+            final List<ClientTooltipComponent> processedLines = Platform.INSTANCE.processTooltipComponents(
+                stack,
+                graphics,
+                x,
+                stack.getTooltipImage(),
+                lines
+            );
+            final String key = ClientPlatformUtil.isCommand() ? "cmd" : "ctrl";
+            processedLines.add(HelpClientTooltipComponent.create(createTranslation(
+                "gui",
+                "crafting_grid.press_shift_" + key + "_to_only_show_items_used_in_crafting"
+            )));
+            graphics.tooltip(font, processedLines, x, y, DefaultTooltipPositioner.INSTANCE, null);
+            return;
+        }
+        super.extractTooltip(graphics, x, y);
+    }
+}

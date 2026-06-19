@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "magenta",
+  "ingredient": "#refinedstorage:destructors",
+  "result": "refinedstorage:magenta_destructor"
+}

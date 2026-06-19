@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "black",
+  "ingredient": "#refinedstorage:network_transmitters",
+  "result": "refinedstorage:black_network_transmitter"
+}

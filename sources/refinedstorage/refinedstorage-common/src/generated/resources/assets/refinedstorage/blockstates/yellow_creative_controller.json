@@ -1,0 +1,36 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "refinedstorage:block/controller/off"
+      },
+      "when": {
+        "energy_type": "off"
+      }
+    },
+    {
+      "apply": {
+        "model": "refinedstorage:block/controller/nearly_on"
+      },
+      "when": {
+        "energy_type": "nearly_on"
+      }
+    },
+    {
+      "apply": {
+        "model": "refinedstorage:block/controller/yellow"
+      },
+      "when": {
+        "energy_type": "on"
+      }
+    },
+    {
+      "apply": {
+        "model": "refinedstorage:block/controller/nearly_off"
+      },
+      "when": {
+        "energy_type": "nearly_off"
+      }
+    }
+  ]
+}

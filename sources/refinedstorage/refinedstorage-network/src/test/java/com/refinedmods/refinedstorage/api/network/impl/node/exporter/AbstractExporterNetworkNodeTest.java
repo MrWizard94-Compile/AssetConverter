@@ -1,0 +1,294 @@
+package com.refinedmods.refinedstorage.api.network.impl.node.exporter;
+
+import com.refinedmods.refinedstorage.api.core.Action;
+import com.refinedmods.refinedstorage.api.network.energy.EnergyNetworkComponent;
+import com.refinedmods.refinedstorage.api.network.node.SchedulingMode;
+import com.refinedmods.refinedstorage.api.network.node.exporter.ExporterTransferStrategy;
+import com.refinedmods.refinedstorage.api.network.storage.StorageNetworkComponent;
+import com.refinedmods.refinedstorage.api.resource.ResourceAmount;
+import com.refinedmods.refinedstorage.api.storage.Actor;
+import com.refinedmods.refinedstorage.api.storage.InsertableStorage;
+import com.refinedmods.refinedstorage.api.storage.Storage;
+import com.refinedmods.refinedstorage.api.storage.StorageImpl;
+import com.refinedmods.refinedstorage.api.storage.limited.LimitedStorageImpl;
+import com.refinedmods.refinedstorage.network.test.AddNetworkNode;
+import com.refinedmods.refinedstorage.network.test.InjectNetworkEnergyComponent;
+import com.refinedmods.refinedstorage.network.test.InjectNetworkStorageComponent;
+import com.refinedmods.refinedstorage.network.test.NetworkTest;
+import com.refinedmods.refinedstorage.network.test.SetupNetwork;
+
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static com.refinedmods.refinedstorage.network.test.fixtures.ResourceFixtures.A;
+import static com.refinedmods.refinedstorage.network.test.fixtures.ResourceFixtures.B;
+import static com.refinedmods.refinedstorage.network.test.fixtures.ResourceFixtures.C;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
+@NetworkTest
+@SetupNetwork(energyStored = 1000, energyCapacity = 1000)
+abstract class AbstractExporterNetworkNodeTest {
+    @AddNetworkNode
+    ExporterNetworkNode sut;
+
+    @AddNetworkNode(networkId = "nonexistent")
+    ExporterNetworkNode sutWithoutNetwork;
+
+    protected abstract SchedulingMode createSchedulingMode();
+
+    @BeforeEach
+    void setUp() {
+        sut.setEnergyUsage(5);
+        sut.setSchedulingMode(createSchedulingMode());
+    }
+
+    @Test
+    void testInitialState() {
+        // Assert
+        assertThat(sut.getEnergyUsage()).isEqualTo(5);
+    }
+
+    @Test
+    void shouldExtractEnergy(
+        @InjectNetworkEnergyComponent final EnergyNetworkComponent energy
+    ) {
+        // Act
+        sut.doWork();
+
+        // Assert
+        assertThat(energy.getStored()).isEqualTo(1000 - 5);
+    }
+
+    @Test
+    void shouldNotTransferWithoutNetwork() {
+        // Act & assert
+        assertDoesNotThrow(sutWithoutNetwork::doWork);
+        assertThat(sutWithoutNetwork.isActive()).isTrue();
+    }
+
+    @Test
+    void shouldNotTransferWithoutSchedulingMode(@InjectNetworkStorageComponent final StorageNetworkComponent storage) {
+        // Arrange
+        storage.addSource(new StorageImpl());
+        storage.insert(A, 100, Action.EXECUTE, Actor.EMPTY);
+        storage.insert(B, 100, Action.EXECUTE, Actor.EMPTY);
+
+        final Storage destination = new StorageImpl();
+
+        sut.setFilters(List.of(A, B));
+        sut.setTransferStrategy(createTransferStrategy(destination, 1));
+        sut.setSchedulingMode(null);
+
+        // Act
+        sut.doWork();
+
+        // Assert
+        assertThat(storage.getAll()).usingRecursiveFieldByFieldElementComparator().containsExactlyInAnyOrder(
+            new ResourceAmount(A, 100),
+            new ResourceAmount(B, 100)
+        );
+        assertThat(destination.getAll()).isEmpty();
+    }
+
+    @Test
+    void shouldNotTransferWithoutStrategy(@InjectNetworkStorageComponent final StorageNetworkComponent storage) {
+        // Arrange
+        storage.addSource(new StorageImpl());
+        storage.insert(A, 100, Action.EXECUTE, Actor.EMPTY);
+        storage.insert(B, 100, Action.EXECUTE, Actor.EMPTY);
+
+        final Storage destination = new StorageImpl();
+
+        sut.setFilters(List.of(A, B));
+
+        // Act
+        sut.doWork();
+
+        // Assert
+        assertThat(storage.getAll()).usingRecursiveFieldByFieldElementComparator().containsExactlyInAnyOrder(
+            new ResourceAmount(A, 100),
+            new ResourceAmount(B, 100)
+        );
+        assertThat(destination.getAll()).isEmpty();
+    }
+
+    @Test
+    void shouldNotTransferIfInactive(@InjectNetworkStorageComponent final StorageNetworkComponent storage) {
+        // Arrange
+        storage.addSource(new StorageImpl());
+        storage.insert(A, 100, Action.EXECUTE, Actor.EMPTY);
+        storage.insert(B, 100, Action.EXECUTE, Actor.EMPTY);
+
+        final Storage destination = new StorageImpl();
+        final ExporterTransferStrategy strategy = createTransferStrategy(destination, 1);
+
+        sut.setTransferStrategy(strategy);
+        sut.setFilters(List.of(A, B));
+        sut.setActive(false);
+
+        // Act
+        sut.doWork();
+
+        // Assert
+        assertThat(storage.getAll()).usingRecursiveFieldByFieldElementComparator().containsExactlyInAnyOrder(
+            new ResourceAmount(A, 100),
+            new ResourceAmount(B, 100)
+        );
+        assertThat(destination.getAll()).isEmpty();
+    }
+
+    @Test
+    void shouldNotTransferWithoutFilters(@InjectNetworkStorageComponent final StorageNetworkComponent storage) {
+        // Arrange
+        storage.addSource(new StorageImpl());
+        storage.insert(A, 100, Action.EXECUTE, Actor.EMPTY);
+        storage.insert(B, 100, Action.EXECUTE, Actor.EMPTY);
+
+        final Storage destination = new StorageImpl();
+        final ExporterTransferStrategy strategy = createTransferStrategy(destination, 1);
+
+        sut.setTransferStrategy(strategy);
+        sut.setFilters(List.of());
+
+        // Act
+        sut.doWork();
+
+        // Assert
+        assertThat(storage.getAll()).usingRecursiveFieldByFieldElementComparator().containsExactlyInAnyOrder(
+            new ResourceAmount(A, 100),
+            new ResourceAmount(B, 100)
+        );
+        assertThat(destination.getAll()).isEmpty();
+    }
+
+    @Test
+    void shouldNotTransferIfNoResourcesAreAvailable(
+        @InjectNetworkStorageComponent final StorageNetworkComponent storage
+    ) {
+        // Arrange
+        final Storage destination = new StorageImpl();
+        final ExporterTransferStrategy strategy = createTransferStrategy(destination, 10);
+
+        sut.setTransferStrategy(strategy);
+        sut.setFilters(List.of(A, B));
+
+        // Act
+        sut.doWork();
+        sut.doWork();
+        sut.doWork();
+
+        // Assert
+        assertThat(storage.getAll()).isEmpty();
+        assertThat(destination.getAll()).isEmpty();
+    }
+
+    @Test
+    void shouldTransferWithLimitedSpaceInDestination(
+        @InjectNetworkStorageComponent final StorageNetworkComponent storage
+    ) {
+        // Arrange
+        storage.addSource(new StorageImpl());
+        storage.insert(A, 100, Action.EXECUTE, Actor.EMPTY);
+        storage.insert(B, 100, Action.EXECUTE, Actor.EMPTY);
+        storage.insert(C, 100, Action.EXECUTE, Actor.EMPTY);
+
+        final Storage destination = new LimitedStorageImpl(5);
+        destination.insert(C, 1, Action.EXECUTE, Actor.EMPTY);
+
+        final ExporterTransferStrategy strategy = createTransferStrategy(destination, 10);
+
+        sut.setTransferStrategy(strategy);
+        sut.setFilters(List.of(C));
+        sut.setFilters(List.of(A, B));
+
+        // Act & assert
+        sut.doWork();
+
+        assertThat(storage.getAll()).usingRecursiveFieldByFieldElementComparator().containsExactlyInAnyOrder(
+            new ResourceAmount(A, 96),
+            new ResourceAmount(B, 100),
+            new ResourceAmount(C, 100)
+        );
+        assertThat(destination.getAll()).usingRecursiveFieldByFieldElementComparator().containsExactlyInAnyOrder(
+            new ResourceAmount(A, 4),
+            new ResourceAmount(C, 1)
+        );
+
+        sut.doWork();
+
+        assertThat(storage.getAll()).usingRecursiveFieldByFieldElementComparator().containsExactlyInAnyOrder(
+            new ResourceAmount(A, 96),
+            new ResourceAmount(B, 100),
+            new ResourceAmount(C, 100)
+        );
+        assertThat(destination.getAll()).usingRecursiveFieldByFieldElementComparator().containsExactlyInAnyOrder(
+            new ResourceAmount(A, 4),
+            new ResourceAmount(C, 1)
+        );
+    }
+
+    @Test
+    void shouldNotTransferIfThereIsNoSpaceInTheDestination(
+        @InjectNetworkStorageComponent final StorageNetworkComponent storage
+    ) {
+        // Arrange
+        storage.addSource(new StorageImpl());
+        storage.insert(A, 100, Action.EXECUTE, Actor.EMPTY);
+        storage.insert(B, 100, Action.EXECUTE, Actor.EMPTY);
+
+        final Storage destination = new LimitedStorageImpl(1);
+        destination.insert(C, 1, Action.EXECUTE, Actor.EMPTY);
+
+        final ExporterTransferStrategy strategy = createTransferStrategy(destination, 5);
+
+        sut.setTransferStrategy(strategy);
+        sut.setFilters(List.of(A, B));
+
+        // Act
+        sut.doWork();
+
+        // Assert
+        assertThat(storage.getAll()).usingRecursiveFieldByFieldElementComparator().containsExactlyInAnyOrder(
+            new ResourceAmount(A, 100),
+            new ResourceAmount(B, 100)
+        );
+        assertThat(destination.getAll()).usingRecursiveFieldByFieldElementComparator().containsExactly(
+            new ResourceAmount(C, 1)
+        );
+    }
+
+    @Test
+    void shouldTransferSingleResourceEvenIfTransferQuotaHasNotBeenMet(
+        @InjectNetworkStorageComponent final StorageNetworkComponent storage
+    ) {
+        // Arrange
+        storage.addSource(new StorageImpl());
+        storage.insert(A, 6, Action.EXECUTE, Actor.EMPTY);
+        storage.insert(B, 7, Action.EXECUTE, Actor.EMPTY);
+
+        final Storage destination = new StorageImpl();
+        final ExporterTransferStrategy strategy = createTransferStrategy(destination, 10);
+
+        sut.setTransferStrategy(strategy);
+        sut.setFilters(List.of(A, B));
+
+        // Act
+        sut.doWork();
+
+        // Assert
+        assertThat(storage.getAll()).usingRecursiveFieldByFieldElementComparator().containsExactly(
+            new ResourceAmount(B, 7)
+        );
+        assertThat(destination.getAll()).usingRecursiveFieldByFieldElementComparator().containsExactlyInAnyOrder(
+            new ResourceAmount(A, 6)
+        );
+    }
+
+    protected static ExporterTransferStrategy createTransferStrategy(final InsertableStorage destination,
+                                                                     final long transferQuota) {
+        return new ExporterTransferStrategyImpl(destination, resource -> transferQuota);
+    }
+}

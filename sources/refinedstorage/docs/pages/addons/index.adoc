@@ -1,0 +1,20 @@
+= Addons
+
+== Official addons
+
+- xref:quartz-arsenal.adoc[]
+- xref:quartz-accessories.adoc[]
+- xref:mekanism.adoc[]
+
+== Integrations
+
+- xref:just-enough-items.adoc[]
+- xref:roughly-enough-items.adoc[]
+- xref:emi.adoc[]
+- xref:curios.adoc[]
+- xref:trinkets.adoc[]
+- xref:fabric-ecosystem.adoc[]
+
+== Community addons
+
+- xref:community-addons.adoc[]

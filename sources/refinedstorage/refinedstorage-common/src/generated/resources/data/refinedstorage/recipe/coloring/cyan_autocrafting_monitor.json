@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "cyan",
+  "ingredient": "#refinedstorage:autocrafting_monitors",
+  "result": "refinedstorage:cyan_autocrafting_monitor"
+}

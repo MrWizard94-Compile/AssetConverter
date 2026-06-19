@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "cyan",
+  "ingredient": "#refinedstorage:security_managers",
+  "result": "refinedstorage:cyan_security_manager"
+}

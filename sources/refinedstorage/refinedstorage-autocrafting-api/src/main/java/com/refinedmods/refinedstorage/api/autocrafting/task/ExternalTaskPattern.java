@@ -1,0 +1,294 @@
+package com.refinedmods.refinedstorage.api.autocrafting.task;
+
+import com.refinedmods.refinedstorage.api.autocrafting.Pattern;
+import com.refinedmods.refinedstorage.api.autocrafting.status.TaskStatusBuilder;
+import com.refinedmods.refinedstorage.api.core.Action;
+import com.refinedmods.refinedstorage.api.resource.ResourceAmount;
+import com.refinedmods.refinedstorage.api.resource.ResourceKey;
+import com.refinedmods.refinedstorage.api.resource.list.MutableResourceList;
+import com.refinedmods.refinedstorage.api.resource.list.MutableResourceListImpl;
+import com.refinedmods.refinedstorage.api.resource.list.ResourceList;
+import com.refinedmods.refinedstorage.api.storage.root.RootStorage;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
+
+import org.jspecify.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static java.util.Objects.requireNonNull;
+
+class ExternalTaskPattern extends AbstractTaskPattern {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExternalTaskPattern.class);
+
+    private final MutableResourceList expectedOutputs;
+    private final ResourceList simulatedIterationInputs;
+    private final long originalIterationsToSendToSink;
+    private final Deque<ExternalPatternSinkId> pendingSinkIds;
+    private long iterationsToSendToSink;
+    private long iterationsReceived;
+    private boolean interceptedAnythingSinceLastStep;
+    private boolean interceptedAnIterationAtLeastOnceSinceLastStep;
+    private ExternalPatternSink.@Nullable Result lastSinkResult;
+    @Nullable
+    private ExternalPatternSinkDetails lastSinkDetails;
+    private int currentSinkIndex;
+
+    ExternalTaskPattern(final Pattern pattern, final TaskPlan.PatternPlan plan) {
+        super(pattern, plan);
+        this.originalIterationsToSendToSink = plan.iterations();
+        this.expectedOutputs = MutableResourceListImpl.create();
+        pattern.layout().outputs().forEach(
+            output -> expectedOutputs.add(output.resource(), output.amount() * plan.iterations())
+        );
+        this.iterationsToSendToSink = plan.iterations();
+        this.simulatedIterationInputs = calculateIterationInputs(Action.SIMULATE);
+        this.pendingSinkIds = new ArrayDeque<>();
+    }
+
+    ExternalTaskPattern(final TaskSnapshot.PatternSnapshot snapshot) {
+        super(snapshot.pattern(), new TaskPlan.PatternPlan(snapshot.root(),
+            requireNonNull(snapshot.externalPattern()).originalIterationsToSendToSink(), snapshot.ingredients()));
+        final TaskSnapshot.ExternalPatternSnapshot externalPattern = snapshot.externalPattern();
+        this.expectedOutputs = externalPattern.copyExpectedOutputs();
+        this.simulatedIterationInputs = externalPattern.simulatedIterationInputs();
+        this.originalIterationsToSendToSink = externalPattern.originalIterationsToSendToSink();
+        this.iterationsToSendToSink = externalPattern.iterationsToSendToSink();
+        this.iterationsReceived = externalPattern.iterationsReceived();
+        this.interceptedAnythingSinceLastStep = externalPattern.interceptedAnythingSinceLastStep();
+        this.lastSinkResult = externalPattern.lastSinkResult();
+        this.lastSinkDetails = externalPattern.lastSinkDetails();
+        this.pendingSinkIds = externalPattern.pendingSinkIds();
+    }
+
+    @Override
+    PatternStepResult step(final MutableResourceList internalStorage,
+                           final RootStorage rootStorage,
+                           final ExternalPatternSinkProvider sinkProvider,
+                           final TaskListener listener) {
+        if (interceptedAnIterationAtLeastOnceSinceLastStep) {
+            interceptedAnIterationAtLeastOnceSinceLastStep = false;
+            if (!pendingSinkIds.isEmpty()) {
+                final ExternalPatternSinkId sinkId = pendingSinkIds.remove();
+                listener.receivedExternalIteration(pattern, sinkId);
+            }
+        }
+        if (expectedOutputs.isEmpty()) {
+            return PatternStepResult.COMPLETED;
+        }
+        final ExternalPatternSink.Result previousSinkResult = lastSinkResult;
+        if (iterationsToSendToSink == 0) {
+            return idleOrRunning(previousSinkResult);
+        }
+        if (!acceptsIterationInputs(internalStorage, sinkProvider)) {
+            return idleOrRunning(previousSinkResult);
+        }
+        LOGGER.debug("Stepped {} with {} iterations remaining", pattern, iterationsToSendToSink);
+        iterationsToSendToSink--;
+        interceptedAnythingSinceLastStep = false;
+        return PatternStepResult.RUNNING;
+    }
+
+    private PatternStepResult idleOrRunning(final ExternalPatternSink.@Nullable Result previousSinkResult) {
+        if (interceptedAnythingSinceLastStep) {
+            interceptedAnythingSinceLastStep = false;
+            return PatternStepResult.RUNNING;
+        }
+        if (previousSinkResult != lastSinkResult) {
+            return PatternStepResult.RUNNING;
+        }
+        return PatternStepResult.IDLE;
+    }
+
+    @Override
+    long beforeInsert(final ResourceKey resource, final long amount) {
+        if (root) {
+            return 0;
+        }
+        return trySatisfy(resource, amount);
+    }
+
+    @Override
+    long afterInsert(final ResourceKey resource, final long amount) {
+        if (!root) {
+            return 0;
+        }
+        return trySatisfy(resource, amount);
+    }
+
+    private long trySatisfy(final ResourceKey resource, final long amount) {
+        final long claimable = getClaimable(resource);
+        if (claimable == 0) {
+            return 0;
+        }
+        final long correctedAmount = Math.min(claimable, amount);
+        expectedOutputs.remove(resource, correctedAmount);
+        final boolean receivedAtLeastOneIteration = updateIterationsReceived();
+        if (receivedAtLeastOneIteration) {
+            interceptedAnIterationAtLeastOnceSinceLastStep = true;
+        }
+        interceptedAnythingSinceLastStep = true;
+        return correctedAmount;
+    }
+
+    private long getClaimable(final ResourceKey resource) {
+        final long needed = expectedOutputs.get(resource);
+        if (needed == 0) {
+            return 0;
+        }
+        // Only claim what this task has actually dispatched. Without this cap, when multiple tasks share
+        // the same pattern, a greedy task will eat outputs produced by another task's iterations, hit
+        // expectedOutputs == 0 early, and finishing the task before sending its remaining inputs
+        // which then get returned to storage unprocessed, starving the other task.
+        final long pending = iterationsToSendToSink * getOutputAmountPerIteration(resource);
+        return needed - pending;
+    }
+
+    private long getOutputAmountPerIteration(final ResourceKey resource) {
+        long amount = 0;
+        for (final ResourceAmount output : pattern.layout().outputs()) {
+            if (output.resource().equals(resource)) {
+                amount += output.amount();
+            }
+        }
+        return amount;
+    }
+
+    private boolean updateIterationsReceived() {
+        final long originalIterationsReceived = iterationsReceived;
+        long result = originalIterationsToSendToSink;
+        for (final ResourceAmount output : pattern.layout().outputs()) {
+            final long expected = output.amount() * originalIterationsToSendToSink;
+            final long stillNeeded = expectedOutputs.get(output.resource());
+            final long receivedOutputs = expected - stillNeeded;
+            final long receivedOutputIterations = receivedOutputs / output.amount();
+            if (result > receivedOutputIterations) {
+                result = receivedOutputIterations;
+            }
+        }
+        this.iterationsReceived = result;
+        return iterationsReceived > originalIterationsReceived;
+    }
+
+    @Override
+    void appendStatus(final TaskStatusBuilder builder) {
+        final List<ResourceAmount> outputs = pattern.layout().outputs();
+        if (iterationsToSendToSink > 0) {
+            for (final ResourceAmount output : outputs) {
+                builder.scheduled(output.resource(), output.amount() * iterationsToSendToSink);
+            }
+        }
+        final long iterationsSentToSink = originalIterationsToSendToSink - iterationsToSendToSink;
+        final long iterationsProcessing = iterationsSentToSink - iterationsReceived;
+        if (iterationsProcessing > 0) {
+            for (final ResourceKey input : simulatedIterationInputs.getAll()) {
+                builder.processing(
+                    input,
+                    simulatedIterationInputs.get(input) * iterationsProcessing,
+                    lastSinkDetails
+                );
+            }
+        }
+        if (lastSinkResult != null) {
+            switch (lastSinkResult) {
+                case REJECTED -> outputs.stream().map(ResourceAmount::resource).forEach(builder::rejected);
+                case SKIPPED -> outputs.stream().map(ResourceAmount::resource).forEach(builder::noneFound);
+                case LOCKED -> outputs.stream().map(ResourceAmount::resource).forEach(builder::locked);
+                case ACCEPTED -> {
+                    // does not need to be reported
+                }
+            }
+        }
+    }
+
+    @Override
+    long getWeight() {
+        return iterationsToSendToSink;
+    }
+
+    @Override
+    double getPercentageCompleted() {
+        return iterationsReceived / (double) originalIterationsToSendToSink;
+    }
+
+    private boolean acceptsIterationInputs(final MutableResourceList internalStorage,
+                                           final ExternalPatternSinkProvider sinkProvider) {
+        final ResourceList iterationInputsSimulated = calculateIterationInputs(Action.SIMULATE);
+        if (!extractAll(iterationInputsSimulated, internalStorage, Action.SIMULATE)) {
+            return false;
+        }
+        final List<ExternalPatternSink> sinks = sinkProvider.getSinksByPatternLayout(pattern.layout());
+        if (sinks.isEmpty()) {
+            lastSinkResult = ExternalPatternSink.Result.SKIPPED;
+            return false;
+        }
+        final ExternalPatternSink sink = getSinkThatIsAcceptingResources(sinks, iterationInputsSimulated);
+        if (sink == null) {
+            return false;
+        }
+        final ResourceList iterationInputs = calculateIterationInputs(Action.EXECUTE);
+        extractAll(iterationInputs, internalStorage, Action.EXECUTE);
+        // If the sink does not accept the inputs
+        // we cannot return the extracted resources to the internal storage
+        // because we have already deducted from the iteration inputs
+        // and because the sink might have still accepted some resources halfway.
+        // If we returned the extracted resources to the internal storage and correct the
+        // iteration inputs, it would potentially duplicate the resources
+        // across the sink and the internal storage.
+        // The end result is that we lie, do as if the insertion was successful,
+        // and potentially void the extracted resources from the internal storage.
+        if (sink.insertAll(pattern, iterationInputs.copyState(), Action.EXECUTE)
+            != ExternalPatternSink.Result.ACCEPTED) {
+            LOGGER.warn("Sink {} did not accept all inputs for pattern {}", sink, pattern);
+        }
+        pendingSinkIds.add(sink.unwrapId(pattern));
+        return true;
+    }
+
+    @Nullable
+    private ExternalPatternSink getSinkThatIsAcceptingResources(final List<ExternalPatternSink> sinks,
+                                                                final ResourceList iterationInputsSimulated) {
+        if (currentSinkIndex >= sinks.size()) {
+            currentSinkIndex = 0;
+        }
+        while (currentSinkIndex < sinks.size()) {
+            final ExternalPatternSink sink = sinks.get(currentSinkIndex);
+            final ExternalPatternSink.Result simulatedResult = sink.insertAll(
+                pattern,
+                iterationInputsSimulated.copyState(),
+                Action.SIMULATE
+            );
+            lastSinkResult = simulatedResult;
+            lastSinkDetails = sink.getDetails();
+            currentSinkIndex++;
+            if (simulatedResult != ExternalPatternSink.Result.ACCEPTED) {
+                continue;
+            }
+            return sink;
+        }
+        return null;
+    }
+
+    @Override
+    TaskSnapshot.PatternSnapshot createSnapshot() {
+        return new TaskSnapshot.PatternSnapshot(
+            root,
+            pattern,
+            ingredients,
+            null,
+            new TaskSnapshot.ExternalPatternSnapshot(
+                expectedOutputs.copy(),
+                simulatedIterationInputs,
+                originalIterationsToSendToSink,
+                iterationsToSendToSink,
+                iterationsReceived,
+                interceptedAnythingSinceLastStep,
+                lastSinkResult,
+                lastSinkDetails,
+                pendingSinkIds
+            )
+        );
+    }
+}

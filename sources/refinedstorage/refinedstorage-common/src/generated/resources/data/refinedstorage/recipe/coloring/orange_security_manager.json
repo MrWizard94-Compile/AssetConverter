@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "orange",
+  "ingredient": "#refinedstorage:security_managers",
+  "result": "refinedstorage:orange_security_manager"
+}

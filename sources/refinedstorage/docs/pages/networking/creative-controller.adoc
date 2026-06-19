@@ -1,0 +1,15 @@
+= Creative Controller
+:from: v0.3.0-alpha
+:icon: controller.png
+
+The {doctitle} provides the storage network with an infinite amount of energy.
+
+It can only be obtained in creative mode.
+
+> If Refined Storage is configured to not require energy, this item is not available.
+
+include::../../partials/redstone-mode.adoc[]
+
+include::../../partials/connections-all.adoc[]
+
+include::../../partials/recoloring.adoc[]

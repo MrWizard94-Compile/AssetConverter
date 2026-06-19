@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "cyan",
+  "ingredient": "#refinedstorage:detectors",
+  "result": "refinedstorage:cyan_detector"
+}

@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "orange",
+  "ingredient": "#refinedstorage:exporters",
+  "result": "refinedstorage:orange_exporter"
+}

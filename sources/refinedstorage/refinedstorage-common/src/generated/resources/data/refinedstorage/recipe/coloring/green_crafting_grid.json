@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "green",
+  "ingredient": "#refinedstorage:crafting_grids",
+  "result": "refinedstorage:green_crafting_grid"
+}
