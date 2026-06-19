@@ -1,0 +1,43 @@
+### Entangled 1.3.21
+- Added Japanese translations (thanks to Twister716!)
+- Fixed cached block entity not being invalidated when received new entangled block data from server
+
+### Entangled 1.3.20
+- Fixed the WAILA/Jade/The One Probe showing air when the bound block is far away
+
+### Entangled 1.3.19
+- Added a config option to allow whitelisting blocks rather than blacklisting
+- Added Russian translations (thanks to EnderDrag0n!)
+- Added Turkish translations (thanks to RuyaSavascisi!)
+- Updated Simplified Chinese translations (thanks to UraraChiya!)
+
+### Entangled 1.3.18
+- Removed blacklist entries for Applied Energistics and Refined Storage blocks
+- Networking capabilities from Refined Storage will no longer be passed on by entangled blocks
+- Fixed already bound entangled block items not being placeable
+- Fixed dimension name in bound entangled block tooltip
+
+### Entangled 1.3.17
+- Added a tag for invalid target blocks
+- Added a tag blocks and block entities which should not be rendered
+- Blocks from Applied Energistics and Refined Storage are now blacklisted by default to avoid buggy behaviour
+- Improved Waila/Jade message coloring
+- Fixed some ways to bypass the `maxDistance` and `allowDimensional` config options
+
+### Entangled 1.3.16
+- Fixed some blocks not visually connecting to the entangled block
+- Fixed rare deadlock when Supplementaries is installed
+
+### Entangled 1.3.15
+- Errors from rendering blocks inside entangled blocks will now be reported instead of crashing the game
+- Added Simplified Chinese translations (thanks to MuteTiefling!)
+
+### Entangled 1.3.14
+- Fixed pipes sometimes disconnecting
+
+### Entangled 1.3.13
+- Updated Brazilian Portuguese translations (thanks to FITFC!)
+
+### Entangled 1.3.12
+- Updated to core library 1.1
+- Fix rare server crash when the area of the bound block is unloaded
