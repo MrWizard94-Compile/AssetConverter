@@ -1,0 +1,32 @@
+package net.mehvahdjukaar.supplementaries.common.commands;
+
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import net.mehvahdjukaar.supplementaries.common.misc.globe.GlobeData;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+
+import java.util.Random;
+
+public class ChangeGlobeSeedCommand implements Command<CommandSourceStack> {
+
+    private static final Random rand = new Random();
+
+    public static ArgumentBuilder<CommandSourceStack, ?> register(CommandBuildContext dispatcher) {
+        return Commands.literal("newseed")
+                .requires(cs -> cs.hasPermission(2))
+                .executes(new ChangeGlobeSeedCommand());
+    }
+
+    @Override
+    public int run(CommandContext<CommandSourceStack> context) {
+        ServerLevel level = context.getSource().getLevel();
+        GlobeData.recreateAndAssignFromSeed(level, rand.nextLong());
+        context.getSource().sendSuccess(() -> Component.translatable("commands.supplementaries.globe_changed"), false);
+        return 0;
+    }
+}

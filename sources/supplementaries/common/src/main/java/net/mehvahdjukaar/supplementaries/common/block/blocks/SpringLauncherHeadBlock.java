@@ -1,0 +1,217 @@
+package net.mehvahdjukaar.supplementaries.common.block.blocks;
+
+
+import com.mojang.serialization.MapCodec;
+import net.mehvahdjukaar.supplementaries.common.block.tiles.SpringLauncherArmBlockTile;
+import net.mehvahdjukaar.supplementaries.configs.CommonConfigs;
+import net.mehvahdjukaar.supplementaries.reg.ModRegistry;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+
+import java.util.Arrays;
+
+public class SpringLauncherHeadBlock extends DirectionalBlock {
+
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final BooleanProperty SHORT = BlockStateProperties.SHORT; // is not small? (only used for
+    public static final MapCodec<SpringLauncherHeadBlock> CODEC = simpleCodec(SpringLauncherHeadBlock::new);
+    protected static final VoxelShape PISTON_EXTENSION_EAST_AABB = Block.box(12.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape PISTON_EXTENSION_WEST_AABB = Block.box(0.0D, 0.0D, 0.0D, 4.0D, 16.0D, 16.0D);
+    protected static final VoxelShape PISTON_EXTENSION_SOUTH_AABB = Block.box(0.0D, 0.0D, 12.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape PISTON_EXTENSION_NORTH_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 4.0D);
+    protected static final VoxelShape PISTON_EXTENSION_UP_AABB = Block.box(0.0D, 12.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape PISTON_EXTENSION_DOWN_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
+    protected static final VoxelShape UP_ARM_AABB = Block.box(1.0D, -4.0D, 1.0D, 15.0D, 12.0D, 15.0D);
+    protected static final VoxelShape DOWN_ARM_AABB = Block.box(1.0D, 4.0D, 1.0D, 15.0D, 20.0D, 15.0D);
+    protected static final VoxelShape SOUTH_ARM_AABB = Block.box(1.0D, 1.0D, -4.0D, 15.0D, 15.0D, 12.0D);
+    protected static final VoxelShape NORTH_ARM_AABB = Block.box(1.0D, 1.0D, 4.0D, 15.0D, 15.0D, 20.0D);
+    protected static final VoxelShape EAST_ARM_AABB = Block.box(-4.0D, 1.0D, 1.0D, 12.0D, 15.0D, 15.0D);
+    protected static final VoxelShape WEST_ARM_AABB = Block.box(4.0D, 1.0D, 1.0D, 20.0D, 15.0D, 15.0D);
+    protected static final VoxelShape SHORT_UP_ARM_AABB = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 12.0D, 15.0D);
+    protected static final VoxelShape SHORT_DOWN_ARM_AABB = Block.box(1.0D, 4.0D, 1.0D, 15.0D, 16.0D, 15.0D);
+    protected static final VoxelShape SHORT_SOUTH_ARM_AABB = Block.box(1.0D, 1.0D, 0.0D, 15.0D, 15.0D, 12.0D);
+    protected static final VoxelShape SHORT_NORTH_ARM_AABB = Block.box(1.0D, 1.0D, 4.0D, 15.0D, 15.0D, 16.0D);
+    protected static final VoxelShape SHORT_EAST_ARM_AABB = Block.box(0.0D, 1.0D, 1.0D, 12.0D, 15.0D, 15.0D);
+    protected static final VoxelShape SHORT_WEST_ARM_AABB = Block.box(4.0D, 1.0D, 1.0D, 16.0D, 15.0D, 15.0D);
+    private static final VoxelShape[] EXTENDED_SHAPES = getShapesForExtension(true);
+    private static final VoxelShape[] UNEXTENDED_SHAPES = getShapesForExtension(false);
+
+    // tile entity, leave true
+    public SpringLauncherHeadBlock(Properties properties) {
+        super(properties);
+        this.registerDefaultState(this.stateDefinition.any().setValue(SHORT, false).setValue(FACING, Direction.NORTH));
+    }
+
+    private static VoxelShape[] getShapesForExtension(boolean extended) {
+        return Arrays.stream(Direction.values()).map((direction) -> getShapeForDirection(direction, extended)).toArray(VoxelShape[]::new);
+    }
+
+    private static VoxelShape getShapeForDirection(Direction direction, boolean shortArm) {
+        return switch (direction) {
+            case UP -> Shapes.or(PISTON_EXTENSION_UP_AABB, shortArm ? SHORT_UP_ARM_AABB : UP_ARM_AABB);
+            case NORTH -> Shapes.or(PISTON_EXTENSION_NORTH_AABB, shortArm ? SHORT_NORTH_ARM_AABB : NORTH_ARM_AABB);
+            case SOUTH -> Shapes.or(PISTON_EXTENSION_SOUTH_AABB, shortArm ? SHORT_SOUTH_ARM_AABB : SOUTH_ARM_AABB);
+            case WEST -> Shapes.or(PISTON_EXTENSION_WEST_AABB, shortArm ? SHORT_WEST_ARM_AABB : WEST_ARM_AABB);
+            case EAST -> Shapes.or(PISTON_EXTENSION_EAST_AABB, shortArm ? SHORT_EAST_ARM_AABB : EAST_ARM_AABB);
+            default -> Shapes.or(PISTON_EXTENSION_DOWN_AABB, shortArm ? SHORT_DOWN_ARM_AABB : DOWN_ARM_AABB);
+        };
+    }
+
+    @Override
+    protected MapCodec<? extends SpringLauncherHeadBlock> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+        return (state.getValue(SHORT) ? EXTENDED_SHAPES : UNEXTENDED_SHAPES)[state.getValue(FACING).ordinal()];
+    }
+
+    @Override
+    public void fallOn(Level level, BlockState state, BlockPos pos, Entity entityIn, float fallDistance) {
+        if (entityIn.isSuppressingBounce() || state.getValue(FACING) != Direction.UP) {
+            super.fallOn(level, state, pos, entityIn, fallDistance);
+        } else {
+            entityIn.causeFallDamage(fallDistance, 0.0F, level.damageSources().fall());
+            //TODO: add falling block entity support. also fix not working on servers
+            if ((entityIn instanceof LivingEntity) && !level.isClientSide && fallDistance > (float) CommonConfigs.Redstone.LAUNCHER_HEIGHT.get()) {
+                BlockState state1 = ModRegistry.SPRING_LAUNCHER_ARM.get().defaultBlockState();
+                level.setBlock(pos, state1
+                        .setValue(SpringLauncherArmBlock.EXTENDING, false).setValue(FACING, state.getValue(FACING)), 3);
+                if (level.getBlockEntity(pos) instanceof SpringLauncherArmBlockTile tile) {
+                    tile.retractOnFallOn();
+                }
+            }
+            //this.bounceEntity(entityIn);
+        }
+
+    }
+
+    /**
+     * Called when an Entity lands on this Block. This method *must* update motionY because the entity will not do that
+     * on its own
+     */
+    /*
+    public void onLanded(IBlockReader worldIn, Entity entityIn) {
+        if (entityIn.isSuppressingBounce()) {
+            super.onLanded(worldIn, entityIn);
+        } else {
+            this.bounceEntity(entityIn);
+        }
+
+    }*/
+    private void bounceEntity(Entity entity) {
+        Vec3 vector3d = entity.getDeltaMovement();
+        if (vector3d.y < 0.0D) {
+            double d0 = entity instanceof LivingEntity ? 1.0D : 0.8D;
+            entity.setDeltaMovement(vector3d.x, -vector3d.y * d0, vector3d.z);
+        }
+
+    }
+
+    @Override
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
+        return true;
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING, SHORT);
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Rotation rot) {
+        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    public BlockState mirror(BlockState state, Mirror mirrorIn) {
+        return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+        return new ItemStack(ModRegistry.SPRING_LAUNCHER.get());
+    }
+
+    // piston code
+
+    /**
+     * Called before the Block is set to air in the world. Called regardless of if
+     * the player's tool can actually collect this block
+     */
+    @Override
+    public BlockState playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
+        if (!worldIn.isClientSide && player.getAbilities().instabuild) {
+            BlockPos blockpos = pos.relative(state.getValue(FACING).getOpposite());
+            Block block = worldIn.getBlockState(blockpos).getBlock();
+            if (block instanceof SpringLauncherBlock) {
+                worldIn.removeBlock(blockpos, false);
+            }
+        }
+        return super.playerWillDestroy(worldIn, pos, state, player);
+    }
+
+    @Override
+    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        BlockState comp = ModRegistry.SPRING_LAUNCHER_ARM.get().defaultBlockState().setValue(SpringLauncherArmBlock.EXTENDING, false).setValue(FACING, state.getValue(FACING));
+        if ((state.getBlock() != newState.getBlock()) && (newState != comp)) {
+            super.onRemove(state, worldIn, pos, newState, isMoving);
+            Direction direction = state.getValue(FACING).getOpposite();
+            pos = pos.relative(direction);
+            BlockState blockstate = worldIn.getBlockState(pos);
+            if ((blockstate.getBlock() instanceof SpringLauncherBlock) && blockstate.getValue(BlockStateProperties.EXTENDED)) {
+                dropResources(blockstate, worldIn, pos);
+                worldIn.removeBlock(pos, false);
+            }
+        }
+    }
+
+    @Override
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos,
+                                  BlockPos facingPos) {
+        return facing.getOpposite() == stateIn.getValue(FACING) && !stateIn.canSurvive(worldIn, currentPos)
+                ? Blocks.AIR.defaultBlockState()
+                : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+    }
+
+    @Override
+    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
+        BlockState bs = worldIn.getBlockState(pos.relative(state.getValue(FACING).getOpposite()));
+        return bs == ModRegistry.SPRING_LAUNCHER.get().defaultBlockState().setValue(BlockStateProperties.EXTENDED, true).setValue(FACING, state.getValue(FACING));
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+        if (state.canSurvive(worldIn, pos)) {
+            BlockPos blockpos = pos.relative(state.getValue(FACING).getOpposite());
+            worldIn.getBlockState(blockpos).handleNeighborChanged(worldIn, blockpos, blockIn, fromPos, false);
+        }
+    }
+
+}
+

@@ -1,0 +1,10 @@
+{
+  "action": {
+    "type": "sliceanddice:damage",
+    "amount": 0.5,
+    "damage_type": "oreganized:molten_lead"
+  },
+  "fluid": {
+    "tag": "c:molten_lead"
+  }
+}

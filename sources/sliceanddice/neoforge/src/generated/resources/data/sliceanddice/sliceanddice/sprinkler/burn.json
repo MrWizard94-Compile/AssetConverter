@@ -1,0 +1,10 @@
+{
+  "action": {
+    "type": "sliceanddice:damage",
+    "amount": 0.5,
+    "damage_type": "minecraft:in_fire"
+  },
+  "fluid": {
+    "tag": "sliceanddice:burning"
+  }
+}

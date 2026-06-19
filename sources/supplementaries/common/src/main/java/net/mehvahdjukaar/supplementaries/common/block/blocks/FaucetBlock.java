@@ -1,0 +1,239 @@
+package net.mehvahdjukaar.supplementaries.common.block.blocks;
+
+import net.mehvahdjukaar.candlelight.api.VirtualOverride;
+import net.mehvahdjukaar.moonlight.api.block.WaterBlock;
+import net.mehvahdjukaar.moonlight.api.fluids.FluidsHelper;
+import net.mehvahdjukaar.moonlight.api.util.Utils;
+import net.mehvahdjukaar.moonlight.api.util.math.MthUtils;
+import net.mehvahdjukaar.supplementaries.common.block.ModBlockProperties;
+import net.mehvahdjukaar.supplementaries.common.block.tiles.FaucetBlockTile;
+import net.mehvahdjukaar.supplementaries.reg.ModParticles;
+import net.mehvahdjukaar.supplementaries.reg.ModRegistry;
+import net.mehvahdjukaar.supplementaries.reg.ModSounds;
+import net.mehvahdjukaar.supplementaries.reg.ModTags;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.FastColor;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
+
+public class FaucetBlock extends WaterBlock implements EntityBlock {
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final BooleanProperty ENABLED = BlockStateProperties.ENABLED;
+    public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+    public static final BooleanProperty HAS_WATER = ModBlockProperties.HAS_WATER;
+    public static final IntegerProperty LIGHT_LEVEL = ModBlockProperties.LIGHT_LEVEL_0_7;
+    public static final BooleanProperty CONNECTED = ModBlockProperties.CONNECTED;
+    protected static final VoxelShape SHAPE_NORTH = Block.box(5, 5, 5, 11, 15, 16);
+    protected static final VoxelShape SHAPE_SOUTH = MthUtils.rotateVoxelShape(SHAPE_NORTH, Direction.SOUTH);
+    protected static final VoxelShape SHAPE_WEST = MthUtils.rotateVoxelShape(SHAPE_NORTH, Direction.WEST);
+    protected static final VoxelShape SHAPE_EAST = MthUtils.rotateVoxelShape(SHAPE_NORTH, Direction.EAST);
+    protected static final VoxelShape SHAPE_NORTH_JAR = Block.box(5, 0, 5, 11, 10, 16);
+    protected static final VoxelShape SHAPE_SOUTH_JAR = MthUtils.rotateVoxelShape(SHAPE_NORTH_JAR, Direction.SOUTH);
+    protected static final VoxelShape SHAPE_WEST_JAR = MthUtils.rotateVoxelShape(SHAPE_NORTH_JAR, Direction.WEST);
+    protected static final VoxelShape SHAPE_EAST_JAR = MthUtils.rotateVoxelShape(SHAPE_NORTH_JAR, Direction.EAST);
+
+    public FaucetBlock(Properties properties) {
+        super(properties.lightLevel(s -> s.getValue(LIGHT_LEVEL)));
+        this.registerDefaultState(this.stateDefinition.any().setValue(CONNECTED, false).setValue(FACING, Direction.NORTH)
+                .setValue(ENABLED, false).setValue(POWERED, false)
+                .setValue(HAS_WATER, false).setValue(WATERLOGGED, false).setValue(LIGHT_LEVEL, 0));
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        if (state.getValue(CONNECTED)) {
+            return switch (state.getValue(FACING)) {
+                case SOUTH -> SHAPE_SOUTH_JAR;
+                case EAST -> SHAPE_EAST_JAR;
+                case WEST -> SHAPE_WEST_JAR;
+                default -> SHAPE_NORTH_JAR;
+            };
+        } else {
+            return switch (state.getValue(FACING)) {
+                case SOUTH -> SHAPE_SOUTH;
+                case EAST -> SHAPE_EAST;
+                case WEST -> SHAPE_WEST;
+                default -> SHAPE_NORTH;
+            };
+        }
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        boolean enabled = state.getValue(ENABLED);
+
+        float f = enabled ? 1F : 1.2F;
+        level.playSound(null, pos, ModSounds.FAUCET.get(), SoundSource.BLOCKS, 1F, f);
+
+        level.gameEvent(player, enabled ? GameEvent.BLOCK_ACTIVATE : GameEvent.BLOCK_DEACTIVATE, pos);
+        this.updateBlock(state, level, pos, true);
+        return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+        boolean hasWater = updateTileFluidAndReturnIfHasWater(state, pos, worldIn);
+        if (hasWater != state.getValue(HAS_WATER)) worldIn.setBlockAndUpdate(pos, state.setValue(HAS_WATER, hasWater));
+    }
+
+    @Override
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
+        if (stateIn.getValue(WATERLOGGED)) {
+            worldIn.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
+        }
+        if (facing == Direction.DOWN) {
+            boolean canConnectDown = canConnect(facingState, worldIn, facingPos, facing.getOpposite());
+            //boolean water = canConnectDown?stateIn.getValue(HAS_WATER)&&this.isSpecialTankBelow(facingState): updateTileFluid(stateIn,currentPos,worldIn);
+            return stateIn.setValue(CONNECTED, canConnectDown);
+        }
+        if (facing == stateIn.getValue(FACING).getOpposite()) {
+            boolean hasWater = updateTileFluidAndReturnIfHasWater(stateIn, currentPos, worldIn);
+            return stateIn.setValue(HAS_WATER, hasWater);
+        }
+        return stateIn;
+    }
+
+    //returns false if no color (water)
+    public boolean updateTileFluidAndReturnIfHasWater(BlockState state, BlockPos pos, LevelReader world) {
+        if (world.getBlockEntity(pos) instanceof FaucetBlockTile tile && world instanceof ServerLevel level) {
+            return tile.updateContainedFluidVisuals(level);
+        }
+        return false;
+    }
+
+    @VirtualOverride("neoforge")
+    public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
+        boolean water = updateTileFluidAndReturnIfHasWater(state, pos, level);
+        if (state.getValue(HAS_WATER) != water) {
+            if (level instanceof Level l) {
+                l.setBlock(pos, state.setValue(HAS_WATER, water), 2);
+            }
+        }
+    }
+
+    private boolean canConnect(BlockState downState, LevelAccessor world, BlockPos pos, Direction dir) {
+        if (downState.getBlock() instanceof JarBlock) return true;
+        else if (downState.getBlock() instanceof AbstractCauldronBlock) return false;
+        else if (downState.is(ModTags.FAUCET_CONNECTION_BLACKLIST)) return false;
+        else if (downState.is(ModTags.FAUCET_CONNECTION_WHITELIST)) return false;
+        else if (downState.hasProperty(BlockStateProperties.LEVEL_HONEY)) return true;
+        return world instanceof Level level && FluidsHelper.hasFluidHandler(level, pos, dir);
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block neighborBlock, BlockPos fromPos, boolean moving) {
+        super.neighborChanged(state, world, pos, neighborBlock, fromPos, moving);
+        this.updateBlock(state, world, pos, false);
+    }
+
+    public void updateBlock(BlockState state, Level world, BlockPos pos, boolean toggle) {
+        boolean isPowered = world.hasNeighborSignal(pos);
+        if (isPowered != state.getValue(POWERED) || toggle) {
+            world.setBlock(pos, state.setValue(POWERED, isPowered).setValue(ENABLED, toggle ^ state.getValue(ENABLED)), 2);
+        }
+
+        boolean hasWater = updateTileFluidAndReturnIfHasWater(state, pos, world);
+        if (hasWater != state.getValue(HAS_WATER)) world.setBlockAndUpdate(pos, state.setValue(HAS_WATER, hasWater));
+    }
+
+    public boolean isOpen(BlockState state) {
+        return (state.getValue(BlockStateProperties.POWERED) ^ state.getValue(BlockStateProperties.ENABLED));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING, ENABLED, POWERED, HAS_WATER, CONNECTED, WATERLOGGED, LIGHT_LEVEL);
+    }
+
+    //TODO: fix water faucet connecting on rotation
+
+    @Override
+    public BlockState rotate(BlockState state, Rotation rot) {
+        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    public BlockState mirror(BlockState state, Mirror mirrorIn) {
+        return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        Level world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        Direction dir = context.getClickedFace().getAxis() == Direction.Axis.Y ? Direction.NORTH : context.getClickedFace();
+
+        boolean water = world.getFluidState(pos).getType() == Fluids.WATER;
+        boolean hasJar = canConnect(world.getBlockState(pos.below()), world, pos.below(), Direction.UP);
+
+        boolean powered = world.hasNeighborSignal(pos);
+
+        return this.defaultBlockState().setValue(FACING, dir)
+                .setValue(CONNECTED, hasJar).setValue(WATERLOGGED, water).setValue(POWERED, powered);
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
+        boolean flag = this.isOpen(state);
+        if (state.getValue(HAS_WATER) && !state.getValue(CONNECTED)) {
+            if (random.nextFloat() > (flag ? 0 : 0.06)) return;
+            float d = 0.125f;
+            double x = (pos.getX() + 0.5 + d * (random.nextFloat() - 0.5));
+            double y = (pos.getY() + 0.25);
+            double z = (pos.getZ() + 0.5 + d * (random.nextFloat() - 0.5));
+            int color = getTileParticleColor(pos, world);
+            //get texture color if color is white
+            float r = FastColor.ARGB32.red(color) / 255f;
+            float g = FastColor.ARGB32.green(color) / 255f;
+            float b = FastColor.ARGB32.blue(color) / 255f;
+            world.addParticle(ModParticles.DRIPPING_LIQUID.get(), x, y, z, r, g, b);
+        }
+    }
+
+    //only client
+    public int getTileParticleColor(BlockPos pos, Level world) {
+        if (world.getBlockEntity(pos) instanceof FaucetBlockTile te)
+            return te.tempFluidHolder.getCachedParticleColor(world, pos);
+        return 0x423cf7;
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+        return new FaucetBlockTile(pPos, pState);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+        return Utils.getTicker(pBlockEntityType, ModRegistry.FAUCET_TILE.get(), pLevel.isClientSide ? null : FaucetBlockTile::serverTick);
+    }
+}
+

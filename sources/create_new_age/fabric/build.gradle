@@ -1,0 +1,122 @@
+import dev.ithundxr.silk.ChangelogText
+
+repositories {
+    maven { url = "https://maven.terraformersmc.com/" } // ModMenu, EMI
+    maven { url = "https://maven.shedaniel.me" } // REI
+    maven { url = "https://mvn.devos.one/releases" }  // Porting Lib
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven" } // Forge Config API Port
+}
+
+dependencies {
+    compileOnly(project(":common"))
+    
+    modImplementation("net.fabricmc:fabric-loader:${fabricLoaderVersion}")
+    modApi("net.fabricmc.fabric-api:fabric-api:${fabricVersion}")
+    
+    modImplementation("com.simibubi.create:create-fabric:${createFabricVersion}")
+    modApi("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:8.0.0")
+
+    modImplementation("com.tterrag.registrate_fabric:Registrate:${rootProject.registrateFabricVersion}")
+    modImplementation("net.createmod.ponder:Ponder-Fabric-${rootProject.minecraftVersion}:${ponderVersion}")
+    modCompileOnly("dev.engine-room.flywheel:flywheel-fabric-api-${minecraftVersion}:${flywheelVersion}")
+    modRuntimeOnly("dev.engine-room.flywheel:flywheel-fabric-${minecraftVersion}:${flywheelVersion}")
+
+    modCompileOnly("cc.tweaked:cc-tweaked-${rootProject.minecraftVersion}-fabric-api:${cctVersion}")
+    modRuntimeOnly("cc.tweaked:cc-tweaked-${rootProject.minecraftVersion}-fabric:${cctVersion}")
+
+    // Fabric 0.15.0+ should already have mixinextras
+//    annotationProcessor(implementation(include("io.github.llamalad7:mixinextras-fabric:0.4.1")))
+
+    // Mods with compat
+    modImplementation("com.terraformersmc:modmenu:${modmenuVersion}")
+    modCompileOnly("dev.emi:emi-fabric:${emiVersion}+${rootProject.minecraftVersion}:api")
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:${reiVersion}")
+    modRuntimeOnly("appeng:appliedenergistics2-fabric:${ae2Version}")
+
+    if (recipeViewer == "emi") {
+        modRuntimeOnly("dev.emi:emi-fabric:${emiVersion}+${rootProject.minecraftVersion}")
+    } else if (recipeViewer == "rei") {
+        modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:${reiVersion}")
+    }
+    
+    // Runtime only mods
+//    Sodium crashes immediately on world join so I'm just going to remove it for now
+//    modRuntimeOnly("maven.modrinth:sodium:${sodiumVersion}")
+//    modRuntimeOnly("maven.modrinth:indium:${indiumVersion}")
+    
+    // Runtime only mods for testing
+    modRuntimeOnly("maven.modrinth:resourceful-lib:YzWNEutS")
+    modRuntimeOnly("maven.modrinth:resourceful-config:PlEObkl9")
+    modRuntimeOnly("maven.modrinth:botarium:YgOh7n9M")
+//    modRuntimeOnly("maven.modrinth:ad-astra:DruFc2hK")
+}
+
+compileJava {
+    source(project(":common").sourceSets.main.allSource)
+}
+
+processResources {
+    from project(":common").sourceSets.main.resources
+    var replaceProperties = [
+        "version": rootProject.version.replaceAll("\\+.*-mc", "\\+mc"),
+        "minecraftVersion": rootProject.minecraftVersion,
+        "fabricLoaderVersion": project.fabricLoaderVersion,
+        "eslVersion": rootProject.eslVersion,
+        "createVersion": rootProject.createVersion.replaceAll("-[0-9]*", ""),
+        "objLoader": project.objLoader
+    ]
+
+    inputs.properties(replaceProperties)
+    filesMatching(["fabric.mod.json", "assets/**/*.json"]) {
+        expand(replaceProperties)
+    }
+}
+
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += ['-ACNA_FABRIC']
+}
+
+var modId = rootProject.modId
+
+loom {
+    runs {
+        datagen {
+            inherit(client)
+            vmArg("-Dfabric-api.datagen")
+            vmArg("-Dfabric-api.datagen.output-dir=${file("src/generated/resources")}")
+            vmArg("-Dporting_lib.datagen.existing_resources=${file("../common/src/main/resources")}")
+            vmArg("-Dfabric-api.datagen.modid=${modId}")
+            
+            runDir("build/datagen")
+        }
+    }    
+}
+
+// https://modmuss50.github.io/mod-publish-plugin/
+publishMods {
+    file = remapJar.archiveFile
+    changelog = ChangelogText.getChangelogText(rootProject).toString()
+    type = STABLE
+    version = "$modVersion+mc$minecraftVersion"
+    displayName = "$modVersion for Fabric $minecraftVersion"
+    modLoaders.add("fabric")
+
+    curseforge {
+        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+        projectId = "905861"
+        clientRequired = true
+        serverRequired = true
+        requires("create-fabric")
+        minecraftVersions.add(minecraftVersion)
+    }
+
+    modrinth {
+        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+        projectId = "FTeXqI9v"
+        requires { // Requires Create
+            id = "Xbc0uyRg"
+        }
+        minecraftVersions.add(minecraftVersion)
+    }
+}

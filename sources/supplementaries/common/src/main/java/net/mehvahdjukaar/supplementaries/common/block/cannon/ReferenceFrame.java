@@ -1,0 +1,27 @@
+package net.mehvahdjukaar.supplementaries.common.block.cannon;
+
+import net.mehvahdjukaar.moonlight.api.misc.TileOrEntityTarget;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
+
+public interface ReferenceFrame {
+    Vec3 position(float partialTicks);
+
+    Quaternionf getRotation(float partialTicks);
+
+    Vec3 velocity();
+
+    void applyRecoil(Vec3 recoil);
+
+    TileOrEntityTarget makeNetworkTarget();
+
+    boolean isStillValid(Player player);
+
+    boolean shouldRotatePlayerFaceWhenManeuvering();
+
+    boolean impedePlayerMovementWhenManeuvering();
+
+    boolean canManeuverFromGUI(Player player);
+}
+

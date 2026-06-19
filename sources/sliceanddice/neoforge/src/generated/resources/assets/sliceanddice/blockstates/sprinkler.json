@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "type=ceiling": {
+      "model": "sliceanddice:block/sprinkler/ceiling"
+    },
+    "type=floor": {
+      "model": "sliceanddice:block/sprinkler/floor/base"
+    }
+  }
+}

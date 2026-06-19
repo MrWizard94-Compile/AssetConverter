@@ -1,0 +1,58 @@
+package net.mehvahdjukaar.supplementaries.common.block.fire_behaviors;
+
+import net.mehvahdjukaar.supplementaries.common.utils.fake_level.IEntityInterceptFakeLevel;
+import net.mehvahdjukaar.supplementaries.reg.ModTags;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.TntBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
+
+public class TntBehavior extends GenericProjectileBehavior {
+
+    //creates tnt entity
+    public static boolean explodesWhenHitByFlamingArrow(BlockState tntState) {
+        return tntState.getBlock() instanceof TntBlock || tntState.is(ModTags.CANNON_TNTS);
+    }
+
+    //might not create an entry but should be blown as such will make it explodes
+    public static boolean explodesWhenExploded(BlockState tntState) {
+        return tntState.getBlock() instanceof TntBlock || tntState.is(ModTags.IGNITED_BY_EXPLOSION);
+    }
+
+    public static void igniteTntHack(BlockState tntState, Level level, BlockPos pos) {
+        Arrow dummyArrow = new Arrow(level, pos.getX() + 0.5, pos.getY() + 0.5,
+                pos.getZ() + 0.5, Items.ARROW.getDefaultInstance(), null);
+        dummyArrow.setRemainingFireTicks(20);
+        tntState.onProjectileHit(level, tntState,
+                new BlockHitResult(new Vec3(0.5, 0.5, 0.5), Direction.UP, pos, true),
+                dummyArrow);
+    }
+
+    @Override
+    public @Nullable Entity createEntity(ItemStack projectile, IEntityInterceptFakeLevel fakeLevel, Vec3 facing) {
+        if (projectile.isEmpty()) return null;
+        if (projectile.getItem() instanceof BlockItem bi) {
+            BlockState tntState = bi.getBlock().defaultBlockState();
+            BlockPos pos = BlockPos.ZERO;
+            Level level = (Level) fakeLevel;
+            level.setBlock(pos, tntState, Block.UPDATE_NONE);
+            igniteTntHack(tntState, level, pos);
+            var e = fakeLevel.getIntercepted();
+            if (e != null) e.setDeltaMovement(0, 1, 0);
+            return e;
+        }
+        return null;
+    }
+
+
+}

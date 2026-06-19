@@ -1,0 +1,28 @@
+package net.mehvahdjukaar.supplementaries.common.commands;
+
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import net.mehvahdjukaar.supplementaries.common.misc.globe.GlobeData;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+
+public class ResetGlobeSeedCommand implements Command<CommandSourceStack> {
+
+    public static ArgumentBuilder<CommandSourceStack, ?> register(CommandBuildContext dispatcher) {
+        return Commands.literal("resetseed")
+                .requires(cs -> cs.hasPermission(2))
+                .executes(new ResetGlobeSeedCommand());
+    }
+
+    @Override
+    public int run(CommandContext<CommandSourceStack> context) {
+        ServerLevel level = context.getSource().getLevel();
+        GlobeData.recreateAndAssignFromSeed(level, level.getSeed());
+        context.getSource().sendSuccess(() -> Component.translatable("commands.supplementaries.globe_reset"), false);
+        return 0;
+    }
+}

@@ -1,0 +1,32 @@
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run
+run-server
+run-data
+.cache
+
+# Files from Forge MDK
+forge*changelog.txt
+
+secrets.properties
+/neoforge/lib/RenderDoc_1.37_64/
+/neoforge/lib/RenderDoc_1.37_64/**
