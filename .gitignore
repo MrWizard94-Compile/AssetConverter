@@ -1,0 +1,12 @@
+# Ignore everything at repo root by default (cloned mods, tools, binaries).
+/*
+!/.gitignore
+!/*.py
+!/README_windows.md
+!/_atm10_research.md
+!/_atm10_mods_raw.json
+
+# Python cache (if any scripts run from tracked paths)
+__pycache__/
+*.pyc
+*.pyo
