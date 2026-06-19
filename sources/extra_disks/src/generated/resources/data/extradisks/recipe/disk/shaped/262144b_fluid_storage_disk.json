@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "refinedstorage:advanced_processor",
+    "E": "refinedstorage:quartz_enriched_iron",
+    "G": "#c:glass_blocks",
+    "I": "refinedstorage:improved_processor",
+    "P": "#refinedstorage:parts/fluids/262144b"
+  },
+  "pattern": [
+    "GEG",
+    "EPE",
+    "IAI"
+  ],
+  "result": {
+    "id": "extradisks:262144b_fluid_storage_disk"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "extradisks:advanced_storage_housing",
+    "#refinedstorage:parts/items/262144k"
+  ],
+  "result": {
+    "id": "extradisks:262144k_item_storage_disk"
+  }
+}

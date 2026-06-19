@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": "refinedstorage:advanced_processor",
+    "E": "refinedstorage:quartz_enriched_iron",
+    "P": "#refinedstorage:parts/fluids/16384b",
+    "R": "#c:dusts/redstone"
+  },
+  "pattern": [
+    "DED",
+    "PRP",
+    "DPD"
+  ],
+  "result": {
+    "id": "extradisks:65536b_fluid_storage_part"
+  }
+}

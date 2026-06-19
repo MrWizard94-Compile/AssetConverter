@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "refinedstorage:processor_binding",
+    "#c:nether_stars",
+    "refinedstorage:silicon",
+    "#c:dusts/redstone"
+  ],
+  "result": {
+    "id": "extradisks:raw_withering_processor"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:block",
+  "functions": [
+    {
+      "function": "extradisks:storage_block"
+    },
+    {
+      "function": "minecraft:copy_components",
+      "include": [
+        "minecraft:custom_name"
+      ],
+      "source": "block_entity"
+    }
+  ],
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "extradisks:infinite_fluid_storage_block"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "extradisks:blocks/infinite_fluid_storage_block"
+}

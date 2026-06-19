@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "refinedstorage:machine_casing",
+    "C": "refinedstorage:construction_core",
+    "D": "refinedstorage:advanced_processor",
+    "G": "refinedstorage:improved_processor",
+    "O": "refinedstorage:destruction_core"
+  },
+  "pattern": [
+    "DCD",
+    "GBG",
+    "DOD"
+  ],
+  "result": {
+    "id": "extradisks:advanced_machine_casing"
+  }
+}

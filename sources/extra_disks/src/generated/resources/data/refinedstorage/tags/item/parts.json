@@ -1,0 +1,10 @@
+{
+  "values": [
+    "#refinedstorage:parts/items",
+    "#refinedstorage:parts/fluids",
+    {
+      "id": "#refinedstorage:parts/chemical",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "extradisks:advanced_storage_housing",
+    "#refinedstorage:parts/fluids/infinite"
+  ],
+  "result": {
+    "id": "extradisks:infinite_fluid_storage_disk"
+  }
+}
