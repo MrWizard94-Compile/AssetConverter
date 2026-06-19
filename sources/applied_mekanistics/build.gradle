@@ -1,0 +1,225 @@
+plugins {
+    id("net.neoforged.moddev") version "2.0.78"
+    id("com.matthewprenger.cursegradle") version "1.4.0"
+    id("com.diffplug.spotless") version "7.0.3"
+    id("com.modrinth.minotaur") version "2.8.7"
+}
+
+group = "me.ramidzkh"
+version = System.getenv("APPMEK_VERSION") ?: "1.6.0"
+
+repositories {
+    maven {
+        name = "Modmaven"
+        url = uri("https://modmaven.dev/")
+
+        content {
+            includeGroup("appeng")
+            includeGroup("mekanism")
+        }
+    }
+
+    maven {
+        name = "CurseForge"
+        url = uri("https://www.cursemaven.com")
+
+        content {
+            includeGroup("curse.maven")
+        }
+    }
+
+    maven {
+        name = "TerraformersMC"
+        url = uri("https://maven.terraformersmc.com/")
+
+        content {
+            includeGroup("dev.emi")
+        }
+    }
+
+    maven {
+        name = "Jared maven"
+        url = uri("https://maven.blamejared.com")
+
+        content {
+            includeGroup("mezz.jei")
+        }
+    }
+
+    maven {
+        name = "Local"
+        url = file("libs").toURI()
+    }
+
+    mavenLocal()
+}
+
+dependencies {
+    // We depend on many AE2 internals, such as using their basic cell drive, thus not using classifier = "api"
+    implementation("org.appliedenergistics:appliedenergistics2:${ae2_version}")
+
+    compileOnly("mekanism:Mekanism:${minecraft_version}-${mekanism_version}:api")
+    runtimeOnly("mekanism:Mekanism:${minecraft_version}-${mekanism_version}:all")
+
+    if (project.runtime_itemlist_mod == "emi") {
+        implementation("dev.emi:emi-neoforge:${project.emi_version}")
+        compileOnly("mezz.jei:jei-${project.minecraft_version}-neoforge:${project.jei_version}")
+        compileOnly("curse.maven:ae2-jei-integration-1074338:${jei_ae2_integration_id}")
+    } else if (project.runtime_itemlist_mod == "jei") {
+        compileOnly("dev.emi:emi-neoforge:${project.emi_version}")
+        implementation("mezz.jei:jei-${project.minecraft_version}-neoforge:${project.jei_version}")
+        implementation("curse.maven:ae2-jei-integration-1074338:${jei_ae2_integration_id}")
+    } else {
+        throw new GradleException("Invalid runtime_itemlist_mod value: " + project.runtime_itemlist_mod)
+    }
+
+    compileOnly("curse.maven:jade-324717:${jade_id}")
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir("src/generated/resources")
+        }
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+////////////////////
+// Minecraft
+neoForge {
+    version = neoforge_version
+
+    runs {
+        client { client() }
+        server { server() }
+
+        data {
+            data()
+            programArguments.addAll(
+                    "--mod", "appmek",
+                    "--all",
+                    "--output", file("src/generated/resources/").getAbsolutePath(),
+                    "--existing", file("src/main/resources/").getAbsolutePath())
+        }
+    }
+
+    mods {
+        appmek {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+}
+
+// This block of code expands all declared replace properties in the specified resource targets.
+// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
+// When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
+// See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            version: version,
+            loader_version_range: loader_version_range,
+            neo_version_range: neo_version_range,
+            ae2_version_range: ae2_version_range,
+            mekanism_version_range: mekanism_version_range,
+    ]
+    inputs.properties(replaceProperties)
+
+    filesMatching(["META-INF/neoforge.mods.toml"]) {
+        expand replaceProperties
+    }
+}
+
+/////////////
+// Spotless
+spotless {
+    java {
+        target("src/main/java/**/*.java")
+
+        endWithNewline()
+        leadingTabsToSpaces()
+        removeUnusedImports()
+        toggleOffOn()
+        eclipse().configFile("codeformat/codeformat.xml")
+        importOrderFile("codeformat/ae2.importorder")
+    }
+
+    format("json") {
+        target("src/*/resources/**/*.json")
+        targetExclude("src/generated/resources/**")
+        prettier().config(parser: "json")
+    }
+}
+
+////////////////
+// CurseForge
+System.getenv("CURSEFORGE")?.with { String key ->
+    curseforge {
+        apiKey = key
+
+        project {
+            id = "574300"
+            changelogType = "markdown"
+            changelog = "View changelog at [the release page](https://github.com/AppliedEnergistics/Applied-Mekanistics/releases/tag/${version})"
+
+            if (version.contains("alpha")) {
+                releaseType = "alpha"
+            } else if (version.contains("beta")) {
+                releaseType = "beta"
+            } else {
+                releaseType = "release"
+            }
+
+            addGameVersion("${minecraft_version}")
+            addGameVersion("NeoForge")
+
+            mainArtifact(jar) {
+                displayName = "${project.version}"
+
+                relations {
+                    requiredDependency("applied-energistics-2")
+                    requiredDependency("mekanism")
+                }
+            }
+        }
+    }
+}
+
+////////////////
+// Modrinth
+modrinth {
+    token.set(System.getenv("MODRINTH"))
+    projectId.set("applied-mekanistics")
+    changelog.set("View changelog at [the release page](https://github.com/AppliedEnergistics/Applied-Mekanistics/releases/tag/${version})")
+    versionNumber.set(project.version)
+
+    if (version.contains("alpha")) {
+        versionType.set("alpha")
+    } else if (version.contains("beta")) {
+        versionType.set("beta")
+    } else {
+        versionType.set("release")
+    }
+
+    uploadFile.set(jar)
+    gameVersions.add(minecraft_version)
+    loaders.add("neoforge")
+
+    dependencies {
+        required.project("ae2")
+        required.project("mekanism")
+    }
+}
+
+tasks.modrinth.onlyIf {
+    System.getenv("MODRINTH")
+}

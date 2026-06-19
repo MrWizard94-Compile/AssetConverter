@@ -1,0 +1,100 @@
+package me.ramidzkh.mekae2.ae2.stack;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
+
+import me.ramidzkh.mekae2.MekCapabilities;
+import me.ramidzkh.mekae2.ae2.MekanismKey;
+import mekanism.api.Action;
+import mekanism.api.chemical.IChemicalHandler;
+
+import appeng.api.behaviors.StackExportStrategy;
+import appeng.api.behaviors.StackTransferContext;
+import appeng.api.config.Actionable;
+import appeng.api.stacks.AEKey;
+import appeng.api.storage.StorageHelper;
+
+public class MekanismStackExportStrategy implements StackExportStrategy {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MekanismStackExportStrategy.class);
+    private final BlockCapabilityCache<IChemicalHandler, Direction> cache;
+
+    public MekanismStackExportStrategy(ServerLevel level, BlockPos fromPos, Direction fromSide) {
+        this.cache = BlockCapabilityCache.create(MekCapabilities.CHEMICAL.block(), level, fromPos, fromSide);
+    }
+
+    @Override
+    public long transfer(StackTransferContext context, AEKey what, long amount) {
+        if (!(what instanceof MekanismKey mekanismKey)) {
+            return 0;
+        }
+
+        var storage = cache.getCapability();
+
+        if (storage == null) {
+            return 0;
+        }
+
+        var inv = context.getInternalStorage();
+
+        var extracted = StorageHelper.poweredExtraction(
+                context.getEnergySource(),
+                inv.getInventory(),
+                what,
+                amount,
+                context.getActionSource(),
+                Actionable.SIMULATE);
+
+        var wasInserted = extracted
+                - storage.insertChemical(mekanismKey.withAmount(extracted),
+                        Action.SIMULATE).getAmount();
+
+        if (wasInserted > 0) {
+            extracted = StorageHelper.poweredExtraction(
+                    context.getEnergySource(),
+                    inv.getInventory(),
+                    what,
+                    wasInserted,
+                    context.getActionSource(),
+                    Actionable.MODULATE);
+
+            wasInserted = extracted
+                    - storage.insertChemical(mekanismKey.withAmount(extracted), Action.EXECUTE).getAmount();
+
+            if (wasInserted < extracted) {
+                // Be nice and try to give the overflow back
+                var leftover = extracted - wasInserted;
+                leftover -= inv.getInventory().insert(what, leftover, Actionable.MODULATE, context.getActionSource());
+
+                if (leftover > 0) {
+                    LOGGER.error("Storage export: adjacent block unexpectedly refused insert, voided {}x{}", leftover,
+                            what);
+                }
+            }
+        }
+
+        return wasInserted;
+    }
+
+    @Override
+    public long push(AEKey what, long amount, Actionable mode) {
+        if (!(what instanceof MekanismKey mekanismKey)) {
+            return 0;
+        }
+
+        var storage = cache.getCapability();
+
+        if (storage == null) {
+            return 0;
+        }
+
+        return amount
+                - storage.insertChemical(mekanismKey.withAmount(amount), Action.fromFluidAction(mode.getFluidAction()))
+                        .getAmount();
+    }
+}
