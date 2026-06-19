@@ -1,0 +1,33 @@
+modLoader = "javafml"
+loaderVersion = "*"
+license = "CC BY-NC-ND 4.0"
+issueTrackerURL = "https://github.com/Faboslav/villages-and-pillages/issues"
+
+[[mods]]
+modId = "${modId}"
+version = "${modVersion}"
+displayName = "${modName}"
+authors = "${modAuthor}"
+description = "${modDescription}"
+logoFile = "icon.png"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/villages-and-pillages"
+
+[modproperties.${ modId }]
+catalogueImageIcon = "icon.png"
+
+[[dependencies.${ modId }]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[${minMinecraftVersion},)"
+
+[[dependencies.${ modId }]]
+modId = "forge"
+mandatory = true
+versionRange = "[${forgeVersion},)"
+
+[[dependencies.${ modId }]]
+modId = "yungsapi"
+mandatory = true
+versionRange = "[${yungsapiMinecraftVersion}-Forge-${yungsapiVersion},)"
+ordering = "NONE"
+side = "BOTH"

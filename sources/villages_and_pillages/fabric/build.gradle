@@ -1,0 +1,91 @@
+plugins {
+	id "com.github.johnrengelman.shadow" version "8.1.1"
+}
+
+allprojects {
+	archivesBaseName = "${mod_id}-fabric-mc${minecraft_version}"
+}
+
+architectury {
+	platformSetupLoomIde()
+	fabric()
+}
+
+loom {
+	accessWidenerPath = project(":common").loom.accessWidenerPath
+}
+
+configurations {
+	common
+	shadowCommon
+	compileClasspath.extendsFrom common
+	runtimeClasspath.extendsFrom common
+	developmentFabric.extendsFrom common
+}
+
+dependencies {
+	// Core dependencies
+	modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+	modApi "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+
+	// YUNG's API (https://www.curseforge.com/minecraft/mc-mods/yungs-api-fabric)
+	modImplementation("com.yungnickyoung.minecraft.yungsapi:YungsApi:${yungsapi_minecraft_version}-Fabric-${yungsapi_version}")
+
+	common(project(path: ":common", configuration: "namedElements")) { transitive false }
+	shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+}
+
+shadowJar {
+	exclude "architectury.common.json"
+
+	configurations = [project.configurations.shadowCommon]
+	archiveClassifier.set("dev-shadow")
+}
+
+remapJar {
+	injectAccessWidener = true
+	input.set shadowJar.archiveFile
+	dependsOn shadowJar
+	archiveClassifier.set(null)
+}
+
+jar {
+	archiveClassifier.set("dev")
+}
+
+sourcesJar {
+	def commonSources = project(":common").sourcesJar
+	dependsOn commonSources
+	from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+	withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+		skip()
+	}
+}
+
+repositories {
+	maven {
+		name = 'Fabric'
+		url = 'https://maven.fabricmc.net/'
+	}
+
+	maven {
+		name = "Modrinth"
+		url = "https://api.modrinth.com/maven"
+
+		content {
+			includeGroup "maven.modrinth"
+		}
+	}
+
+	maven {
+		url "https://maven.terraformersmc.com/releases/"
+		content {
+			includeGroup "com.terraformersmc"
+		}
+	}
+
+	maven { url "https://www.cursemaven.com" }
+}
