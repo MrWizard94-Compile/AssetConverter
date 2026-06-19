@@ -1,0 +1,17 @@
+{
+  "required": false,
+  "package": "net.potionstudios.biomeswevegone.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "client": [
+  ],
+  "mixins": [
+    "ChunkAccessMixin",
+    "EatBlockGoalMixin",
+    "ChunkStatusTasksMixin",
+    "SurfaceSystemMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

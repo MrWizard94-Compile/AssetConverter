@@ -1,0 +1,8 @@
+{
+  "biomeswevegone:plugin": {
+	"entrypoints": {
+        "common": "net.potionstudios.biomeswevegone.compat.wthit.BWGWTHITPlugin",
+        "client": "net.potionstudios.biomeswevegone.compat.wthit.BWGWTHITPlugin"
+    }
+  }
+}

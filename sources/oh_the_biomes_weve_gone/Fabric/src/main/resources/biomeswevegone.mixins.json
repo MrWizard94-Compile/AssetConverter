@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "package": "net.potionstudios.biomeswevegone.fabric.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "client": [
+	"PalePumpkinOverlayMixin"
+  ],
+  "mixins": [
+	"AttachedStemBlockMixin",
+	"BushBlockMixin",
+	"CropBlockMixin",
+	"EnderManMixin",
+	"GrassBlockBoneMealMixin",
+	"PitcherCropBlockMixin",
+	"StemBlockMixin"
+  ],
+  "injectors": {
+	"defaultRequire": 1
+  }
+}
