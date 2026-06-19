@@ -1,0 +1,34 @@
+package com.almostreliable.merequester.requester.status;
+
+import com.almostreliable.merequester.requester.RequesterBlockEntity;
+
+import appeng.api.networking.ticking.TickRateModulation;
+
+public class IdleState implements StatusState {
+
+    IdleState() {}
+
+    @Override
+    public StatusState handle(RequesterBlockEntity host, int index) {
+        if (host.getStorageManager().get(index).getBufferAmount() > 0) {
+            return EXPORT;
+        }
+
+        var request = host.getRequestManager().get(index);
+        if (request.isRequesting() && request.getAmount() > host.getStorageManager().get(index).getKnownAmount()) {
+            return REQUEST;
+        }
+
+        return this;
+    }
+
+    @Override
+    public RequestStatus type() {
+        return RequestStatus.IDLE;
+    }
+
+    @Override
+    public TickRateModulation getTickRateModulation() {
+        return TickRateModulation.IDLE;
+    }
+}

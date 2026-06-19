@@ -1,0 +1,141 @@
+package com.almostreliable.merequester.terminal;
+
+import com.almostreliable.merequester.MERequester;
+import com.almostreliable.merequester.Utils;
+import com.almostreliable.merequester.network.RequesterSyncPacket;
+import com.almostreliable.merequester.requester.RequesterBlockEntity;
+import com.almostreliable.merequester.requester.abstraction.AbstractRequesterMenu;
+import com.almostreliable.merequester.requester.abstraction.RequestTracker;
+
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
+
+import appeng.api.networking.IGrid;
+import appeng.api.networking.IGridNode;
+import appeng.api.networking.security.IActionHost;
+import appeng.menu.implementations.MenuTypeBuilder;
+import appeng.menu.implementations.PatternAccessTermMenu;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Comparator;
+import java.util.IdentityHashMap;
+import java.util.Map;
+
+/**
+ * yoinked from {@link PatternAccessTermMenu}
+ */
+public class RequesterTerminalMenu extends AbstractRequesterMenu {
+
+    public static final MenuType<RequesterTerminalMenu> TYPE = MenuTypeBuilder
+        .create(RequesterTerminalMenu::new, RequesterTerminalHost.class)
+        .buildUnregistered(Utils.getRL(MERequester.TERMINAL_ID));
+
+    private final Long2ObjectOpenHashMap<RequestTracker> byId = new Long2ObjectOpenHashMap<>();
+    private final Map<RequesterBlockEntity, RequestTracker> byRequester = new IdentityHashMap<>();
+
+    protected RequesterTerminalMenu(MenuType<?> menuType, int id, Inventory playerInventory, Object host) {
+        super(menuType, id, playerInventory, host);
+    }
+
+    @Override
+    public void broadcastChanges() {
+        if (isClientSide()) return;
+        super.broadcastChanges();
+
+        IGrid grid = getGrid();
+        if (grid == null) return;
+
+        VisitorState state = visitRequesters(grid);
+        if (state.forceFullUpdate || state.total != byRequester.size()) {
+            sendFullUpdate(grid);
+        } else {
+            sendPartialUpdate();
+        }
+    }
+
+    @Override
+    protected int transferStackToMenu(ItemStack stack) {
+        // sort the requesters like in the terminal to refer to the same slots
+        var requesters = byRequester.keySet().stream().sorted(Comparator.comparingLong(RequesterBlockEntity::getSortValue)).toList();
+
+        // find the first available slot and put the stack there
+        for (var requester : requesters) {
+            var targetSlot = requester.getRequestManager().firstAvailableIndex();
+            if (targetSlot == -1) continue;
+            byRequester.get(requester).getServer().insertItem(targetSlot, stack, false);
+            break;
+        }
+
+        return 0;
+    }
+
+    @Override
+    protected void sendFullUpdate(@Nullable IGrid grid) {
+        assert grid != null;
+        byId.clear();
+        byRequester.clear();
+
+        // clear the current data on the client
+        if (getPlayer() instanceof ServerPlayer serverPlayer) {
+            PacketDistributor.sendToPlayer(serverPlayer, RequesterSyncPacket.createClearData());
+        }
+
+        for (var requester : grid.getActiveMachines(RequesterBlockEntity.class)) {
+            byRequester.put(requester, createTracker(requester));
+        }
+
+        for (var requestTracker : byRequester.values()) {
+            byId.put(requestTracker.getId(), requestTracker);
+            syncRequestTrackerFull(requestTracker);
+        }
+    }
+
+    @Override
+    protected void sendPartialUpdate() {
+        for (var requestTracker : byRequester.values()) {
+            syncRequestTrackerPartial(requestTracker);
+        }
+    }
+
+    @Nullable
+    @Override
+    protected RequestTracker getRequestTracker(long id) {
+        return byId.get(id);
+    }
+
+    private VisitorState visitRequesters(IGrid grid) {
+        VisitorState state = new VisitorState();
+        for (var requester : grid.getActiveMachines(RequesterBlockEntity.class)) {
+            RequestTracker requestTracker = byRequester.get(requester);
+            if (requestTracker == null || !requestTracker.getName().equals(requester.getTerminalName().getString())) {
+                state.forceFullUpdate = true;
+                return state;
+            }
+            state.total++;
+        }
+        return state;
+    }
+
+    @Nullable
+    private IGrid getGrid() {
+        IActionHost host = getActionHost();
+        if (host != null) {
+            IGridNode agn = host.getActionableNode();
+            if (agn != null && agn.isActive()) {
+                return agn.getGrid();
+            }
+        }
+        return null;
+    }
+
+    private static class VisitorState {
+
+        private int total;
+        private boolean forceFullUpdate;
+    }
+}

@@ -1,0 +1,45 @@
+package com.almostreliable.merequester.requester.status;
+
+import com.almostreliable.merequester.requester.RequesterBlockEntity;
+
+import appeng.api.networking.crafting.CalculationStrategy;
+import appeng.api.networking.ticking.TickRateModulation;
+
+public class RequestState implements StatusState {
+
+    RequestState() {}
+
+    @Override
+    public StatusState handle(RequesterBlockEntity owner, int index) {
+        if (!owner.getRequestManager().get(index).getState()) {
+            return IDLE;
+        }
+
+        var amountToCraft = owner.getStorageManager().computeAmountToCraft(index);
+        if (amountToCraft <= 0) return IDLE;
+        var key = owner.getRequestManager().getKey(index);
+
+        var future = owner
+            .getMainNodeGrid()
+            .getCraftingService()
+            .beginCraftingCalculation(
+                owner.getLevel(),
+                owner::getActionSource,
+                key,
+                amountToCraft,
+                CalculationStrategy.REPORT_MISSING_ITEMS
+            );
+
+        return new PlanState(future);
+    }
+
+    @Override
+    public RequestStatus type() {
+        return RequestStatus.REQUEST;
+    }
+
+    @Override
+    public TickRateModulation getTickRateModulation() {
+        return TickRateModulation.SLOWER;
+    }
+}
