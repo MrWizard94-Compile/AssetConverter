@@ -1,0 +1,260 @@
+import java.util.regex.Matcher
+import se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask
+import static org.apache.commons.lang3.StringUtils.repeat
+
+plugins {
+    id 'java-library'
+    id 'eclipse'
+    id 'idea'
+    id 'net.neoforged.moddev' version "$mod_dev_gradle"
+    id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '3.1.1'
+    id 'me.modmuss50.mod-publish-plugin' version '1.1.0'
+    id 'com.diffplug.spotless' version '8.1.0'
+}
+
+def isRelease = System.getenv('CURSEFORGE_TOKEN')
+if (!isRelease) {
+    mod_version += '-snapshot'
+}
+
+version = "$minecraft_version-$mod_version"
+group = 'edivad.dimstorage'
+base.archivesName = 'DimStorage'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+        if (System.getProperty('idea.active')) {
+            vendor = JvmVendorSpec.JETBRAINS
+        }
+    }
+}
+
+println(repeat('*', 60))
+println("Project Version: $version")
+println("Java: ${System.getProperty('java.version')}")
+println("JVM: ${System.getProperty('java.vm.version')} (${System.getProperty('java.vendor')})")
+println("Arch: ${System.getProperty('os.arch')}")
+println(repeat('*', 60))
+
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+    exclude '.cache'
+}
+
+neoForge {
+    enable {
+        version = project.neo_version
+        disableRecompilation = System.getenv("CI") == "true"
+    }
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    validateAccessTransformers = true
+
+    runs {
+        configureEach {
+            logLevel = org.slf4j.event.Level.DEBUG
+
+            systemProperty 'neoforge.enabledGameTestNamespaces', 'dimstorage'
+
+            if (System.getProperty('idea.active')) {
+                jvmArguments.add("-XX:+AllowEnhancedClassRedefinition")
+            }
+        }
+
+        client {
+            client()
+            gameDirectory = project.file('runs/client')
+        }
+
+        server {
+            server()
+            gameDirectory = project.file('runs/server')
+            programArgument '--nogui'
+        }
+
+        data {
+            data()
+            gameDirectory = project.file('runs/data')
+            programArguments.addAll '--mod', 'dimstorage', '--all',
+                                    '--output', file('src/generated/resources/').getAbsolutePath(),
+                                    '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+    }
+
+    mods {
+        dimstorage {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+repositories {
+    maven {
+        name 'curseforge'
+        url 'https://www.cursemaven.com'
+    }
+    maven {
+        name 'JEI'
+        url 'https://maven.blamejared.com/'
+    }
+    flatDir {
+        dir 'libs'
+    }
+}
+
+dependencies {
+    //implementation "edivad:EdivadLib-$minecraft_version:3.0.0-snapshot"
+    implementation "curse.maven:edivadlib-638508:$edivadlib_id"
+
+    implementation "curse.maven:the-one-probe-245211:$top_version"
+
+    compileOnly "mezz.jei:jei-$minecraft_version-common-api:$jei_version"
+    compileOnly "mezz.jei:jei-$minecraft_version-neoforge-api:$jei_version"
+    localRuntime "mezz.jei:jei-$minecraft_version-neoforge:$jei_version"
+
+    implementation  "curse.maven:jade-324717:$jade_id"
+}
+
+spotless {
+    java {
+        target 'src/*/java/**/*.java'
+        importOrder('\\#', 'java|javax|org|com|')
+
+        endWithNewline()
+        trimTrailingWhitespace()
+        removeUnusedImports()
+        leadingTabsToSpaces(2)
+    }
+}
+
+tasks.register('generatePackageInfos') {
+  def srcDir = layout.projectDirectory.dir("src/main/java")
+  def javaFiles = project.fileTree(srcDir) { include '**/*.java' }
+
+  inputs.dir(srcDir)
+  outputs.upToDateWhen { false }
+
+  doLast {
+    javaFiles.each { javaFile ->
+      def packageInfoFile = new File(javaFile.parent, 'package-info.java')
+      if (!packageInfoFile.exists()) {
+        def pkgName = javaFile.toString().replaceAll(Matcher.quoteReplacement(File.separator), '/')
+        pkgName = pkgName.substring(pkgName.indexOf('edivad/dimstorage/'), pkgName.lastIndexOf('/'))
+        pkgName = pkgName.replaceAll('/', '.')
+
+        def pkgInfoText = """
+            |@FieldsAreNonnullByDefault
+            |@MethodsReturnNonnullByDefault
+            |@ParametersAreNonnullByDefault
+            |package $pkgName;
+            |
+            |import javax.annotation.ParametersAreNonnullByDefault;
+            |import net.minecraft.FieldsAreNonnullByDefault;
+            |import net.minecraft.MethodsReturnNonnullByDefault;
+        """.stripMargin().trim()
+
+        packageInfoFile.text = pkgInfoText
+      }
+    }
+  }
+}
+
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.addAll(['-Xmaxerrs', '100000'])
+    options.encoding = 'UTF-8'
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
+
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
+    var replaceProperties = [
+        minecraft_version       : minecraft_version,
+        minecraft_version_range : minecraft_version_range,
+        neo_version             : neo_version,
+        neo_version_range       : neo_version_range,
+        loader_version_range    : loader_version_range,
+        mod_version             : mod_version,
+        edivadlib_version_range : edivadlib_version_range,
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from "src/main/templates"
+    into "build/generated/sources/modMetadata"
+}
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+
+def lastCommit = providers.exec {
+    commandLine 'git', 'rev-parse', 'HEAD'
+}.standardOutput.asText.get().trim()
+
+def penultimateTag = () -> {
+    providers.exec {
+        commandLine 'git', 'describe', '--abbrev=0', '--tags', 'HEAD~'
+    }.standardOutput.asText.get().trim()
+}
+
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes([
+            'Specification-Title'     : 'dimstorage',
+            'Specification-Vendor'    : 'Edivad99',
+            'Specification-Version'   : '1',
+            'Implementation-Title'    : 'dimstorage',
+            'Implementation-Version'  : project.version,
+            'Implementation-Vendor'   : 'Edivad99',
+            'Implementation-Commit'   : lastCommit,
+        ])
+    }
+}
+
+tasks.register('makeChangelog', GitChangelogTask) {
+    fromRepo.set(projectDir.absolutePath.toString())
+    fromRevision.set(penultimateTag())
+    toRevision.set('HEAD')
+    file.set(file('CHANGELOG.md'))
+    untaggedName.set('Next release')
+    templateContent.set(file('changelog.mustache').text)
+    ignoreCommitsIfMessageMatches.set('^.*Merge branch.*$')
+}
+
+publishMods {
+    displayName = "DimStorage-$minecraft_version-$mod_version"
+    version = mod_version
+    type = STABLE
+
+    def changelogFile = file('CHANGELOG.md')
+    changelog = changelogFile.exists() ? changelogFile.text : 'CHANGELOG.md not found'
+
+    modLoaders.add('neoforge')
+    file = jar.archiveFile
+
+    curseforge {
+        projectId = '353882'
+        accessToken = providers.environmentVariable('CURSEFORGE_TOKEN')
+        minecraftVersions.add(minecraft_version)
+        requires('edivadlib')
+    }
+    modrinth {
+        projectId = '8lnmIJH7'
+        accessToken = providers.environmentVariable('MODRINTH_TOKEN')
+        minecraftVersions.add(minecraft_version)
+        requires('edivadlib')
+    }
+}

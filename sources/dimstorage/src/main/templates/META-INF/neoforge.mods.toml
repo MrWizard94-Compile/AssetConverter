@@ -1,0 +1,33 @@
+modLoader = "javafml"
+loaderVersion = "${loader_version_range}"
+license = "GNU AGPLv3"
+issueTrackerURL = "https://github.com/Edivad99/DimStorage/issues"
+
+[[mods]]
+  modId = "dimstorage"
+  version = "${mod_version}"
+  displayName = "DimStorage"
+  updateJSONURL = "https://api.modrinth.com/updates/dimstorage/forge_updates.json?neoforge=include"
+  modUrl = "https://www.curseforge.com/minecraft/mc-mods/dimstorage"
+  credits = "I would like to thank Thegaarnik for giving me the opportunity to publish and update this mod."
+  authors = "Edivad99"
+  description = "DimStorage add a technologic version of ender chest system with owner, frequence selection and lock system."
+
+[[dependencies.dimstorage]]
+  modId = "neoforge"
+  type = "required"
+  versionRange = "${neo_version_range}"
+  ordering = "NONE"
+  side = "BOTH"
+[[dependencies.dimstorage]]
+  modId = "minecraft"
+  type = "required"
+  versionRange = "${minecraft_version_range}"
+  ordering = "NONE"
+  side = "BOTH"
+[[dependencies.dimstorage]]
+  modId = "edivadlib"
+  type = "required"
+  versionRange = "${edivadlib_version_range}"
+  ordering = "NONE"
+  side = "BOTH"

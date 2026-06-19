@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:obsidian"
+    },
+    "b": {
+      "item": "dimstorage:solid_dim_core"
+    },
+    "c": {
+      "item": "minecraft:iron_ingot"
+    },
+    "d": {
+      "tag": "c:glass_panes"
+    }
+  },
+  "pattern": [
+    "cdc",
+    "cdc",
+    "aba"
+  ],
+  "result": {
+    "count": 1,
+    "id": "dimstorage:dimensional_tablet"
+  }
+}

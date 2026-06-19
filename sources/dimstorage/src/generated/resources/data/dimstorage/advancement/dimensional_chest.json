@@ -1,0 +1,33 @@
+{
+  "parent": "dimstorage:root",
+  "criteria": {
+    "inv_changed": {
+      "conditions": {
+        "items": [
+          {
+            "items": "dimstorage:dimensional_chest"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.dimstorage.dimensional_chest.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "dimstorage:dimensional_chest"
+    },
+    "title": {
+      "translate": "advancements.dimstorage.dimensional_chest"
+    }
+  },
+  "requirements": [
+    [
+      "inv_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

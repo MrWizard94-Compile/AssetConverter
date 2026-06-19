@@ -1,0 +1,14 @@
+name: 'Release'
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  run:
+    uses: Edivad99/EdivadLib/.github/workflows/release-generic.yml@1.21.x
+    secrets:
+      CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+      MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}

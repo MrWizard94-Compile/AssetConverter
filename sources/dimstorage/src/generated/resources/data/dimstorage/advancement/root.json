@@ -1,0 +1,33 @@
+{
+  "criteria": {
+    "inv_changed": {
+      "conditions": {
+        "items": [
+          {
+            "items": "dimstorage:dim_core"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.dimstorage.root.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "dimstorage:dim_core"
+    },
+    "title": {
+      "translate": "advancements.dimstorage.root"
+    }
+  },
+  "requirements": [
+    [
+      "inv_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

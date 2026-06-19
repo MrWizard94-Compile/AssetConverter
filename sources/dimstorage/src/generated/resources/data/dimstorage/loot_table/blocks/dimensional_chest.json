@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_name",
+              "source": "block_entity"
+            },
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "dimstorage:frequency"
+              ],
+              "source": "block_entity"
+            }
+          ],
+          "name": "dimstorage:dimensional_chest"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "dimstorage:blocks/dimensional_chest"
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_dim_core": {
+      "conditions": {
+        "items": [
+          {
+            "items": "dimstorage:dim_core"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "dimstorage:solid_dim_core"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_dim_core"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "dimstorage:solid_dim_core"
+    ]
+  }
+}

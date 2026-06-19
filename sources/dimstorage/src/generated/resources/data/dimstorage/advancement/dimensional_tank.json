@@ -1,0 +1,33 @@
+{
+  "parent": "dimstorage:root",
+  "criteria": {
+    "inv_changed": {
+      "conditions": {
+        "items": [
+          {
+            "items": "dimstorage:dimensional_tank"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.dimstorage.dimensional_tablet.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "dimstorage:dimensional_tank"
+    },
+    "title": {
+      "translate": "advancements.dimstorage.dimensional_tablet"
+    }
+  },
+  "requirements": [
+    [
+      "inv_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
