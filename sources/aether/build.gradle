@@ -1,0 +1,269 @@
+import net.minecraftforge.gradle.userdev.tasks.JarJar
+
+plugins {
+    id 'java-library'
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.neoforged.gradle' version '[6.0.13, 6.2)'
+    id 'org.spongepowered.mixin' version '[0.7,0.8)'
+    id 'org.parchmentmc.librarian.forgegradle' version '[1,2)'
+    id 'org.moddingx.modgradle.mapping' version '[4,5)'
+    id 'org.moddingx.modgradle.sourcejar' version '[4,5)' apply false
+    id 'io.github.0ffz.github-packages' version '[1,2)'
+    id 'com.matthewprenger.cursegradle' version '[1.4,1.5)'
+    id 'com.modrinth.minotaur' version '[2,3)'
+}
+
+version = "${mc_version}-${mod_version}-neoforge"
+group = 'com.aetherteam.aether'
+
+base {
+    archivesName = mod_id
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+apply plugin: 'org.moddingx.modgradle.sourcejar'
+
+minecraft {
+    mappings channel: 'sugarcane', version: project.mappings
+
+//    enableEclipsePrepareRuns = true
+//    enableIdeaPrepareRuns = true
+    copyIdeResources = true
+//    generateRunFolders = true
+
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+    runs {
+        configureEach {
+            workingDirectory project.file('run')
+
+            property "${mod_id}.iside", 'true'
+//            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'info' // info is the default for production
+
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        client {
+            property 'forge.enabledGameTestNamespaces', mod_id
+        }
+
+        server {
+            property 'forge.enabledGameTestNamespaces', mod_id
+
+            args '--nogui'
+        }
+
+        gameTestServer {
+            property 'forge.enabledGameTestNamespaces', mod_id
+        }
+
+        data {
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/'), '--existing', file('src/generated/resources/'), '--existing-mod', 'nitrogen_internals', '--existing-mod', 'cumulus_menus'
+
+            environment 'target', 'fmluserdevdata'
+        }
+    }
+}
+
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+}
+
+processResources {
+    exclude '.cache/'
+}
+
+dependencies {
+    minecraft "net.neoforged:forge:${project.mc_version}-${project.neoforge_version}"
+
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${project.mixinextras_version}"))
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    implementation("io.github.llamalad7:mixinextras-forge:${project.mixinextras_version}")
+
+    implementation fg.deobf("com.aetherteam.nitrogen:nitrogen_internals:${project.nitrogen_version}")
+    implementation fg.deobf("com.aetherteam.cumulus:cumulus_menus:${project.cumulus_version}")
+
+    implementation fg.deobf("top.theillusivec4.curios:curios-forge:${project.curios_version}+${project.mc_version}")
+
+    compileOnly fg.deobf("top.theillusivec4.caelus:caelus-forge:${project.caelus_version}")
+
+//    runtimeOnly fg.deobf("io.github.flemmli97:debugutils:${project.mc_version}-${project.debugutils_version}-forge")
+
+    jarJar("io.github.llamalad7:mixinextras-forge:${project.mixinextras_version}") {
+        jarJar.ranged(it, "[${project.mixinextras_version},)")
+        jarJar.pin(it, "${project.mixinextras_version}")
+    }
+
+    jarJar fg.deobf("com.aetherteam.nitrogen:nitrogen_internals:${project.nitrogen_version}") {
+        jarJar.ranged(it, "[${project.nitrogen_version},)")
+        jarJar.pin(it, "${project.nitrogen_version}")
+    }
+
+    jarJar fg.deobf("com.aetherteam.cumulus:cumulus_menus:${project.cumulus_version}") {
+        jarJar.ranged(it, "[${project.cumulus_version},)")
+        jarJar.pin(it, "${project.cumulus_version}")
+    }
+
+    jarJar fg.deobf("top.theillusivec4.curios:curios-forge:${project.curios_version}+${project.mc_version}") {
+        jarJar.ranged(it, "[${project.curios_version},)")
+        jarJar.pin(it, "${project.curios_version}+${project.mc_version}")
+    }
+
+    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${project.jei_version}"))
+    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${project.jei_version}"))
+
+    runtimeOnly compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${project.jei_version}"))
+
+    compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-${project.crafttweaker_version}")
+
+//    runtimeOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-Forge-1.20.1:20.0.5")
+//    runtimeOnly fg.deobf("net.darkhax.tips:Tips-Forge-1.20.1:12.0.3")
+
+//    compileOnly fg.deobf("curse.maven:colytra-280200:${project.colytra_version}")
+//    compileOnly fg.deobf("curse.maven:curious-elytra-317716:${project.curiouselytra_version}")
+    compileOnly fg.deobf("curse.maven:jade-324717:${project.jade_version}")
+    compileOnly fg.deobf("curse.maven:lootr-361276:${project.lootr_version}")
+
+//    runtimeOnly fg.deobf("io.github.ultimateboomer:smoothboot-forge:${project.smoothboot_version}")
+
+//    compileOnly fileTree(dir: 'libs', include: '*.jar')
+
+//    runtimeOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:$rei_version")
+//    runtimeOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:$cloth_config_version")
+//    runtimeOnly fg.deobf("dev.architectury:architectury-forge:$architectury_version")
+
+    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-api-forge:$rei_version")
+    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-default-plugin-forge:$rei_version")
+    compileOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:$cloth_config_version")
+    compileOnly fg.deobf("dev.architectury:architectury-forge:$architectury_version")
+
+    compileOnly fg.deobf("org.violetmoon.quark:Quark:${project.quark_version}")
+    compileOnly fg.deobf("org.violetmoon.zeta:Zeta:${project.zeta_version}")
+}
+
+repositories {
+    maven { url = "https://jitpack.io" }
+    maven { url = "https://maven.blamejared.com" }
+    maven { url = "https://maven.theillusivec4.top/" }
+    maven { url = "https://www.cursemaven.com" }
+    maven { url = "https://gitlab.com/api/v4/projects/21830712/packages/maven" }
+    maven { url = "https://packages.aether-mod.net/Nitrogen" }
+    maven { url = "https://packages.aether-mod.net/Cumulus" }
+    maven { url "https://maven.shedaniel.me/" }
+    maven { url "https://maven.architectury.dev/" }
+    mavenCentral()
+    //mavenLocal()
+}
+
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes([
+                "Specification-Title"     : project.mod_name,
+                "Specification-Vendor"    : "The Aether Team",
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : project.mod_name,
+                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Vendor"   : "The Aether Team",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+
+    finalizedBy 'reobfJar'
+
+    archiveClassifier = 'no-embeds'
+}
+
+tasks.named('jarJar', JarJar).configure {
+    archiveClassifier = ''
+}
+
+tasks.jarJar.finalizedBy('reobfJarJar')
+
+tasks.named(sourceSets.main.compileJavaTaskName) {
+    outputs.file("${it.temporaryDir}/${it.name}-refmap.json").withPropertyName("mixin refmap")
+}
+
+compileJava {
+    options.incremental = false
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId project.archivesBaseName
+            artifact project.tasks.jarJar
+            artifact sourceJar
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/The-Aether-Team/The-Aether"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
+
+curseforge {
+    project {
+        apiKey = System.getenv("CURSEFORGE_TOKEN")
+        id = "${project.curseforge_id}"
+        releaseType = "${project.version_type}"
+        changelog = file("$rootDir/docs/CHANGELOG.md")
+        changelogType = "markdown"
+        addGameVersion("${project.mc_version}")
+        addGameVersion("Forge")
+        addGameVersion("NeoForge")
+        mainArtifact(tasks.jarJar) {
+            displayName = "${project.mod_name} - ${version}"
+            relations {
+                embeddedLibrary "curios"
+                embeddedLibrary "cumulus"
+            }
+        }
+    }
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "${project.modrinth_id}"
+    versionNumber = "${version}"
+    versionType = "${project.version_type}"
+    versionName = "${project.mod_name} - ${version}"
+    changelog = new File("$rootDir/docs/CHANGELOG.md").text
+    uploadFile = tasks.jarJar
+    gameVersions = ["${project.mc_version}"]
+    loaders = ["forge", "neoforge"]
+    dependencies {
+        embedded.version "curios", "${project.curios_version}+${project.mc_version}"
+        embedded.version "cumulus", "${project.cumulus_version}"
+    }
+}
+
+mixin {
+    config "${project.mod_id}.mixins.json"
+    add sourceSets.main, "${project.mod_id}.refmap.json"
+}
+
+build {
+    dependsOn 'jarJar'
+}
+
+// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
