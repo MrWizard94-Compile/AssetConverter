@@ -1,0 +1,290 @@
+package org.cyclops.integratedtunnels.core;
+
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import org.cyclops.commoncapabilities.api.ingredient.IIngredientMatcher;
+import org.cyclops.commoncapabilities.api.ingredient.IngredientComponent;
+import org.cyclops.commoncapabilities.api.ingredient.storage.IIngredientComponentStorage;
+import org.cyclops.commoncapabilities.api.ingredient.storage.IIngredientComponentStorageSlotted;
+import org.cyclops.cyclopscore.helper.ItemStackHelpers;
+import org.cyclops.cyclopscore.helper.MinecraftHelpers;
+import org.cyclops.cyclopscore.ingredient.storage.InconsistentIngredientInsertionException;
+import org.cyclops.cyclopscore.ingredient.storage.IngredientStorageHelpers;
+import org.cyclops.integrateddynamics.IntegratedDynamics;
+import org.cyclops.integrateddynamics.api.evaluate.EvaluationException;
+import org.cyclops.integrateddynamics.api.ingredient.IIngredientPositionsIndex;
+import org.cyclops.integrateddynamics.api.network.INetwork;
+import org.cyclops.integrateddynamics.api.network.INetworkCraftingHandlerRegistry;
+import org.cyclops.integrateddynamics.api.network.IPositionedAddonsNetworkIngredients;
+import org.cyclops.integrateddynamics.api.part.PartPos;
+import org.cyclops.integrateddynamics.api.part.aspect.IAspectWrite;
+import org.cyclops.integrateddynamics.api.part.aspect.property.IAspectProperties;
+import org.cyclops.integrateddynamics.core.part.write.PartStateWriterBase;
+import org.cyclops.integratedtunnels.GeneralConfig;
+import org.cyclops.integratedtunnels.IntegratedTunnels;
+import org.cyclops.integratedtunnels.core.predicate.IngredientPredicate;
+import org.cyclops.integratedtunnels.part.aspect.ITunnelConnection;
+import org.cyclops.integratedtunnels.part.aspect.TunnelAspectWriteBuilders;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.concurrent.TimeUnit;
+
+/**
+ * @author rubensworks
+ */
+public class TunnelHelpers {
+
+    private static final Cache<ITunnelConnection, Integer> CACHE_INV_CHECKS = CacheBuilder.newBuilder()
+            .expireAfterWrite((GeneralConfig.inventoryUnchangedTickCount + GeneralConfig.inventoryUnchangedTickTimeout) * (1000 / MinecraftHelpers.SECOND_IN_TICKS),
+                    TimeUnit.MILLISECONDS).build();
+
+    /**
+     * Move instances from source to destination.
+     * @param source The source instance storage.
+     * @param sourceSlot The source slot.
+     * @param destination The destination ingredient storage.
+     * @param destinationSlot The destination slot.
+     * @param ingredientPredicate Only instances matching this predicate will be moved.
+     * @param movementPosition The position at which the movement is happening.
+     *                         This is used for handling {@link InconsistentIngredientInsertionException}.
+     * @param simulate If the transfer should be simulated.
+     * @param <T> The instance type.
+     * @param <M> The matching condition parameter.
+     * @return The moved instance.
+     * @throws EvaluationException If illegal movement occured and further movement should stop.
+     */
+    @Nonnull
+    public static <T, M> T moveSingle(IIngredientComponentStorage<T, M> source, int sourceSlot,
+                                      IIngredientComponentStorage<T, M> destination, int destinationSlot,
+                                      IngredientPredicate<T, M> ingredientPredicate, PartPos movementPosition,
+                                      boolean simulate) throws EvaluationException {
+        try {
+            try {
+                if (ingredientPredicate.hasMatchFlags()) {
+                    IIngredientMatcher<T, M> matcher = ingredientPredicate.getIngredientComponent().getMatcher();
+                    for (T instance : ingredientPredicate.getInstances()) {
+                        T movedInstance = IngredientStorageHelpers.moveIngredientsSlotted(source, sourceSlot, destination, destinationSlot,
+                                instance, ingredientPredicate.getMatchFlags(), simulate);
+                        if (!matcher.isEmpty(movedInstance)) {
+                            return movedInstance;
+                        }
+                    }
+                    return matcher.getEmptyInstance();
+                } else {
+                    return IngredientStorageHelpers.moveIngredientsSlotted(source, sourceSlot, destination, destinationSlot,
+                            ingredientPredicate, ingredientPredicate.getMaxQuantity(), ingredientPredicate.isExactQuantity(), simulate);
+                }
+            } catch (InconsistentIngredientInsertionException e) {
+                // Handle movement errors due to inconsistent simulation.
+                // If we are moving items, emit them in the world, otherwise they go lost.
+                if (GeneralConfig.ejectItemsOnInconsistentSimulationMovement && e.getIngredientComponent().equals(IngredientComponent.ITEMSTACK)) {
+                    ItemStackHelpers.spawnItemStack(movementPosition.getPos().getLevel(true), movementPosition.getPos().getBlockPos(), e.getRemainder());
+                    throw new EvaluationException(Component.literal("Ingredient movement failed " +
+                            "due to inconsistent insertion behaviour by destination in simulation " +
+                            "and non-simulation mode. This can be caused by invalid network setups. " +
+                            "Ejected failed item in world."));
+                }
+                throw new EvaluationException(Component.literal("Ingredient movement failed " +
+                        "due to inconsistent insertion behaviour by destination in simulation " +
+                        "and non-simulation mode. This can be caused by invalid network setups. Lost ")
+                            .append(e.getIngredientComponent().getMatcher().getDisplayName(e.getRemainder())));
+            }
+        } catch (IllegalStateException e) {
+            IntegratedTunnels.clog(org.apache.logging.log4j.Level.WARN, e.getMessage());
+            return source.getComponent().getMatcher().getEmptyInstance();
+        }
+    }
+
+    /**
+     * Move ingredients from source to destination.
+     * @param network The network in which the movement is happening.
+     * @param ingredientsNetwork The ingredients network in which the movement is happening.
+     * @param channel The channel.
+     * @param connection The connection object.
+     * @param source The source ingredient storage.
+     * @param sourceSlot The source slot.
+     * @param destination The destination ingredient storage.
+     * @param destinationSlot The destination slot.
+     * @param ingredientPredicate Only ingredientstack matching this predicate will be moved.
+     * @param movementPosition The position at which the movement is happening.
+     *                         This is used for handling {@link InconsistentIngredientInsertionException}.
+     * @param craftIfFailed If the exact ingredient from ingredientPredicate should be crafted if transfer failed.
+     * @param <T> The instance type.
+     * @param <M> The matching condition parameter.
+     * @return The moved ingredientstack.
+     * @throws EvaluationException If illegal movement occured and further movement should stop.
+     */
+    @Nonnull
+    public static <T, M> T moveSingleStateOptimized(INetwork network, IPositionedAddonsNetworkIngredients<T, M> ingredientsNetwork,
+                                                    int channel, ITunnelConnection connection,
+                                                    IIngredientComponentStorage<T, M> source, int sourceSlot,
+                                                    IIngredientComponentStorage<T, M> destination, int destinationSlot,
+                                                    IngredientPredicate<T, M> ingredientPredicate, PartPos movementPosition,
+                                                    boolean craftIfFailed) throws EvaluationException {
+        IIngredientMatcher<T, M> matcher = source.getComponent().getMatcher();
+
+        // Don't craft if we still have a running crafting job for the instance.
+        if (craftIfFailed) {
+            for (T instance : ingredientPredicate.getInstances()) {
+                if (isCrafting(network, ingredientsNetwork, channel, instance, ingredientPredicate.getMatchFlags())) {
+                    return matcher.getEmptyInstance();
+                }
+            }
+        }
+
+        // Don't do any expensive transfers if the to-be-moved stack is empty
+        if (ingredientPredicate.isEmpty()) {
+            return matcher.getEmptyInstance();
+        }
+
+        // Don't do anything if we are sleeping for this connection
+        Integer sleepCheck = CACHE_INV_CHECKS.getIfPresent(connection);
+        if (sleepCheck != null && sleepCheck >= GeneralConfig.inventoryUnchangedTickCount) {
+            return matcher.getEmptyInstance();
+        }
+
+        // Do the actual movement
+        T moved = moveSingle(source, sourceSlot, destination, destinationSlot, ingredientPredicate, movementPosition, false);
+        if (matcher.isEmpty(moved)) {
+            // Mark this connection as 'sleeping' if nothing was moved
+            CACHE_INV_CHECKS.put(connection, sleepCheck == null ? 1 : sleepCheck + 1);
+        } else if (sleepCheck != null) {
+            CACHE_INV_CHECKS.invalidate(connection);
+        }
+
+        // Schedule a new observation for the network, as its contents may have changed
+        ingredientsNetwork.scheduleObservation();
+
+        // Craft if we moved nothing, and the flag is enabled.
+        if (craftIfFailed && matcher.isEmpty(moved)) {
+            for (T instance : ingredientPredicate.getInstances()) {
+                // If we don't have to move exact instances,
+                // only request the crafting of 1.
+                T craftInstance = instance;
+                if (!ingredientPredicate.isExactQuantity()) {
+                    craftInstance = matcher.withQuantity(craftInstance, 1);
+                }
+
+                // Don't allow crafting jobs to be started if we detect a case where movement failed,
+                // but the required ingredient is in fact present in the network.
+                // This is to avoid cases where crafting jobs would be started before a previous movement was observed,
+                // and the crafting job output thereby not being detected upon the next observement.
+                IIngredientPositionsIndex<T, M> index = ingredientsNetwork.getChannelIndex(channel);
+                if (index.getQuantity(instance) >= matcher.getQuantity(craftInstance)) {
+                    return moved;
+                }
+
+                // Only craft if the target accepts the crafting output completely
+                boolean targetAcceptsCraftingResult;
+                if (destinationSlot >= 0) {
+                    targetAcceptsCraftingResult = destination instanceof IIngredientComponentStorageSlotted
+                            && matcher.isEmpty(((IIngredientComponentStorageSlotted<T, M>) destination)
+                            .insert(destinationSlot, craftInstance, true));
+                } else {
+                    targetAcceptsCraftingResult = matcher.isEmpty(destination.insert(craftInstance, true));
+                }
+
+                if (targetAcceptsCraftingResult) {
+                    requestCrafting(network, ingredientsNetwork, channel,
+                            craftInstance, ingredientPredicate.getMatchFlags());
+                    break;
+                }
+            }
+        }
+
+        return moved;
+    }
+
+    /**
+     * Start a crafting job for the given instance.
+     * @param network The network to craft in.
+     * @param ingredientsNetwork The ingredients network.
+     * @param channel The channel.
+     * @param instance The instance to craft.
+     * @param matchCondition The match condition.
+     * @param <T> The instance type.
+     * @param <M> The matching condition parameter.
+     * @return If a crafting job could be started.
+     */
+    public static <T, M> boolean requestCrafting(INetwork network, IPositionedAddonsNetworkIngredients<T, M> ingredientsNetwork,
+                                                 int channel, T instance, M matchCondition) {
+        return IntegratedDynamics._instance.getRegistryManager().getRegistry(INetworkCraftingHandlerRegistry.class)
+                .craft(network, ingredientsNetwork, channel, ingredientsNetwork.getComponent(), instance, matchCondition, false);
+    }
+
+    /**
+     * Check if the given instance is being crafted.
+     * @param network The network to craft in.
+     * @param ingredientsNetwork The ingredients network.
+     * @param channel The channel.
+     * @param instance The instance to craft.
+     * @param matchCondition The match condition.
+     * @param <T> The instance type.
+     * @param <M> The matching condition parameter.
+     * @return If a crafting job exists for the given instance.
+     */
+    public static <T, M> boolean isCrafting(INetwork network, IPositionedAddonsNetworkIngredients<T, M> ingredientsNetwork,
+                                            int channel, T instance, M matchCondition) {
+        return IntegratedDynamics._instance.getRegistryManager().getRegistry(INetworkCraftingHandlerRegistry.class)
+                .isCrafting(network, ingredientsNetwork, channel, ingredientsNetwork.getComponent(), instance, matchCondition);
+    }
+
+    /**
+     * Create a new block item use context for use during tunnel movement.
+     * @param world The world.
+     * @param playerEntity The optional player.
+     * @param pos The position.
+     * @param side The side.
+     * @param hand A hand.
+     * @return A new BlockItemUseContext
+     */
+    public static BlockPlaceContext createBlockItemUseContext(Level world, @Nullable Player playerEntity, BlockPos pos, Direction side, InteractionHand hand) {
+        return createBlockItemUseContext(world, playerEntity, pos, side, hand, ItemStack.EMPTY);
+    }
+
+    /**
+     * Create a new block item use context for use during tunnel movement.
+     * @param world The world.
+     * @param playerEntity The optional player.
+     * @param pos The position.
+     * @param side The side.
+     * @param hand A hand.
+     * @param itemStack The item stack.
+     * @return A new BlockItemUseContext
+     */
+    public static BlockPlaceContext createBlockItemUseContext(Level world, @Nullable Player playerEntity, BlockPos pos, Direction side, InteractionHand hand, ItemStack itemStack) {
+        return new BlockPlaceContext(world, playerEntity, hand, itemStack,
+                new BlockHitResult(new Vec3((double)pos.getX() + 0.5D + (double)side.getStepX() * 0.5D,
+                        (double)pos.getY() + 0.5D + (double)side.getStepY() * 0.5D,
+                        (double)pos.getZ() + 0.5D + (double)side.getStepZ() * 0.5D), side, pos, false));
+    }
+
+    /**
+     * Determine the channel for passive interaction of a part.
+     * This prefers the active aspect's channel property, and falls back to the part's energy channel.
+     * @param partStateBase The part's state.
+     * @return The channel.
+     */
+    public static int getPassiveInteractionChannel(PartStateWriterBase<?> partStateBase) {
+        int channel = partStateBase.getChannel();
+        IAspectWrite aspect = partStateBase.getActiveAspect();
+        if (aspect != null) {
+            IAspectProperties properties = partStateBase.getAspectProperties(aspect);
+            if (properties != null) {
+                channel = properties.getValue(TunnelAspectWriteBuilders.PROP_CHANNEL).getRawValue();
+            }
+        }
+        return channel;
+    }
+}
