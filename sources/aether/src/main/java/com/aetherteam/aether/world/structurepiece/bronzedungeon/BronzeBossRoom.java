@@ -1,0 +1,62 @@
+package com.aetherteam.aether.world.structurepiece.bronzedungeon;
+
+
+import com.aetherteam.aether.Aether;
+import com.aetherteam.aether.blockentity.TreasureChestBlockEntity;
+import com.aetherteam.aether.loot.AetherLoot;
+import com.aetherteam.aether.world.processor.BossRoomProcessor;
+import com.aetherteam.aether.world.structurepiece.AetherStructurePieceTypes;
+import com.aetherteam.aether.world.structurepiece.AetherTemplateStructurePiece;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+
+import java.util.function.Function;
+
+/**
+ * Starting piece for the Bronze Dungeon. Has the slider.
+ */
+public class BronzeBossRoom extends BronzeDungeonPiece {
+    public BronzeBossRoom(StructureTemplateManager manager, String name, BlockPos pos, Rotation rotation) {
+        this(AetherStructurePieceTypes.BRONZE_BOSS_ROOM.get(), manager, name, AetherTemplateStructurePiece.makeSettingsWithPivot(makeSettings(), manager, BronzeDungeonPiece.makeLocation(name), rotation), pos);
+    }
+
+    public BronzeBossRoom(StructurePieceSerializationContext context, CompoundTag tag) {
+        this(AetherStructurePieceTypes.BRONZE_BOSS_ROOM.get(), tag, context.structureTemplateManager(), resourceLocation -> BronzeBossRoom.makeSettings());
+    }
+
+    public BronzeBossRoom(StructurePieceType type, StructureTemplateManager manager, String name, StructurePlaceSettings settings, BlockPos pos) {
+        super(type, manager, name, settings, pos);
+    }
+
+    public BronzeBossRoom(StructurePieceType type, CompoundTag tag, StructureTemplateManager manager, Function<ResourceLocation, StructurePlaceSettings> settingsFactory) {
+        super(type, tag, manager, settingsFactory);
+    }
+
+    static StructurePlaceSettings makeSettings() {
+        return new StructurePlaceSettings()
+                .addProcessor(BronzeDungeonPiece.LOCKED_SENTRY_STONE)
+                .addProcessor(BossRoomProcessor.INSTANCE)
+                .setFinalizeEntities(true);
+    }
+
+    @Override
+    protected void handleDataMarker(String name, BlockPos pos, ServerLevelAccessor level, RandomSource random, BoundingBox box) {
+        if (name.equals("Treasure Chest")) {
+            BlockPos chest = pos.below();
+            RandomizableContainerBlockEntity.setLootTable(level, random, chest, AetherLoot.BRONZE_DUNGEON_REWARD);
+            TreasureChestBlockEntity.setDungeonType(level, chest, new ResourceLocation(Aether.MODID, "bronze"));
+            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+        }
+    }
+}
