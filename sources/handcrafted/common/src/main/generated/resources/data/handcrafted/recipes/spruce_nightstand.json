@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:spruce_planks"
+    },
+    "/": {
+      "tag": "handcrafted:chests"
+    }
+  },
+  "pattern": [
+    "###",
+    "#/#"
+  ],
+  "result": {
+    "count": 2,
+    "item": "handcrafted:spruce_nightstand"
+  },
+  "show_notification": true
+}

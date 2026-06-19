@@ -1,0 +1,5 @@
+{
+  "parent": "neoforge:item/bucket",
+  "fluid": "immersiveengineering:phenolic_resin",
+  "loader": "neoforge:fluid_container"
+}

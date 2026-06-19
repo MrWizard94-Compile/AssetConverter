@@ -1,0 +1,5 @@
+{
+  "parent": "neoforge:item/bucket",
+  "fluid": "immersiveengineering:herbicide",
+  "loader": "neoforge:fluid_container"
+}

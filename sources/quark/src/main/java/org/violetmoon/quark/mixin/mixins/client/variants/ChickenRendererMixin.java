@@ -1,0 +1,38 @@
+package org.violetmoon.quark.mixin.mixins.client.variants;
+
+import net.minecraft.client.model.ChickenModel;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.renderer.entity.ChickenRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.animal.Chicken;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import org.violetmoon.quark.content.client.module.VariantAnimalTexturesModule;
+import org.violetmoon.quark.content.tweaks.module.GrabChickensModule;
+
+@Mixin(ChickenRenderer.class)
+public abstract class ChickenRendererMixin extends MobRenderer<Chicken, ChickenModel<Chicken>> {
+
+    public ChickenRendererMixin(EntityRendererProvider.Context context, ChickenModel<Chicken> model, float shadowRadius) {
+        super(context, model, shadowRadius);
+    }
+
+    @Inject(method = "getTextureLocation(Lnet/minecraft/world/entity/animal/Chicken;)Lnet/minecraft/resources/ResourceLocation;", at = @At("HEAD"), cancellable = true)
+	private void overrideTexture(Chicken chicken, CallbackInfoReturnable<ResourceLocation> cir) {
+		//Some mods override the chicken model in a strange way. Double-check we really have a vanilla chicken model. See #5322.
+		ChickenRenderer render = (ChickenRenderer) ((Object) this);
+		Model model = render.getModel();
+		if(model instanceof ChickenModel<?> vanillaChicken)
+			GrabChickensModule.Client.setRenderChickenFeetStatus(chicken, vanillaChicken);
+
+		ResourceLocation loc = VariantAnimalTexturesModule.Client.getChickenTexture(chicken);
+		if(loc != null)
+			cir.setReturnValue(loc);
+	}
+}

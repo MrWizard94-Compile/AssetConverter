@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:blue_glazed_terracotta"
+    },
+    {
+      "item": "handcrafted:terracotta_thick_pot"
+    }
+  ],
+  "result": {
+    "item": "handcrafted:blue_glazed_thick_pot"
+  }
+}

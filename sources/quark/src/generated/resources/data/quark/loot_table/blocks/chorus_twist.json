@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:match_tool",
+          "predicate": {
+            "items": "#c:tools/shear"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "quark:chorus_twist"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "quark:blocks/chorus_twist"
+}

@@ -1,0 +1,17 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "patchouli"
+        }
+      ],
+      "recipe": {
+        "type": "pneumaticcraft:patchouli_book_crafting",
+        "category": "misc"
+      }
+    }
+  ]
+}
