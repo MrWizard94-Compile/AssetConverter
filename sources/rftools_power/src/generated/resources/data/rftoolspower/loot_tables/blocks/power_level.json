@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "rftoolspower:power_level"
+        }
+      ],
+      "name": "power_level",
+      "rolls": 1.0
+    }
+  ]
+}

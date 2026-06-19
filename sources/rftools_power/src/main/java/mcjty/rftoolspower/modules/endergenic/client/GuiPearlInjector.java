@@ -1,0 +1,27 @@
+package mcjty.rftoolspower.modules.endergenic.client;
+
+import mcjty.lib.container.GenericContainer;
+import mcjty.lib.gui.GenericGuiContainer;
+import mcjty.lib.gui.Window;
+import mcjty.rftoolspower.RFToolsPower;
+import mcjty.rftoolspower.modules.endergenic.EndergenicModule;
+import mcjty.rftoolspower.modules.endergenic.blocks.PearlInjectorTileEntity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+
+public class GuiPearlInjector extends GenericGuiContainer<PearlInjectorTileEntity, GenericContainer> {
+
+    public GuiPearlInjector(PearlInjectorTileEntity tileEntity, GenericContainer container, Inventory inventory) {
+        super(tileEntity, container, inventory, EndergenicModule.PEARL_INJECTOR.get().getManualEntry());
+    }
+
+    public static void register() {
+        register(EndergenicModule.CONTAINER_PEARL_INJECTOR.get(), GuiPearlInjector::new);
+    }
+
+    @Override
+    public void init() {
+        window = new Window(this, tileEntity, new ResourceLocation(RFToolsPower.MODID, "gui/pearl_injector.gui"));
+        super.init();
+    }
+}
