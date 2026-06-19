@@ -1,0 +1,85 @@
+package com.direwolf20.buildinggadgets.common.util.ref;
+
+import com.direwolf20.buildinggadgets.common.tainted.Tainted;
+import net.minecraft.resources.ResourceLocation;
+
+@Tainted(reason = "Awful. Contains a large amount of unused data or single-query data")
+public final class Reference {
+    public static final String MODID = "buildinggadgets";
+    public static final String MARKER_BEFORE = MODID + ":before";
+    public static final ResourceLocation MARKER_BEFORE_RL = new ResourceLocation(MARKER_BEFORE);
+    public static final String MARKER_AFTER = MODID + ":after";
+    public static final ResourceLocation MARKER_AFTER_RL = new ResourceLocation(MARKER_AFTER);
+
+    public static final ResourceLocation NETWORK_CHANNEL_ID_MAIN = new ResourceLocation(Reference.MODID, "main_network_channel");
+    public static final ResourceLocation WORLD_TEMPLATE_PROVIDER_ID = new ResourceLocation(MODID, "template_provider");
+
+    private Reference() {
+    }
+
+    public static final class SaveReference {
+        private SaveReference() {
+        }
+
+        public static final String TEMPLATE_SAVE_TEMPLATES = MODID + "_template_save";
+        public static final String UNDO_BUILDING = MODID + "_undo_building";
+        public static final String UNDO_COPY_PASTE = MODID + "_undo_copy_paste";
+        public static final String UNDO_DESTRUCTION = MODID + "_undo_destruction";
+        public static final String UNDO_EXCHANGING = MODID + "_undo_exchanging";
+    }
+
+    public static final class ItemReference {
+        public static final ResourceLocation TAG_TEMPLATE_CONVERTIBLE = new ResourceLocation(MODID, "template_convertible");
+
+        private ItemReference() {
+        }
+    }
+
+    public static final class BlockReference {
+
+        public static final class TagReference {
+            public static final ResourceLocation BLACKLIST_COPY_PASTE = new ResourceLocation(MODID, "blacklist/copy_paste");
+            public static final ResourceLocation BLACKLIST_BUILDING = new ResourceLocation(MODID, "blacklist/building");
+            public static final ResourceLocation BLACKLIST_EXCHANGING = new ResourceLocation(MODID, "blacklist/exchanging");
+            public static final ResourceLocation BLACKLIST_DESTRUCTION = new ResourceLocation(MODID, "blacklist/destruction");
+            public static final ResourceLocation WHITELIST_COPY_PASTE = new ResourceLocation(MODID, "whitelist/copy_paste");
+            public static final ResourceLocation WHITELIST_BUILDING = new ResourceLocation(MODID, "whitelist/building");
+            public static final ResourceLocation WHITELIST_EXCHANGING = new ResourceLocation(MODID, "whitelist/exchanging");
+            public static final ResourceLocation WHITELIST_DESTRUCTION = new ResourceLocation(MODID, "whitelist/destruction");
+
+            private TagReference() {
+            }
+        }
+
+        private BlockReference() {
+        }
+    }
+
+
+    public static final class TileDataSerializerReference {
+        public static final ResourceLocation REGISTRY_ID_TILE_DATA_SERIALIZER = new ResourceLocation(MODID, "tile_data/serializer");
+
+        private TileDataSerializerReference() {
+        }
+    }
+
+    public static final class TileDataFactoryReference {
+        public static final String IMC_METHOD_TILEDATA_FACTORY = "imc_tile_data_factory";
+
+        private TileDataFactoryReference() {
+        }
+
+        public static final String DATA_PROVIDER_FACTORY = MODID + ":data_provider_factory";
+        public static final ResourceLocation DATA_PROVIDER_FACTORY_RL = new ResourceLocation(DATA_PROVIDER_FACTORY);
+    }
+
+    public static final class HandleProviderReference {
+        public static final String IMC_METHOD_HANDLE_PROVIDER = "imc_handle_provider";
+
+        private HandleProviderReference() {
+        }
+
+        public static final String STACK_HANDLER_ITEM_HANDLE = MODID + ":stack_handler_provider";
+        public static final ResourceLocation STACK_HANDLER_ITEM_HANDLE_RL = new ResourceLocation(STACK_HANDLER_ITEM_HANDLE);
+    }
+}
