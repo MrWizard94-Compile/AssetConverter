@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "chest_boat",
+  "ingredients": [
+    "minecraft:chest",
+    "biomesoplenty:umbran_boat"
+  ],
+  "result": {
+    "id": "biomesoplenty:umbran_chest_boat"
+  }
+}
