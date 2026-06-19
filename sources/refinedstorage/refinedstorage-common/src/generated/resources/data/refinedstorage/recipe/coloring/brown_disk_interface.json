@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "brown",
+  "ingredient": "#refinedstorage:disk_interfaces",
+  "result": "refinedstorage:brown_disk_interface"
+}

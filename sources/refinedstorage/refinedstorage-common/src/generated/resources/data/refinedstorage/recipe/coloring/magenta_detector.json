@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "magenta",
+  "ingredient": "#refinedstorage:detectors",
+  "result": "refinedstorage:magenta_detector"
+}

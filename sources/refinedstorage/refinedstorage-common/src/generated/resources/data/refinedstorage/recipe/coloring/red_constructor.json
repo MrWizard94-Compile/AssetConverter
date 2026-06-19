@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "red",
+  "ingredient": "#refinedstorage:constructors",
+  "result": "refinedstorage:red_constructor"
+}

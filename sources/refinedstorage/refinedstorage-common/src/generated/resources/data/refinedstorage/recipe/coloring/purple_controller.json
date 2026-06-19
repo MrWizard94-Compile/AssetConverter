@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "purple",
+  "ingredient": "#refinedstorage:controllers",
+  "result": "refinedstorage:purple_controller"
+}

@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "white",
+  "ingredient": "#refinedstorage:exporters",
+  "result": "refinedstorage:white_exporter"
+}

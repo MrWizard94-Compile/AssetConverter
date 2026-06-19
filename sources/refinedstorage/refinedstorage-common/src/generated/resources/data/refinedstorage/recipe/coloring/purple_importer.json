@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "purple",
+  "ingredient": "#refinedstorage:importers",
+  "result": "refinedstorage:purple_importer"
+}

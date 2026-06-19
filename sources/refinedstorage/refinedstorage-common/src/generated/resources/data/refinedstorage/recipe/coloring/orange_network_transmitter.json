@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "orange",
+  "ingredient": "#refinedstorage:network_transmitters",
+  "result": "refinedstorage:orange_network_transmitter"
+}

@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "black",
+  "ingredient": "#refinedstorage:autocrafter_managers",
+  "result": "refinedstorage:black_autocrafter_manager"
+}

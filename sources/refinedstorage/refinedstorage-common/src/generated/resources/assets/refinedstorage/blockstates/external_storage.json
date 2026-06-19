@@ -1,0 +1,9 @@
+{
+  "variants": {
+    "": {
+      "type": "refinedstorage:cable_part",
+      "color": "gray",
+      "part_model": "refinedstorage:block/external_storage/base"
+    }
+  }
+}

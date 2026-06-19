@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "black",
+  "ingredient": "#refinedstorage:wireless_transmitters",
+  "result": "refinedstorage:black_wireless_transmitter"
+}

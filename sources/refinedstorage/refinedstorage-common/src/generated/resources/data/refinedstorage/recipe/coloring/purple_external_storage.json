@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "purple",
+  "ingredient": "#refinedstorage:external_storages",
+  "result": "refinedstorage:purple_external_storage"
+}

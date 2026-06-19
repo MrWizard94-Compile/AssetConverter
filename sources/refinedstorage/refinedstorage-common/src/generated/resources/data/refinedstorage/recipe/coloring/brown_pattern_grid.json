@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "brown",
+  "ingredient": "#refinedstorage:pattern_grids",
+  "result": "refinedstorage:brown_pattern_grid"
+}

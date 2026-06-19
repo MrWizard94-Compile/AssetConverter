@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "pink",
+  "ingredient": "#refinedstorage:network_receivers",
+  "result": "refinedstorage:pink_network_receiver"
+}

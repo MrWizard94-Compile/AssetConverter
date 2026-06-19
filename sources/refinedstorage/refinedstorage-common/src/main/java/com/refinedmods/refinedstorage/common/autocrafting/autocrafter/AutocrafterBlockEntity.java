@@ -1,0 +1,615 @@
+package com.refinedmods.refinedstorage.common.autocrafting.autocrafter;
+
+import com.refinedmods.refinedstorage.api.autocrafting.Pattern;
+import com.refinedmods.refinedstorage.api.autocrafting.task.ExternalPatternSink;
+import com.refinedmods.refinedstorage.api.autocrafting.task.ExternalPatternSinkId;
+import com.refinedmods.refinedstorage.api.autocrafting.task.StepBehavior;
+import com.refinedmods.refinedstorage.api.autocrafting.task.Task;
+import com.refinedmods.refinedstorage.api.autocrafting.task.TaskImpl;
+import com.refinedmods.refinedstorage.api.autocrafting.task.TaskSnapshot;
+import com.refinedmods.refinedstorage.api.core.Action;
+import com.refinedmods.refinedstorage.api.network.Network;
+import com.refinedmods.refinedstorage.api.network.autocrafting.AutocraftingNetworkComponent;
+import com.refinedmods.refinedstorage.api.network.autocrafting.PatternProvider;
+import com.refinedmods.refinedstorage.api.network.autocrafting.PatternProviderExternalPatternSink;
+import com.refinedmods.refinedstorage.api.network.impl.node.patternprovider.PatternProviderListener;
+import com.refinedmods.refinedstorage.api.network.impl.node.patternprovider.PatternProviderNetworkNode;
+import com.refinedmods.refinedstorage.api.resource.ResourceAmount;
+import com.refinedmods.refinedstorage.common.Platform;
+import com.refinedmods.refinedstorage.common.api.RefinedStorageApi;
+import com.refinedmods.refinedstorage.common.api.autocrafting.PlatformPatternProviderExternalPatternSink;
+import com.refinedmods.refinedstorage.common.api.support.network.InWorldNetworkNodeContainer;
+import com.refinedmods.refinedstorage.common.autocrafting.PatternInventory;
+import com.refinedmods.refinedstorage.common.content.BlockEntities;
+import com.refinedmods.refinedstorage.common.content.ContentNames;
+import com.refinedmods.refinedstorage.common.content.Items;
+import com.refinedmods.refinedstorage.common.support.AbstractDirectionalBlock;
+import com.refinedmods.refinedstorage.common.support.FilteredContainer;
+import com.refinedmods.refinedstorage.common.support.containermenu.ExtendedMenuProvider;
+import com.refinedmods.refinedstorage.common.support.network.AbstractBaseNetworkNodeContainerBlockEntity;
+import com.refinedmods.refinedstorage.common.upgrade.UpgradeContainer;
+import com.refinedmods.refinedstorage.common.upgrade.UpgradeDestinations;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamEncoder;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Containers;
+import net.minecraft.world.Nameable;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import org.jspecify.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static com.refinedmods.refinedstorage.common.support.AbstractDirectionalBlock.tryExtractDirection;
+
+public class AutocrafterBlockEntity extends AbstractBaseNetworkNodeContainerBlockEntity<PatternProviderNetworkNode>
+    implements ExtendedMenuProvider<AutocrafterData>, StepBehavior, PatternProviderExternalPatternSink,
+    PatternProviderListener {
+    static final int PATTERNS = 9;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AutocrafterBlockEntity.class);
+
+    private static final int MAX_CHAINED_AUTOCRAFTERS = 8;
+    private static final String TAG_UPGRADES = "upgr";
+    private static final String TAG_PATTERNS = "patterns";
+    private static final String TAG_LOCK_MODE = "lm";
+    private static final String TAG_PRIORITY = "pri";
+    private static final String TAG_TASKS = "tasks";
+    private static final String TAG_VISIBLE_TO_THE_AUTOCRAFTER_MANAGER = "vaum";
+    private static final String TAG_LOCKED = "locked";
+    private static final String TAG_WAS_POWERED = "wp";
+    private static final String TAG_ID = "auid";
+
+    private final PatternInventory patternContainer = new PatternInventory(PATTERNS, this::getLevel) {
+        @Override
+        public void setChanged() {
+            super.setChanged();
+            final long upgradeEnergyUsage = upgradeContainer.getEnergyUsage();
+            final long baseEnergyUsage = Platform.INSTANCE.getConfig().getAutocrafter().getEnergyUsage();
+            final long patternEnergyUsage = patternContainer.getEnergyUsage();
+            mainNetworkNode.setEnergyUsage(baseEnergyUsage + patternEnergyUsage + upgradeEnergyUsage);
+            AutocrafterBlockEntity.this.setChanged();
+        }
+    };
+    private final UpgradeContainer upgradeContainer;
+    private LockMode lockMode = LockMode.NEVER;
+    private boolean visibleToTheAutocrafterManager = true;
+    private int ticks;
+    private int steps = getSteps(0);
+    private int tickRate = getTickRate(0);
+    @Nullable
+    private PlatformPatternProviderExternalPatternSink sink;
+    @Nullable
+    private ExternalPatternSinkId id;
+    @Nullable
+    private AutocrafterExternalPatternSinkDetails lazyDetails;
+    private boolean wasPowered;
+    private boolean locked;
+
+    public AutocrafterBlockEntity(final BlockPos pos, final BlockState state) {
+        super(
+            BlockEntities.INSTANCE.getAutocrafter(),
+            pos,
+            state,
+            new PatternProviderNetworkNode(Platform.INSTANCE.getConfig().getAutocrafter().getEnergyUsage(), PATTERNS)
+        );
+        this.upgradeContainer = new UpgradeContainer(UpgradeDestinations.AUTOCRAFTER, (c, upgradeEnergyUsage) -> {
+            final long baseEnergyUsage = Platform.INSTANCE.getConfig().getAutocrafter().getEnergyUsage();
+            final long patternEnergyUsage = patternContainer.getEnergyUsage();
+            mainNetworkNode.setEnergyUsage(baseEnergyUsage + patternEnergyUsage + upgradeEnergyUsage);
+            final int amountOfSpeedUpgrades = c.getAmount(Items.INSTANCE.getSpeedUpgrade());
+            tickRate = getTickRate(amountOfSpeedUpgrades);
+            steps = getSteps(amountOfSpeedUpgrades);
+        }, this::setChanged);
+        this.patternContainer.setListener(this::onPatternChanged);
+        this.mainNetworkNode.setStepBehavior(this);
+        this.mainNetworkNode.setDetailsProvider(this::getOrLoadDetails);
+        this.mainNetworkNode.setSink(this);
+        this.mainNetworkNode.setListener(this);
+        this.mainNetworkNode.onAddedIntoContainer(new AutocrafterParentContainer(this));
+    }
+
+    @Override
+    protected InWorldNetworkNodeContainer createMainContainer(final PatternProviderNetworkNode networkNode) {
+        return new AutocrafterNetworkNodeContainer(
+            this,
+            networkNode,
+            "main",
+            new AutocrafterConnectionStrategy(this::getBlockState, getBlockPos())
+        );
+    }
+
+    public FilteredContainer getPatternContainer() {
+        return patternContainer;
+    }
+
+    UpgradeContainer getUpgradeContainer() {
+        return upgradeContainer;
+    }
+
+    private boolean isPartOfChain() {
+        return getChainingRoot() != this;
+    }
+
+    // If there is another autocrafter next to us, that is pointing in our direction,
+    // and we are not part of a chain, we are the head of the chain
+    private boolean isHeadOfChain() {
+        if (level == null || isPartOfChain()) {
+            return false;
+        }
+        for (final Direction direction : Direction.values()) {
+            final BlockPos pos = getBlockPos().relative(direction);
+            if (!level.isLoaded(pos)) {
+                continue;
+            }
+            final BlockEntity neighbor = level.getBlockEntity(pos);
+            if (neighbor instanceof AutocrafterBlockEntity neighborAutocrafter) {
+                final Direction neighborDirection = tryExtractDirection(neighborAutocrafter.getBlockState());
+                if (neighborDirection == direction.getOpposite()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private AutocrafterBlockEntity getChainingRoot() {
+        return getChainingRoot(0, this);
+    }
+
+    private AutocrafterBlockEntity getChainingRoot(final int depth, final AutocrafterBlockEntity origin) {
+        final Direction direction = tryExtractDirection(getBlockState());
+        if (level == null || direction == null || depth >= MAX_CHAINED_AUTOCRAFTERS) {
+            return origin;
+        }
+        final BlockEntity neighbor = getConnectedMachine();
+        if (!(neighbor instanceof AutocrafterBlockEntity neighborCrafter)) {
+            return this;
+        }
+        return neighborCrafter.getChainingRoot(depth + 1, origin);
+    }
+
+    @Nullable
+    private BlockEntity getConnectedMachine() {
+        final Direction direction = tryExtractDirection(getBlockState());
+        if (level == null || direction == null) {
+            return null;
+        }
+        final BlockPos neighborPos = getBlockPos().relative(direction);
+        if (!level.isLoaded(neighborPos)) {
+            return null;
+        }
+        return level.getBlockEntity(neighborPos);
+    }
+
+    @Override
+    public Component getName() {
+        final AutocrafterBlockEntity root = getChainingRoot();
+        if (root == this) {
+            return doGetName();
+        }
+        return root.getName();
+    }
+
+    private Component doGetName() {
+        final Component customName = getCustomName();
+        if (customName != null) {
+            return customName;
+        }
+        final BlockEntity connectedMachine = getConnectedMachine();
+        // We don't handle autocrafters here, as autocrafters are also nameable, and we could have infinite recursion.
+        if (connectedMachine instanceof Nameable nameable && !(connectedMachine instanceof AutocrafterBlockEntity)) {
+            return nameable.getName();
+        } else if (connectedMachine != null) {
+            return connectedMachine.getBlockState().getBlock().getName();
+        }
+        return ContentNames.AUTOCRAFTER;
+    }
+
+    @Nullable
+    @Override
+    public AbstractContainerMenu createMenu(final int syncId, final Inventory inventory, final Player player) {
+        return new AutocrafterContainerMenu(syncId, inventory, this);
+    }
+
+    @Override
+    public AutocrafterData getMenuData() {
+        return new AutocrafterData(isPartOfChain(), isHeadOfChain(), locked);
+    }
+
+    @Override
+    public StreamEncoder<RegistryFriendlyByteBuf, AutocrafterData> getMenuCodec() {
+        return AutocrafterData.STREAM_CODEC;
+    }
+
+    @Override
+    public void saveAdditional(final ValueOutput output) {
+        super.saveAdditional(output);
+        output.store(TAG_PATTERNS, ItemContainerContents.CODEC,
+            ItemContainerContents.fromItems(patternContainer.getItems()));
+        output.store(TAG_UPGRADES, ItemContainerContents.CODEC,
+            ItemContainerContents.fromItems(upgradeContainer.getItems()));
+        output.store(TAG_TASKS, TaskSnapshotCodecs.LIST_CODEC, collectTaskSnapshots());
+        output.putBoolean(TAG_LOCKED, locked);
+        output.putBoolean(TAG_WAS_POWERED, wasPowered);
+        if (id != null) {
+            output.store(TAG_ID, UUIDUtil.CODEC, id.id());
+        }
+    }
+
+    private List<TaskSnapshot> collectTaskSnapshots() {
+        final List<TaskSnapshot> snapshots = new ArrayList<>();
+        for (final Task task : mainNetworkNode.getTasks()) {
+            if (task instanceof TaskImpl taskImpl) {
+                try {
+                    snapshots.add(taskImpl.createSnapshot());
+                } catch (final Exception e) {
+                    LOGGER.error("Error while creating snapshot for task {} {}", task.getResource(), task.getAmount(),
+                        e);
+                }
+            }
+        }
+        return snapshots;
+    }
+
+    @Override
+    public void writeConfiguration(final ValueOutput output) {
+        super.writeConfiguration(output);
+        output.putInt(TAG_LOCK_MODE, LockModeSettings.getLockMode(lockMode));
+        output.putInt(TAG_PRIORITY, mainNetworkNode.getPriority());
+        output.putBoolean(TAG_VISIBLE_TO_THE_AUTOCRAFTER_MANAGER, visibleToTheAutocrafterManager);
+    }
+
+    @Override
+    public void loadAdditional(final ValueInput input) {
+        input.read(TAG_PATTERNS, ItemContainerContents.CODEC)
+            .ifPresent(contents -> contents.copyInto(patternContainer.getItems()));
+        input.read(TAG_UPGRADES, ItemContainerContents.CODEC).ifPresent(upgradeContainer::load);
+        input.read(TAG_TASKS, TaskSnapshotCodecs.LIST_CODEC)
+            .ifPresent(snapshots ->
+                snapshots.forEach(snapshot -> mainNetworkNode.addTask(new TaskImpl(snapshot))));
+        this.locked = input.getBooleanOr(TAG_LOCKED, false);
+        this.wasPowered = input.getBooleanOr(TAG_WAS_POWERED, false);
+        if (level != null && !level.isClientSide()) {
+            onPatternChanged();
+        }
+        this.id = new ExternalPatternSinkId(input.read(TAG_ID, UUIDUtil.CODEC).orElseGet(UUID::randomUUID));
+        this.mainNetworkNode.setId(id);
+        super.loadAdditional(input);
+    }
+
+    @Override
+    public void readConfiguration(final ValueInput input) {
+        super.readConfiguration(input);
+        lockMode = input.getInt(TAG_LOCK_MODE)
+            .map(LockModeSettings::getLockMode)
+            .orElse(LockMode.NEVER);
+        input.getInt(TAG_PRIORITY).ifPresent(mainNetworkNode::setPriority);
+        visibleToTheAutocrafterManager = input.getBooleanOr(TAG_VISIBLE_TO_THE_AUTOCRAFTER_MANAGER, true);
+    }
+
+    @Override
+    protected boolean hasRedstoneMode() {
+        return false;
+    }
+
+    @Override
+    public List<ItemStack> getUpgrades() {
+        return upgradeContainer.getUpgrades();
+    }
+
+    @Override
+    public boolean addUpgrade(final ItemStack upgradeStack) {
+        return upgradeContainer.addUpgrade(upgradeStack);
+    }
+
+    @Override
+    public void preRemoveSideEffects(final BlockPos pos, final BlockState state) {
+        super.preRemoveSideEffects(pos, state);
+        if (level != null) {
+            final NonNullList<ItemStack> drops = NonNullList.create();
+            drops.addAll(upgradeContainer.getDrops());
+            for (int i = 0; i < patternContainer.getContainerSize(); ++i) {
+                drops.add(patternContainer.getItem(i));
+            }
+            Containers.dropContents(level, pos, drops);
+        }
+    }
+
+    void setCustomName(final String name) {
+        if (isPartOfChain()) {
+            return;
+        }
+        setCustomName(name.trim().isBlank() ? null : Component.literal(name));
+        setChanged();
+    }
+
+    LockMode getLockMode() {
+        return lockMode;
+    }
+
+    void setLockMode(final LockMode lockMode) {
+        this.lockMode = lockMode;
+        this.locked = false;
+        this.wasPowered = false;
+        setChanged();
+    }
+
+    int getPriority() {
+        return mainNetworkNode.getPriority();
+    }
+
+    void setPriority(final int priority) {
+        mainNetworkNode.setPriority(priority);
+        setChanged();
+    }
+
+    boolean isVisibleToTheAutocrafterManager() {
+        return visibleToTheAutocrafterManager;
+    }
+
+    void setVisibleToTheAutocrafterManager(final boolean visibleToTheAutocrafterManager) {
+        this.visibleToTheAutocrafterManager = visibleToTheAutocrafterManager;
+        setChanged();
+    }
+
+    @Override
+    public void setLevel(final Level level) {
+        super.setLevel(level);
+        if (!level.isClientSide()) {
+            onPatternChanged();
+        }
+    }
+
+    @Override
+    protected void initialize(final ServerLevel level, final Direction direction) {
+        super.initialize(level, direction);
+        final Direction incomingDirection = direction.getOpposite();
+        final BlockPos sourcePosition = worldPosition.relative(direction);
+        if (id == null) {
+            this.id = ExternalPatternSinkId.create();
+            this.mainNetworkNode.setId(id);
+        }
+        invalidateDetails();
+        this.sink = Platform.INSTANCE.getPatternProviderExternalPatternSinkFactory()
+            .create(level, sourcePosition, incomingDirection);
+    }
+
+    private void onPatternChanged() {
+        if (level == null) {
+            return;
+        }
+        for (int i = 0; i < patternContainer.getContainerSize(); ++i) {
+            final Pattern pattern = RefinedStorageApi.INSTANCE.getPattern(patternContainer.getItem(i), level)
+                .orElse(null);
+            mainNetworkNode.tryUpdatePattern(i, pattern);
+        }
+    }
+
+    @Override
+    public void doWork() {
+        super.doWork();
+        if (mainNetworkNode.isActive()) {
+            ticks++;
+        }
+        updateLocked();
+    }
+
+    private void updateLocked() {
+        final boolean newLocked = calculateLocked();
+        if (newLocked != locked) {
+            setLocked(newLocked);
+        }
+    }
+
+    private void setLocked(final boolean locked) {
+        this.locked = locked;
+        setChanged();
+    }
+
+    boolean isLocked() {
+        return locked;
+    }
+
+    private boolean calculateLocked() {
+        if (level == null) {
+            return false;
+        }
+        return switch (lockMode) {
+            case NEVER -> false;
+            case LOCK_UNTIL_REDSTONE_PULSE_RECEIVED -> isLockedInPulseMode();
+            case LOCK_UNTIL_CONNECTED_MACHINE_IS_EMPTY -> sink != null && !sink.isEmpty();
+            case LOCK_UNTIL_ALL_OUTPUTS_ARE_RECEIVED -> locked;
+            case LOCK_UNTIL_HIGH_REDSTONE_SIGNAL -> !level.hasNeighborSignal(worldPosition);
+            case LOCK_UNTIL_LOW_REDSTONE_SIGNAL -> level.hasNeighborSignal(worldPosition);
+        };
+    }
+
+    private boolean isLockedInPulseMode() {
+        if (level != null && level.hasNeighborSignal(worldPosition)) {
+            wasPowered = true;
+            setChanged();
+        } else if (wasPowered) {
+            wasPowered = false;
+            setChanged();
+            return false;
+        }
+        return locked;
+    }
+
+    @Override
+    public boolean canStep(final Pattern pattern) {
+        final PatternProvider provider = lookupProvider(pattern);
+        if (provider == null) {
+            return false;
+        }
+        if (provider == mainNetworkNode) {
+            return mainNetworkNode.isActive() && ticks % tickRate == 0;
+        }
+        return provider.canStep(pattern);
+    }
+
+    @Override
+    public int getSteps(final Pattern pattern) {
+        final PatternProvider provider = lookupProvider(pattern);
+        if (provider == null) {
+            return 0;
+        }
+        if (provider == mainNetworkNode) {
+            return steps;
+        }
+        return provider.getSteps(pattern);
+    }
+
+    private static int getSteps(final int amountOfSpeedUpgrades) {
+        return switch (amountOfSpeedUpgrades) {
+            case 1 -> 2;
+            case 2 -> 3;
+            case 3 -> 4;
+            case 4 -> 5;
+            default -> 1;
+        };
+    }
+
+    private static int getTickRate(final int amountOfSpeedUpgrades) {
+        return switch (amountOfSpeedUpgrades) {
+            case 0 -> 10;
+            case 1 -> 8;
+            case 2 -> 6;
+            case 3 -> 4;
+            case 4 -> 2;
+            default -> 0;
+        };
+    }
+
+    @Nullable
+    private PatternProvider lookupProvider(final Pattern pattern) {
+        final Network network = mainNetworkNode.getNetwork();
+        if (network == null) {
+            return null;
+        }
+        return network.getComponent(AutocraftingNetworkComponent.class).getProviderByPattern(pattern);
+    }
+
+    @Override
+    protected boolean doesBlockStateChangeWarrantNetworkNodeUpdate(final BlockState oldBlockState,
+                                                                   final BlockState newBlockState) {
+        return AbstractDirectionalBlock.didDirectionChange(oldBlockState, newBlockState);
+    }
+
+    private void invalidateDetails() {
+        this.lazyDetails = null;
+    }
+
+    @Nullable
+    private AutocrafterExternalPatternSinkDetails getOrLoadDetails() {
+        if (lazyDetails != null) {
+            return lazyDetails;
+        }
+        lazyDetails = loadDetails();
+        return lazyDetails;
+    }
+
+    @Nullable
+    private AutocrafterExternalPatternSinkDetails loadDetails() {
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return null;
+        }
+        final Direction direction = tryExtractDirection(getBlockState());
+        if (direction == null) {
+            return null;
+        }
+        final AutocrafterBlockEntity root = getChainingRoot();
+        final BlockEntity connectedMachine = root.getConnectedMachine();
+        if (connectedMachine == null) {
+            return null;
+        }
+        return loadDetails(serverLevel, connectedMachine, direction);
+    }
+
+    @Nullable
+    private AutocrafterExternalPatternSinkDetails loadDetails(
+        final ServerLevel serverLevel,
+        final BlockEntity connectedMachine,
+        final Direction direction
+    ) {
+        final BlockState connectedMachineState = connectedMachine.getBlockState();
+        final Player fakePlayer = getFakePlayer(serverLevel);
+        final ItemStack connectedMachineStack = Platform.INSTANCE.getBlockAsItemStack(
+            connectedMachineState.getBlock(),
+            connectedMachineState,
+            direction.getOpposite(),
+            serverLevel,
+            connectedMachine.getBlockPos(),
+            fakePlayer
+        );
+        if (connectedMachineStack.isEmpty()) {
+            return null;
+        }
+        return new AutocrafterExternalPatternSinkDetails(getName().getString(), connectedMachineStack);
+    }
+
+    @Override
+    public ExternalPatternSink.Result insertAll(final Collection<ResourceAmount> resources, final Action action) {
+        final AutocrafterBlockEntity root = getChainingRoot();
+        if (root != this) {
+            return root.insertAll(resources, action);
+        }
+        if (sink == null) {
+            return ExternalPatternSink.Result.SKIPPED;
+        }
+        if (locked) {
+            return ExternalPatternSink.Result.LOCKED;
+        }
+        final ExternalPatternSink.Result result = sink.insertAll(resources, action);
+        updateLockedAfterAccept(action, result);
+        return result;
+    }
+
+    private void updateLockedAfterAccept(final Action action, final ExternalPatternSink.Result result) {
+        // If we are using speed upgrades, we will try multiple insertions (steps) in 1 tick.
+        // That is too late, however, if we only update the locked state every tick.
+        if (result == ExternalPatternSink.Result.ACCEPTED
+            && action == Action.EXECUTE
+            && lockMode == LockMode.LOCK_UNTIL_CONNECTED_MACHINE_IS_EMPTY) {
+            updateLocked();
+        }
+        if (result == ExternalPatternSink.Result.ACCEPTED
+            && action == Action.EXECUTE
+            && (lockMode == LockMode.LOCK_UNTIL_REDSTONE_PULSE_RECEIVED
+            || lockMode == LockMode.LOCK_UNTIL_ALL_OUTPUTS_ARE_RECEIVED)) {
+            setLocked(true);
+        }
+    }
+
+    @Override
+    public void receivedExternalIteration() {
+        final AutocrafterBlockEntity root = getChainingRoot();
+        if (root != this) {
+            root.receivedExternalIteration();
+            return;
+        }
+        if (lockMode == LockMode.LOCK_UNTIL_ALL_OUTPUTS_ARE_RECEIVED && locked) {
+            setLocked(false);
+        }
+    }
+}

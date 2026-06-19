@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "white",
+  "ingredient": "#refinedstorage:autocrafters",
+  "result": "refinedstorage:white_autocrafter"
+}

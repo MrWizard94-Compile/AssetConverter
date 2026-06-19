@@ -1,0 +1,6 @@
+{
+  "type": "refinedstorage:recoloring",
+  "color": "brown",
+  "ingredient": "#refinedstorage:external_storages",
+  "result": "refinedstorage:brown_external_storage"
+}
