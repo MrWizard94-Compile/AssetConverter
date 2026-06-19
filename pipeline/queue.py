@@ -69,6 +69,19 @@ QUEUE_PRIORITY = [
     "baubley_heart_canisters",
     "cpm_fabric",
     "mekanistic_routers",
+    # ATM10 batch-5
+    "oritech",
+    "natures_aura",
+    "integrated_tunnels",
+    "more_red",
+    "buildinggadgets",
+    "not_enough_glyphs",
+    "explorers_compass",
+    "tempad",
+    "integrated_crafting",
+    "industrial_foregoing_souls",
+    "integrated_scripting",
+    "restrictions",
 ]
 
 

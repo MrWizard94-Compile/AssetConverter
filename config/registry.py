@@ -53,6 +53,14 @@ MOD_NAMESPACES = {
     "baubley_heart_canisters": "bhc",
     "cpm_fabric": "compactmachines",
     "mekanistic_routers": "mekanisticrouters",
+    "natures_aura": "naturesaura",
+    "more_red": "morered",
+    "integrated_tunnels": "integratedtunnels",
+    "integrated_crafting": "integratedcrafting",
+    "integrated_scripting": "integratedscripting",
+    "explorers_compass": "explorerscompass",
+    "industrial_foregoing_souls": "industrialforegoingsouls",
+    "laser_bridges_and_doors": "laserbridges",
     "thermal_core": "thermal",
     "thermal_foundation": "thermal",
     "thermal_expansion": "thermal",
@@ -247,6 +255,19 @@ MOD_REPOS = {
     "baubley_heart_canisters": "https://github.com/Traverse-Joe/Baubley-Heart-Canisters.git",
     "cpm_fabric": "https://github.com/AlphaMode/CompactMachines.git",
     "mekanistic_routers": "https://github.com/MatyrobbrtMods/MekanisticRouters.git",
+    # ATM10 batch-5 (tech, integrated dynamics, exploration)
+    "oritech": "https://github.com/Rearth/Oritech.git",
+    "natures_aura": "https://github.com/Ellpeck/NaturesAura.git",
+    "integrated_tunnels": "https://github.com/CyclopsMC/IntegratedTunnels.git",
+    "more_red": "https://github.com/Commoble/morered.git",
+    "buildinggadgets": "https://github.com/Direwolf20-MC/BuildingGadgets.git",
+    "not_enough_glyphs": "https://github.com/Alexthw46/NotEnoughGlyphs.git",
+    "explorers_compass": "https://github.com/MattCzyr/ExplorersCompass.git",
+    "tempad": "https://github.com/terrarium-earth/Tempad.git",
+    "integrated_crafting": "https://github.com/CyclopsMC/IntegratedCrafting.git",
+    "industrial_foregoing_souls": "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing-Souls.git",
+    "integrated_scripting": "https://github.com/CyclopsMC/IntegratedScripting.git",
+    "restrictions": "https://github.com/McJtyMods/Restrictions.git",
 }
 
 CLONE_BRANCHES = {
@@ -314,6 +335,17 @@ CLONE_BRANCHES = {
     "living_things": "1.20.1",
     "baubley_heart_canisters": "1.20",
     "cpm_fabric": "1.20",
+    "oritech": "1.21",
+    "natures_aura": "1.20",
+    "integrated_tunnels": "master-1.20-lts",
+    "integrated_crafting": "master-1.20-lts",
+    "integrated_scripting": "master-1.20-lts",
+    "more_red": "1.20.1",
+    "buildinggadgets": "master",
+    "not_enough_glyphs": "1.20",
+    "tempad": "1.20.1",
+    "industrial_foregoing_souls": "1.20",
+    "restrictions": "1.20",
 }
 
 JAR_ONLY_MODS = {
