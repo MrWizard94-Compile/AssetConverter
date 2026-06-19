@@ -22,6 +22,16 @@ QUEUE_PRIORITY = [
     "functional_storage",
     "creeper_overhaul",
     "modularrouters",
+    "sereneseasons",
+    "yungs_better_mineshafts",
+    "yungs_better_dungeons",
+    "yungs_better_strongholds",
+    "simple_magnets",
+    "yungs_better_ocean_monuments",
+    "yungs_better_nether_fortresses",
+    "mo_structures",
+    "yungs_extras",
+    "yungs_better_desert_temples",
 ]
 
 

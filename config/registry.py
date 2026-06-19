@@ -23,6 +23,15 @@ MOD_NAMESPACES = {
     "wireless_chargers": "wirelesschargers",
     "functional_storage": "functionalstorage",
     "creeper_overhaul": "creeperoverhaul",
+    "yungs_better_mineshafts": "bettermineshafts",
+    "yungs_better_dungeons": "betterdungeons",
+    "yungs_better_strongholds": "betterstrongholds",
+    "yungs_better_ocean_monuments": "betteroceanmonuments",
+    "yungs_better_nether_fortresses": "betterfortresses",
+    "yungs_extras": "yungsextras",
+    "yungs_better_desert_temples": "betterdeserttemples",
+    "mo_structures": "mostructures",
+    "simple_magnets": "simplemagnets",
     "thermal_core": "thermal",
     "thermal_foundation": "thermal",
     "thermal_expansion": "thermal",
@@ -156,6 +165,18 @@ MOD_REPOS = {
     "functional_storage": "https://github.com/Buuz135/FunctionalStorage.git",
     "creeper_overhaul": "https://github.com/bonsaistudi0s/Creeper-Overhaul.git",
     "modularrouters": "https://github.com/desht/ModularRouters.git",
+    # ATM10 runners-up (structure/QoL mods)
+    "sereneseasons": "https://github.com/Glitchfiend/SereneSeasons.git",
+    "yungs_better_mineshafts": "https://github.com/YUNG-GANG/YUNGs-Better-Mineshafts.git",
+    "yungs_better_dungeons": "https://github.com/YUNG-GANG/YUNGs-Better-Dungeons.git",
+    "yungs_better_strongholds": "https://github.com/YUNG-GANG/YUNGs-Better-Strongholds.git",
+    "simple_magnets": "https://github.com/SuperMartijn642/SimpleMagnets.git",
+    # ATM10 top-20 runners-up (structure mods)
+    "yungs_better_ocean_monuments": "https://github.com/YUNG-GANG/YUNGs-Better-Ocean-Monuments.git",
+    "yungs_better_nether_fortresses": "https://github.com/YUNG-GANG/YUNGs-Better-Fortresses.git",
+    "mo_structures": "https://github.com/frqnny/mostructures.git",
+    "yungs_extras": "https://github.com/YUNG-GANG/YUNGs-Extras.git",
+    "yungs_better_desert_temples": "https://github.com/YUNG-GANG/YUNGs-Better-Desert-Temples.git",
 }
 
 CLONE_BRANCHES = {
@@ -198,6 +219,16 @@ CLONE_BRANCHES = {
     "rftools_utility": "1.20",
     "rftools_base": "1.20",
     "rftools_storage": "1.20",
+    "sereneseasons": "1.20.1",
+    "yungs_better_mineshafts": "1.20",
+    "yungs_better_dungeons": "1.20",
+    "yungs_better_strongholds": "1.20",
+    "simple_magnets": "forge-1.20",
+    "yungs_better_ocean_monuments": "1.20",
+    "yungs_better_nether_fortresses": "1.20",
+    "mo_structures": "1.20.x",
+    "yungs_extras": "1.20",
+    "yungs_better_desert_temples": "1.20",
 }
 
 JAR_ONLY_MODS = {

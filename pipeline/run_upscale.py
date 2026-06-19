@@ -172,6 +172,42 @@ def find_source_textures_dir(mod_name):
         if os.path.isdir(candidate):
             return candidate
 
+    # YUNG structure mods (and similar): icon/catalogue PNGs live in Common resources
+    for repo_name in repo_names:
+        for subpath in (
+            os.path.join("Common", "src", "main", "resources"),
+            os.path.join("common", "src", "main", "resources"),
+        ):
+            fallback = os.path.join(SOURCES_DIR, repo_name, subpath)
+            if not os.path.isdir(fallback):
+                continue
+            if any(
+                file.endswith(".png")
+                for file in os.listdir(fallback)
+                if os.path.isfile(os.path.join(fallback, file))
+            ):
+                return fallback
+
+    # Mods with PNGs directly under assets/<namespace>/ (no textures/ subfolder)
+    for repo_name in repo_names:
+        assets_ns = os.path.join(
+            SOURCES_DIR,
+            repo_name,
+            "src",
+            "main",
+            "resources",
+            "assets",
+            namespace,
+        )
+        if not os.path.isdir(assets_ns):
+            continue
+        if any(
+            file.endswith(".png")
+            for file in os.listdir(assets_ns)
+            if os.path.isfile(os.path.join(assets_ns, file))
+        ):
+            return assets_ns
+
     return candidates[0]
 
 
