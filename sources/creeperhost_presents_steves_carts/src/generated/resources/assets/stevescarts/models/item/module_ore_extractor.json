@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "stevescarts:item/ore_extractor_icon"
+  }
+}
