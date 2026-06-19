@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "tag": "forge:glass/colorless"
+    },
+    "o": {
+      "tag": "forge:gems/heliodor"
+    }
+  },
+  "pattern": [
+    "###",
+    "#o#",
+    "###"
+  ],
+  "result": {
+    "count": 12,
+    "item": "silentgems:heliodor_glass"
+  }
+}

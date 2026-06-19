@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 1.0,
+  "ingredient": {
+    "item": "silentgems:raw_silver"
+  },
+  "result": "silentgems:silver_ingot"
+}
