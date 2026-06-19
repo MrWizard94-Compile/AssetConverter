@@ -4,10 +4,10 @@
 
 ## Upscaled namespaces (`output/assets/`)
 
-**84** namespaces already processed:
+**86** namespaces already processed:
 
 ```
-actuallyadditions, ae2, aether, biomeswevegone, alexscaves, another_furniture, apotheosis, aquaculture, ars_nouveau, artifacts, bellsandwhistles, biomesoplenty, botania, brewinandchewin, chipped, comforts, cookingforblockheads, copycats, create, create_central_kitchen, create_connected, create_enchantment_industry, create_hypertube, create_jetpack, create_new_age, create_sa, createaddition, createbigcannons, createdeco, createendertransmission, createoreexcavation, deeperdarker, draconicevolution, enderio, evilcraft, farmersdelight, fluxnetworks, forbidden_arcanus, handcrafted, iceandfire, immersiveengineering, industrialforegoing, integrateddynamics, interiors, ironjetpacks, irons_spellbooks, jei, mcwbridges, mcwdoors, mcwfences, mcwlights, mcwroofs, mcwwindows, mekanism, mekanismgenerators, mekanismtools, minecolonies, mowziesmobs, mysticalagradditions, mysticalagriculture, occultism, pneumaticcraft, powah, productivebees, quark, railways, rechiseled, refinedstorage, reliquary, securitycraft, sliceanddice, sophisticatedbackpacks, sophisticatedstorage, storagedrawers, supplementaries, tconstruct, thermal, trackwork, trashcans, twilightforest, valkyrienskies, vs_clockwork, waystones, xnet
+actuallyadditions, ae2, aether, biomeswevegone, railcraft, eternal_starlight, alexscaves, another_furniture, apotheosis, aquaculture, ars_nouveau, artifacts, bellsandwhistles, biomesoplenty, botania, brewinandchewin, chipped, comforts, cookingforblockheads, copycats, create, create_central_kitchen, create_connected, create_enchantment_industry, create_hypertube, create_jetpack, create_new_age, create_sa, createaddition, createbigcannons, createdeco, createendertransmission, createoreexcavation, deeperdarker, draconicevolution, enderio, evilcraft, farmersdelight, fluxnetworks, forbidden_arcanus, handcrafted, iceandfire, immersiveengineering, industrialforegoing, integrateddynamics, interiors, ironjetpacks, irons_spellbooks, jei, mcwbridges, mcwdoors, mcwfences, mcwlights, mcwroofs, mcwwindows, mekanism, mekanismgenerators, mekanismtools, minecolonies, mowziesmobs, mysticalagradditions, mysticalagriculture, occultism, pneumaticcraft, powah, productivebees, quark, railways, rechiseled, refinedstorage, reliquary, securitycraft, sliceanddice, sophisticatedbackpacks, sophisticatedstorage, storagedrawers, supplementaries, tconstruct, thermal, trackwork, trashcans, twilightforest, valkyrienskies, vs_clockwork, waystones, xnet
 ```
 
 ## Summary
@@ -15,7 +15,7 @@ actuallyadditions, ae2, aether, biomeswevegone, alexscaves, another_furniture, a
 | Metric | Value |
 |--------|------:|
 | ATM10 mods in research JSON | 477 |
-| Already upscaled (namespace match) | 84 |
+| Already upscaled (namespace match) | 86 |
 | ATM10 mods matched to upscaled set | 60 |
 | Remaining candidates (public GitHub/GitLab) | 170 |
 | `MOD_REPOS` entries | 98 |
@@ -28,8 +28,8 @@ Excludes libraries, QoL-only mods, and namespaces already present in `output/ass
 | Priority | mod_id | repo_url | branch | est_png_count | curseforge_popularity note |
 |---------:|--------|----------|--------|--------------:|----------------------------|
 | 1 | `oh_the_biomes_weve_gone` **DONE** | https://github.com/Potion-Studios/Oh-The-Biomes-Weve-Gone.git | `main` | 1114 | **DONE** — namespace `biomeswevegone`, 1114 PNG upscaled |
-| 2 | `railcraft_reborn` | https://github.com/railcraft-reborn/railcraft.git | `main` | 950 | 18M CF; classic tech/rail mod reboot with huge item/block set |
-| 3 | `eternal_starlight` | https://github.com/LeoMinecraftModding/eternal-starlight.git | `main` | 750 | New ATM10 dimension mod; high texture surface area |
+| 2 | `railcraft_reborn` **DONE** | https://github.com/railcraft-reborn/railcraft.git | `main` | 1084 | **DONE** — namespace `railcraft`, 1084 PNG upscaled |
+| 3 | `eternal_starlight` **DONE** | https://github.com/LeoMinecraftModding/eternal-starlight.git | `main` | 750 | **DONE** — namespace `eternal_starlight`, 1451 PNG upscaled |
 | 4 | `the_undergarden` | https://github.com/quek04/The-Undergarden.git | `main` | 680 | 48M CF; full dimension with mobs, gear, and biomes |
 | 5 | `productivetrees` | https://github.com/JDKDigital/productivetrees.git | `main` | 520 | 20M CF; pairs with Productive Bees already upscaled |
 | 6 | `extreme_reactors` | https://github.com/ZeroNoRyouki/ExtremeReactors2.git | `main` | 420 | Big Reactors successor; 94M CF, reactor GUI + multiblock parts |
@@ -72,7 +72,7 @@ These top candidates are **not** yet in `MOD_REPOS`:
 
 - ~~`oh_the_biomes_weve_gone`~~ **DONE** (`biomeswevegone`, 1114 PNG)
 - `railcraft_reborn` → `https://github.com/railcraft-reborn/railcraft.git` (`main`)
-- `eternal_starlight` → `https://github.com/LeoMinecraftModding/eternal-starlight.git` (`main`)
+- ~~`eternal_starlight`~~ **DONE** (`eternal_starlight`, 1451 PNG)
 - `the_undergarden` → `https://github.com/quek04/The-Undergarden.git` (`main`)
 - `productivetrees` → `https://github.com/JDKDigital/productivetrees.git` (`main`)
 - `extreme_reactors` → `https://github.com/ZeroNoRyouki/ExtremeReactors2.git` (`main`)
