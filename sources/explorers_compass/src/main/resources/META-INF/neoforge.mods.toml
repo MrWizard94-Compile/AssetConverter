@@ -1,0 +1,26 @@
+license="CC BY-NC-SA 4.0"
+issueTrackerURL="https://github.com/MattCzyr/ExplorersCompass/issues"
+
+[[mods]]
+    modId="explorerscompass"
+    version="${mod_version}"
+    displayName="Explorer's Compass"
+    displayURL="https://github.com/MattCzyr/ExplorersCompass"
+    authors="ChaosTheDude"
+    description='''
+    Search for and locate structures anywhere in the world.
+    '''
+
+[[dependencies.explorerscompass]]
+    modId="neoforge"
+    type="required"
+    versionRange="[${neo_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.explorerscompass]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
