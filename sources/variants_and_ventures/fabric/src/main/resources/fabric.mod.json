@@ -1,0 +1,75 @@
+{
+	"schemaVersion": 1,
+	"id": "${modId}",
+	"version": "${modVersion}",
+	"name": "${modName}",
+	"description": "${modDescription}",
+	"authors": [
+		"${modAuthor}"
+	],
+	"contact": {
+		"homepage": "${modGitHub}",
+		"sources": "${modGitHub}",
+		"issues": "${modGitHub}/issues",
+		"wiki": "${modGitHub}/wiki",
+		"discord": "${modDiscord}"
+	},
+	"license": "${modLicense}",
+	"icon": "icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.faboslav.variantsandventures.fabric.VariantsAndVenturesFabric"
+		],
+		"client": [
+			"com.faboslav.variantsandventures.fabric.VariantsAndVenturesClientFabric"
+		],
+		"preLaunch": [
+			"com.llamalad7.mixinextras.MixinExtrasBootstrap::init"
+		],
+		"modmenu": [
+			"com.faboslav.variantsandventures.fabric.integrations.ModMenuIntegration"
+		]
+	},
+	"mixins": [
+		"${modId}-common.mixins.json",
+		"${modId}-fabric.mixins.json"
+	],
+	"accessWidener": "${modId}.accesswidener",
+	"depends": {
+		"minecraft": ">=${minMinecraftVersion}",
+		"fabricloader": "*",
+		"fabric-api": "*",
+		"yet_another_config_lib_v3": ">=${yaclVersion}",
+		"resourcefullib": ">=${resourcefulLibLibVersion}"
+	},
+	"suggests": {
+		"mod_menu": "*"
+	},
+	"custom": {
+		"mod_menu": {
+			"links": {
+				"Discord": "${modDiscord}",
+				"Wiki": "${modGitHub}/wiki",
+				"CurseForge": "https://www.curseforge.com/minecraft/mc-mods/variants-and-ventures",
+				"Modrinth": "https://modrinth.com/mod/variants-and-ventures"
+			}
+		},
+		"catalogue": {
+			"configFactory": "com.faboslav.variantsandventures.fabric.integrations.CatalogueIntegration",
+			"icon": {
+				"image": "catalogue_icon.png"
+			},
+			"banner": "catalogue_logo.png",
+			"background": "catalogue_background.png"
+		},
+		"mc-publish": {
+			"dependencies": [
+				"fabric-api(required){curseforge:306612}{modrinth:P7dR8mSH}",
+				"yet_another_config_lib_v3(required){curseforge:667299}{modrinth:1eAoo2KR}",
+				"resourcefullib(required){curseforge:570073}{modrinth:G1hIVOrD}",
+				"modmenu(optional){curseforge:308702}{modrinth:mOgUt4GM}"
+			]
+		}
+	}
+}
