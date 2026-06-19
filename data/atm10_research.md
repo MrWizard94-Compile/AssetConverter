@@ -17,16 +17,16 @@ Mod list source: [modpackindex.com ATM10 API](https://www.modpackindex.com/api/v
 
 ## Already Covered
 
-**103 namespaces** in `output/assets/`. **63** appear in the ATM10 mod list:
+**113 namespaces** in `output/assets/`. **63** appear in the ATM10 mod list:
 
 ```
 actuallyadditions, ae2, aether, apotheosis, aquaculture, ars_nouveau, artifacts, bellsandwhistles, chipped, comforts, cookingforblockheads, create, create_aquatic_ambitions, create_dragons_plus, create_enchantment_industry, create_hypertube, createaddition, deeperdarker, enderio, eternal_starlight, evilcraft, extrastorage, farmersdelight, fluxnetworks, forbidden_arcanus, handcrafted, iceandfire, immersiveengineering, industrialforegoing, integrateddynamics, ironjetpacks, irons_spellbooks, mcwbridges, mcwdoors, mcwfences, mcwlights, mcwroofs, mcwwindows, mekanism, mekanism_covers, mekanismgenerators, mekanismmoremachine, mekanismtools, minecolonies, modern_industrialization, modularrouters, mysticalagradditions, mysticalagriculture, occultism, pneumaticcraft, productivebees, productivetrees, rechiseled, refinedstorage, reliquary, securitycraft, sophisticatedbackpacks, sophisticatedstorage, supplementaries, trashcans, twilightforest, waystones, xnet
 ```
 
-**Upscaled mods NOT in ATM10** (39): classic 1.20.1 Forge content dropped or replaced in the 1.21 pack — e.g. Botania, Quark, Tinkers, Biomes O' Plenty, Alex's Caves, many Create addons.
+**Upscaled mods NOT in ATM10** (49): classic 1.20.1 Forge content dropped or replaced in the 1.21 pack — e.g. Botania, Quark, Tinkers, Biomes O' Plenty, Alex's Caves, many Create addons.
 
 ```
-alexscaves, another_furniture, arseng, bigreactors, biomesoplenty, biomeswevegone, botania, brewinandchewin, copycats, create_central_kitchen, create_connected, create_jetpack, create_new_age, create_sa, createbigcannons, createdeco, createendertransmission, createoreexcavation, creeperoverhaul, draconicevolution, functionalstorage, integratedterminals, interiors, ironfurnaces, mowziesmobs, quark, railways, rftoolsbase, rftoolsstorage, rftoolsutility, sliceanddice, storagedelight, storagedrawers, tconstruct, thermal, trackwork, valkyrienskies, vs_clockwork, wirelesschargers
+alexscaves, another_furniture, arseng, betterdeserttemples, betterdungeons, betterfortresses, bettermineshafts, betteroceanmonuments, betterstrongholds, bigreactors, biomesoplenty, biomeswevegone, botania, brewinandchewin, copycats, create_central_kitchen, create_connected, create_jetpack, create_new_age, create_sa, createbigcannons, createdeco, createendertransmission, createoreexcavation, creeperoverhaul, draconicevolution, functionalstorage, integratedterminals, interiors, ironfurnaces, mostructures, mowziesmobs, quark, railways, rftoolsbase, rftoolsstorage, rftoolsutility, sereneseasons, simplemagnets, sliceanddice, storagedelight, storagedrawers, tconstruct, thermal, trackwork, valkyrienskies, vs_clockwork, wirelesschargers, yungsextras
 ```
 
 ## Top 30 NEW Mods to Add
@@ -44,17 +44,17 @@ Prioritized by texture count + content categories. Excludes libraries/QoL/perfor
 | `extreme_reactors` | https://github.com/ZeroNoRyouki/ExtremeReactors2.git | `main` | 293 |
 | `iron_furnaces` | https://github.com/Qelifern/IronFurnaces.git | `main` | 168 |
 | `rftools_utility` | https://github.com/McJtyMods/RFToolsUtility.git | `1.20` | 139 |
+| `simple_magnets` | https://github.com/SuperMartijn642/SimpleMagnets.git | `forge-1.20` | 16 |
 | `wireless_chargers` | https://github.com/SuperMartijn642/WirelessChargers.git | `main` | 9 |
-| `yungs_better_mineshafts` | https://github.com/YUNG-GANG/YUNGs-Better-Mineshafts.git | `1.20.1` | 30 |
-| `yungs_better_dungeons` | https://github.com/YUNG-GANG/YUNGs-Better-Dungeons.git | `1.20.1` | 25 |
-| `yungs_better_strongholds` | https://github.com/YUNG-GANG/YUNGs-Better-Strongholds.git | `1.20.1` | 20 |
-| `simple_magnets` | https://github.com/SuperMartijn642/SimpleMagnets | `main` | ? |
 | `reliquified_artifacts` | https://github.com/Octo-Studios/rar-compat.git | `main` | ? |
-| `yungs_better_ocean_monuments` | https://github.com/YUNG-GANG/YUNGs-Better-Ocean-Monuments.git | `1.20.1` | 15 |
-| `yungs_better_nether_fortresses` | https://github.com/YUNG-GANG/YUNGs-Better-Fortresses.git | `1.20.1` | 15 |
-| `mo_structures` | https://github.com/frqnny/mostructures | `main` | ? |
-| `yungs_extras` | https://github.com/YUNG-GANG/YUNGs-Extras.git | `1.20.1` | ? |
-| `yungs_better_desert_temples` | https://github.com/YUNG-GANG/YUNGs-Better-Desert-Temples.git | `1.20.1` | ? |
+| `yungs_better_strongholds` | https://github.com/YUNG-GANG/YUNGs-Better-Strongholds.git | `1.20` | 4 |
+| `yungs_better_dungeons` | https://github.com/YUNG-GANG/YUNGs-Better-Dungeons.git | `1.20` | 4 |
+| `yungs_better_desert_temples` | https://github.com/YUNG-GANG/YUNGs-Better-Desert-Temples.git | `1.20` | 4 |
+| `yungs_better_ocean_monuments` | https://github.com/YUNG-GANG/YUNGs-Better-Ocean-Monuments.git | `1.20` | 4 |
+| `yungs_better_nether_fortresses` | https://github.com/YUNG-GANG/YUNGs-Better-Fortresses.git | `1.20` | 4 |
+| `yungs_better_mineshafts` | https://github.com/YUNG-GANG/YUNGs-Better-Mineshafts.git | `1.20` | 4 |
+| `yungs_extras` | https://github.com/YUNG-GANG/YUNGs-Extras.git | `1.20` | 3 |
+| `mo_structures` | https://github.com/frqnny/mostructures.git | `1.20.x` | 1 |
 | `yungs_better_witch_huts` | https://github.com/YUNG-GANG/YUNGs-Better-Witch-Huts.git | `1.20.1` | ? |
 | `structory` | https://github.com/Stardust-Labs-MC/Structory | `main` | ? |
 | `moogs_voyager_structures` | https://github.com/Moog-s-Mods/MoogsVoyagerStructures | `main` | ? |

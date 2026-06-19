@@ -30,6 +30,9 @@ MOD_NAMESPACES = {
     "yungs_better_nether_fortresses": "betterfortresses",
     "yungs_extras": "yungsextras",
     "yungs_better_desert_temples": "betterdeserttemples",
+    "yungs_better_witch_huts": "betterwitchhuts",
+    "yungs_better_jungle_temples": "betterjungletemples",
+    "yungs_better_end_island": "betterendisland",
     "mo_structures": "mostructures",
     "simple_magnets": "simplemagnets",
     "thermal_core": "thermal",
@@ -54,6 +57,14 @@ SKIP_MODS = {
     "theoneprobe",
     "ritchiesprojectilelib",
     "kotlinforforge",
+}
+
+# Datapack / structure mods with no assets/<ns>/textures (pack icon only).
+TEXTURELESS_MODS = {
+    "structory",
+    "structory_towers",
+    "moogs_voyager_structures",
+    "mes_moogs_end_structures",
 }
 
 MOD_REPOS = {
@@ -177,6 +188,21 @@ MOD_REPOS = {
     "mo_structures": "https://github.com/frqnny/mostructures.git",
     "yungs_extras": "https://github.com/YUNG-GANG/YUNGs-Extras.git",
     "yungs_better_desert_temples": "https://github.com/YUNG-GANG/YUNGs-Better-Desert-Temples.git",
+    # ATM10 batch-2 (structure + texture mods)
+    "connectedglass": "https://github.com/SuperMartijn642/ConnectedGlass.git",
+    "pipez": "https://github.com/henkelmax/pipez.git",
+    "blue_skies": "https://gitlab.com/modding-legacy/blue-skies.git",
+    "yungs_better_witch_huts": "https://github.com/YUNG-GANG/YUNGs-Better-Witch-Huts.git",
+    "yungs_better_jungle_temples": "https://github.com/YUNG-GANG/YUNGs-Better-Jungle-Temples.git",
+    "yungs_better_end_island": "https://github.com/yungnickyoung/YUNGs-Better-End-Island.git",
+    "structory": "https://github.com/Stardust-Labs-MC/Structory.git",
+    "moogs_voyager_structures": "https://github.com/Moog-s-Mods/MoogsVoyagerStructures.git",
+    "structory_towers": "https://github.com/Stardust-Labs-MC/Structory-Towers.git",
+    "mes_moogs_end_structures": "https://github.com/FinnSetchell/MoogsEndStructures.git",
+    "villages_and_pillages": "https://github.com/Faboslav/villages-and-pillages.git",
+    "dimstorage": "https://github.com/Edivad99/DimStorage.git",
+    "entangled": "https://github.com/SuperMartijn642/Entangled.git",
+    "variants_and_ventures": "https://github.com/Faboslav/variants-and-ventures.git",
 }
 
 CLONE_BRANCHES = {
@@ -229,6 +255,10 @@ CLONE_BRANCHES = {
     "mo_structures": "1.20.x",
     "yungs_extras": "1.20",
     "yungs_better_desert_temples": "1.20",
+    "pipez": "outdated/1.20.1",
+    "yungs_better_witch_huts": "1.20",
+    "yungs_better_jungle_temples": "1.20",
+    "yungs_better_end_island": "1.20",
 }
 
 JAR_ONLY_MODS = {
@@ -267,6 +297,10 @@ MODRINTH_JAR_MODS = {
     "mcwlights": (
         "https://cdn.modrinth.com/data/w4an97C2/versions/H1a9Tx4h/mcw-lights-1.1.5-mc1.20.1forge.jar",
         "mcw-lights-1.1.5-mc1.20.1forge.jar",
+    ),
+    "blue_skies": (
+        "https://cdn.modrinth.com/data/DOSy3C4M/versions/YGq4rvX4/blue_skies-1.20.1-1.3.31.jar",
+        "blue_skies-1.20.1-1.3.31.jar",
     ),
 }
 

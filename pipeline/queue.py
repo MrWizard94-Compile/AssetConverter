@@ -3,7 +3,7 @@ import os
 import re
 
 from config.paths import OUTPUT_ASSETS_DIR
-from config.registry import MOD_REPOS, texture_namespace
+from config.registry import MOD_REPOS, TEXTURELESS_MODS, texture_namespace
 
 # Priority order (registry mod_id). Sync with docs/MOD_QUEUE.md top section.
 QUEUE_PRIORITY = [
@@ -32,6 +32,17 @@ QUEUE_PRIORITY = [
     "mo_structures",
     "yungs_extras",
     "yungs_better_desert_temples",
+    # ATM10 batch-2
+    "connectedglass",
+    "pipez",
+    "blue_skies",
+    "yungs_better_witch_huts",
+    "yungs_better_jungle_temples",
+    "yungs_better_end_island",
+    "villages_and_pillages",
+    "dimstorage",
+    "entangled",
+    "variants_and_ventures",
 ]
 
 
@@ -47,6 +58,8 @@ def _has_upscaled_assets(namespace):
 
 
 def is_complete(mod_id):
+    if mod_id in TEXTURELESS_MODS:
+        return True
     return _has_upscaled_assets(texture_namespace(mod_id))
 
 
