@@ -1,0 +1,15 @@
+from config.paths import (
+    CACHE_DIR,
+    DATA_DIR,
+    DEPLOY_DIR,
+    INSTANCE_DIR,
+    JARS_DIR,
+    MODS_DIR,
+    OUTPUT_ASSETS_DIR,
+    OUTPUT_DIR,
+    PACK_FORMAT,
+    PACK_NAME,
+    PROJECT_ROOT,
+    RESOURCEPACK_DIR,
+    SOURCES_DIR,
+)
