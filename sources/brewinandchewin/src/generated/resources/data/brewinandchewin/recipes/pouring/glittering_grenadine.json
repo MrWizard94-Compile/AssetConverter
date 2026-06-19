@@ -1,0 +1,10 @@
+{
+  "type": "brewinandchewin:keg_pouring",
+  "amount": 250,
+  "filling": true,
+  "fluid": "brewinandchewin:glittering_grenadine",
+  "output": {
+    "item": "brewinandchewin:glittering_grenadine"
+  },
+  "strict": false
+}

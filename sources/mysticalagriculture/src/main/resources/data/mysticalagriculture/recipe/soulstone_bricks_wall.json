@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": "mysticalagriculture:soulstone_bricks"
+  },
+  "result": {
+    "id": "mysticalagriculture:soulstone_bricks_wall",
+    "count": 6
+  }
+}

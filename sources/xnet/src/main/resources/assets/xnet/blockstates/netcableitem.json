@@ -1,0 +1,21 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "xnet:block/netcable",
+    "transform": {
+      "gui": {
+        "scale": 0.30,
+        "rotation": [{"x": 35},{"y": 45}]
+      }
+    }
+  },
+  "variants": {
+    "color": {
+      "blue": { "textures": { "txt": "xnet:block/cable0/normal_none_netcable" }},
+      "red": { "textures": { "txt": "xnet:block/cable1/normal_none_netcable" }},
+      "yellow": { "textures": { "txt": "xnet:block/cable2/normal_none_netcable" }},
+      "green": { "textures": { "txt": "xnet:block/cable3/normal_none_netcable" }},
+      "routing": { "textures": { "txt": "xnet:block/cable4/normal_none_netcable" }}
+    }
+  }
+}

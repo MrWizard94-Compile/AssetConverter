@@ -1,0 +1,33 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+issueTrackerURL="https://github.com/CyclopsMC/EvilCraft/issues"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/evilcraft"
+license="MIT"
+logoFile="logo.png"
+authors="rubensworks (aka kroeser)"
+[[mods]]
+modId="evilcraft"
+version="${file.jarVersion}"
+displayName="EvilCraft"
+updateJSONURL="https://raw.githubusercontent.com/CyclopsMC/Versions/master/forge_update/evilcraft.json"
+description='''
+An evil mod for Minecraft.
+'''
+[[dependencies.evilcraft]]
+    modId="cyclopscore"
+    mandatory=true
+    versionRange="[1.18.4,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.evilcraft]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47.0.1,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.evilcraft]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,]"
+    ordering="NONE"
+    side="BOTH"

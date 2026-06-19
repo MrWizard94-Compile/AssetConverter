@@ -1,0 +1,10 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    "mysticalagriculture:soulium_gemstone_block"
+  ],
+  "result": {
+    "id": "mysticalagriculture:soulium_gemstone",
+    "count": 9
+  }
+}

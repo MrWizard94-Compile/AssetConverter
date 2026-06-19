@@ -1,0 +1,10 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    "mysticalagriculture:prudentium_gemstone_block"
+  ],
+  "result": {
+    "id": "mysticalagriculture:prudentium_gemstone",
+    "count": 9
+  }
+}

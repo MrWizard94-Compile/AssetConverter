@@ -1,0 +1,38 @@
+package com.blakebr0.mysticalagriculture.container.slot;
+
+import com.blakebr0.cucumber.iface.IToggleableSlot;
+import com.blakebr0.cucumber.inventory.CItemStacksHandler;
+import com.blakebr0.cucumber.inventory.slot.CSlot;
+import com.blakebr0.mysticalagriculture.api.tinkering.IElementalItem;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+
+public class ElementSlot extends CSlot implements IToggleableSlot {
+    private final AbstractContainerMenu container;
+
+    public ElementSlot(AbstractContainerMenu container, CItemStacksHandler inventory, int index, int xPosition, int yPosition) {
+        super(inventory, index, xPosition, yPosition);
+        this.container = container;
+    }
+
+    @Override
+    public void onTake(Player player, ItemStack stack) {
+        super.onTake(player, stack);
+        this.container.slotsChanged(null);
+    }
+
+    @Override
+    protected void setStackCopy(ItemStack stack) {
+        super.setStackCopy(stack);
+        this.container.slotsChanged(null);
+    }
+
+    @Override
+    public boolean isActive() {
+        var stack = this.getResourceHandler().getResource(0);
+        var item = stack.getItem();
+
+        return item instanceof IElementalItem;
+    }
+}

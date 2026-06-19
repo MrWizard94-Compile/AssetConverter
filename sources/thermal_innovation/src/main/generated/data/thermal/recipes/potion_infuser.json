@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:glass_bottle"
+    },
+    "C": {
+      "tag": "forge:ingots/copper"
+    },
+    "G": {
+      "tag": "c:gears/silver"
+    },
+    "R": {
+      "item": "thermal:cured_rubber"
+    }
+  },
+  "pattern": [
+    "RBR",
+    "CGC",
+    " C "
+  ],
+  "result": {
+    "item": "thermal:potion_infuser"
+  }
+}

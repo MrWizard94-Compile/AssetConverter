@@ -1,0 +1,15 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    " # ",
+    "#G#",
+    " # "
+  ],
+  "key": {
+    "#": "mysticalagriculture:prosperity_shard",
+    "G": "#c:gems/diamond"
+  },
+  "result": {
+    "id": "mysticalagriculture:prosperity_gemstone"
+  }
+}

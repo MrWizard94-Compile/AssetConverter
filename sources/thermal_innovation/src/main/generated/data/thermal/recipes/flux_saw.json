@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "tag": "c:gears/gold"
+    },
+    "G": {
+      "tag": "c:gears/tin"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "P": {
+      "item": "thermal:rf_coil"
+    },
+    "X": {
+      "item": "thermal:saw_blade"
+    }
+  },
+  "pattern": [
+    " X ",
+    "ICI",
+    "GPG"
+  ],
+  "result": {
+    "item": "thermal:flux_saw"
+  }
+}

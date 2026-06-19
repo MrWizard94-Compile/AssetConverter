@@ -1,0 +1,23 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:jump_boost_i"
+    }
+  ],
+  "input": "mysticalagriculture:blank_augment",
+  "ingredients": [
+    "minecraft:rabbit_foot",
+    "mysticalagriculture:prudentium_essence",
+    "minecraft:rabbit_foot",
+    "mysticalagriculture:prudentium_essence",
+    "minecraft:rabbit_foot",
+    "mysticalagriculture:prudentium_essence",
+    "minecraft:rabbit_foot",
+    "mysticalagriculture:prudentium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:jump_boost_i_augment"
+  }
+}

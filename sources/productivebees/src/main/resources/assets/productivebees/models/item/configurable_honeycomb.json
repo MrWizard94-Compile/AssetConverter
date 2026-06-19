@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "productivebees:item/honeycombs/base",
+    "layer1": "productivebees:item/honeycombs/crystals"
+  }
+}

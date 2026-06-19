@@ -1,0 +1,27 @@
+{
+  "type": "mysticalagriculture:soulium_spawner",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:zombie"
+    }
+  ],
+  "input": {
+    "ingredient": "mysticalagriculture:zombie_essence",
+    "count": 16
+  },
+  "entities": [
+    {
+      "entity": "minecraft:zombie",
+      "weight": 18
+    },
+    {
+      "entity": "minecraft:zombie_villager",
+      "weight": 1
+    },
+    {
+      "entity": "minecraft:husk",
+      "weight": 1
+    }
+  ]
+}

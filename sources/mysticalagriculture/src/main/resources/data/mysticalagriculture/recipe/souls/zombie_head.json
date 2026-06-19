@@ -1,0 +1,8 @@
+{
+  "type": "mysticalagriculture:soul_extraction",
+  "input": "minecraft:zombie_head",
+  "result": {
+    "type": "mysticalagriculture:zombie",
+    "souls": 3.0
+  }
+}

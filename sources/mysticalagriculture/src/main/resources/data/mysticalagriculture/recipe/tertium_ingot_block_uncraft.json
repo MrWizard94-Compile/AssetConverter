@@ -1,0 +1,10 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    "mysticalagriculture:tertium_ingot_block"
+  ],
+  "result": {
+    "id": "mysticalagriculture:tertium_ingot",
+    "count": 9
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_bars"
+    },
+    "i": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "pattern": [
+    "IiI",
+    "IiI",
+    " i "
+  ],
+  "result": {
+    "item": "xnet:antenna"
+  }
+}

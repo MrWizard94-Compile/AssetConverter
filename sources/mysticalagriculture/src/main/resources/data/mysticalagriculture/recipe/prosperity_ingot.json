@@ -1,0 +1,15 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    " # ",
+    "#I#",
+    " # "
+  ],
+  "key": {
+    "#": "mysticalagriculture:prosperity_shard",
+    "I": "#c:ingots/iron"
+  },
+  "result": {
+    "id": "mysticalagriculture:prosperity_ingot"
+  }
+}

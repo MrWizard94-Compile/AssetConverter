@@ -1,0 +1,28 @@
+{
+  "display": {
+    "icon": {
+      "item": "integrateddynamics:wrench"
+    },
+    "title": {
+      "translate": "advancement.integrateddynamics.menril_wrenching"
+    },
+    "description": {
+      "translate": "advancement.integrateddynamics.menril_wrenching.desc"
+    }
+  },
+  "parent": "integrateddynamics:meneglin_basics/menril_production",
+  "criteria": {
+    "criteria_0": {
+      "trigger": "cyclopscore:item_crafted",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "integrateddynamics:wrench"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

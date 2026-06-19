@@ -1,0 +1,27 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:health_boost_iv"
+    },
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:health_boost_v"
+    }
+  ],
+  "input": "mysticalagriculture:health_boost_iv_augment",
+  "ingredients": [
+    "minecraft:golden_apple",
+    "mysticalagriculture:supremium_essence",
+    "minecraft:wither_skeleton_skull",
+    "mysticalagriculture:supremium_essence",
+    "minecraft:golden_apple",
+    "mysticalagriculture:supremium_essence",
+    "minecraft:wither_skeleton_skull",
+    "mysticalagriculture:supremium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:health_boost_v_augment"
+  }
+}

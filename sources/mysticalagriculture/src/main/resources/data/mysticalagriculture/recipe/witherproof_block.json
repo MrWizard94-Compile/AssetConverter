@@ -1,0 +1,21 @@
+{
+  "type": "crafting_shaped",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:wither_skeleton"
+    }
+  ],
+  "pattern": [
+    " E ",
+    "ESE",
+    " E "
+  ],
+  "key": {
+    "E": "mysticalagriculture:wither_skeleton_essence",
+    "S": "mysticalagriculture:soulstone"
+  },
+  "result": {
+    "id": "mysticalagriculture:witherproof_block"
+  }
+}

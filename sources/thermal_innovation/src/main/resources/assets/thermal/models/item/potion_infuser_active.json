@@ -1,0 +1,7 @@
+{
+  "parent": "thermal:item/potion_infuser",
+  "textures": {
+    "layer1": "thermal:item/potion_infuser_active_outline",
+    "layer2": "thermal:item/potion_infuser_filled"
+  }
+}

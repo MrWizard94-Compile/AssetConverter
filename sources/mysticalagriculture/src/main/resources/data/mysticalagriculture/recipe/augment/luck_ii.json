@@ -1,0 +1,23 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:luck_ii"
+    }
+  ],
+  "input": "mysticalagriculture:luck_i_augment",
+  "ingredients": [
+    "minecraft:gold_ingot",
+    "mysticalagriculture:tertium_essence",
+    "minecraft:gold_ingot",
+    "mysticalagriculture:tertium_essence",
+    "minecraft:gold_ingot",
+    "mysticalagriculture:tertium_essence",
+    "minecraft:gold_ingot",
+    "mysticalagriculture:tertium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:luck_ii_augment"
+  }
+}

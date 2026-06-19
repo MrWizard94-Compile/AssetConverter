@@ -1,0 +1,18 @@
+{
+  "type": "cucumber:shaped_transfer_components",
+  "transfer_slot": 4,
+  "pattern": [
+    "FGF",
+    "ISI",
+    "FGF"
+  ],
+  "key": {
+    "G": "mysticalagriculture:inferium_ingot",
+    "I": "mysticalagriculture:inferium_ingot",
+    "S": "#mysticalagriculture:watering_cans",
+    "F": "mysticalagriculture:mystical_fertilizer"
+  },
+  "result": {
+    "id": "mysticalagriculture:inferium_watering_can"
+  }
+}

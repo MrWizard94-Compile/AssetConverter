@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": "mysticalagriculture:imperium_gemstone"
+  },
+  "result": {
+    "id": "mysticalagriculture:imperium_gemstone_block"
+  }
+}

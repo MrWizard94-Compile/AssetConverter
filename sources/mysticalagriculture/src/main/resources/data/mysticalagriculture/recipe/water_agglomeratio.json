@@ -1,0 +1,16 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "IG",
+    "DC"
+  ],
+  "key": {
+    "I": "minecraft:water_bucket",
+    "G": "minecraft:gravel",
+    "D": "minecraft:dirt",
+    "C": "minecraft:clay_ball"
+  },
+  "result": {
+    "id": "mysticalagriculture:water_agglomeratio"
+  }
+}

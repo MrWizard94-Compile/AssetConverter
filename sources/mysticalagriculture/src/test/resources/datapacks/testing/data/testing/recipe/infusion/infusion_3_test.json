@@ -1,0 +1,12 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "input": "minecraft:apple",
+  "ingredients": [
+    "minecraft:carrot",
+    "minecraft:carrot",
+    "minecraft:carrot"
+  ],
+  "result": {
+    "id": "minecraft:magenta_dye"
+  }
+}

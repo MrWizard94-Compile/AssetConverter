@@ -1,0 +1,23 @@
+{
+  "name": "Controller",
+  "icon": "xnet:controller",
+  "category": "rftoolsbase:category_xnet_simple",
+  "extra_recipe_mappings": {
+    "xnet:controller": 0
+  },
+  "sortnum": 10,
+  "pages": [
+    {
+      "type": "text",
+      "text": "The Controller is the heart of an XNet network. It edits channels and decides how items, fluids, energy, or redstone move through connected blocks."
+    },
+    {
+      "type": "text",
+      "text": "Add a channel, choose its type, then add connectors to that channel. Every connector can have its own side, priority, filters, and transfer settings."
+    },
+    {
+      "type": "crafting",
+      "recipe": "xnet:controller"
+    }
+  ]
+}

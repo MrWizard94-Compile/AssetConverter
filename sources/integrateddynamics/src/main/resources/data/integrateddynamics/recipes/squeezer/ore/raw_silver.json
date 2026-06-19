@@ -1,0 +1,35 @@
+{
+  "type": "integrateddynamics:squeezer",
+  "item": {
+    "tag": "forge:ores/silver"
+  },
+  "result": {
+    "items": [
+      {
+        "tag": "forge:raw_materials/silver",
+        "count": 2
+      },
+      {
+        "tag": "forge:raw_materials/silver",
+        "chance": 0.75
+      }
+    ]
+  },
+  "duration": 40,
+  "conditions": [
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:tag_empty",
+        "tag": "forge:raw_materials/silver"
+      }
+    },
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:tag_empty",
+        "tag": "forge:ores/silver"
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "PO",
+    "CS"
+  ],
+  "key": {
+    "P": "minecraft:pumpkin",
+    "O": "minecraft:potato",
+    "C": "minecraft:cactus",
+    "S": "minecraft:sugar_cane"
+  },
+  "result": {
+    "id": "mysticalagriculture:nature_agglomeratio"
+  }
+}

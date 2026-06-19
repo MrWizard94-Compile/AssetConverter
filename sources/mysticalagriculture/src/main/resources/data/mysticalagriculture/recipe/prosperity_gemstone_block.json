@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": "mysticalagriculture:prosperity_gemstone"
+  },
+  "result": {
+    "id": "mysticalagriculture:prosperity_gemstone_block"
+  }
+}

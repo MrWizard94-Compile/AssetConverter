@@ -1,0 +1,9 @@
+{
+  "values": [
+    "xnet:advanced_connector",
+    "xnet:connector",
+    "xnet:netcable",
+    "xnet:redstone_proxy",
+    "xnet:redstone_proxy_upd"
+  ]
+}

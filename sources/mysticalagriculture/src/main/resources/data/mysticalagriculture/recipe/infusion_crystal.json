@@ -1,0 +1,16 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "%#%",
+    "#X#",
+    "%#%"
+  ],
+  "key": {
+    "#": "mysticalagriculture:prosperity_shard",
+    "%": "mysticalagriculture:inferium_essence",
+    "X": "#c:gems/diamond"
+  },
+  "result": {
+    "id": "mysticalagriculture:infusion_crystal"
+  }
+}

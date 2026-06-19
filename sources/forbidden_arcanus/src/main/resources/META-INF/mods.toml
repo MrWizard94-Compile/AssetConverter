@@ -1,0 +1,19 @@
+modLoader="javafml" #mandatory
+loaderVersion="[43,)" #mandatory
+license="All Rights Reserved"
+[[mods]] #mandatory
+modId="forbidden_arcanus" #mandatory
+version="${file.jarVersion}" #mandatory
+ # A display name for the mod
+displayName="Forbidden & Arcanus" #mandatory
+credits="stal111, CesarZorak" #optional
+authors="stal111, CesarZorak" #optional
+# The description text for the mod (multi line!) (#mandatory)
+description=''' '''
+
+[[dependencies.forbidden_arcanus]]
+modId="valhelsia_core"
+mandatory=true
+versionRange="[1.1.2,)"
+ordering="NONE"
+side="BOTH"

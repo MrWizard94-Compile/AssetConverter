@@ -1,0 +1,1 @@
+- Fixed recipe items displayed in fake slots being modified, possibly resulting in compatibility issues

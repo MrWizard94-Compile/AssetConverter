@@ -1,0 +1,64 @@
+/*
+ * MIT License
+ *
+ * Copyright 2020 klikli-dev
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+ * associated documentation files (the "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following
+ * conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial
+ * portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+package com.klikli_dev.occultism.common.item.tool;
+
+import com.klikli_dev.modonomicon.api.ModonomiconConstants;
+import com.klikli_dev.modonomicon.item.ModonomiconCustomItemBase;
+import com.klikli_dev.occultism.Occultism;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import org.jetbrains.annotations.Nullable;
+
+public class GuideBookItem extends ModonomiconCustomItemBase {
+
+    public static final ResourceLocation DICTIONARY_OF_SPIRITS = new ResourceLocation(Occultism.MODID, "dictionary_of_spirits");
+
+    public GuideBookItem(Properties properties) {
+        super(DICTIONARY_OF_SPIRITS, properties);
+        this.craftingRemainingItem = this;
+    }
+
+    @Override
+    public ItemStack getCraftingRemainingItem(ItemStack itemStack) {
+        return itemStack.copy();
+    }
+
+
+    public ItemStack getCreativeModeTabDisplayStack() {
+        ItemStack stack = new ItemStack(this);
+
+        CompoundTag cmp = new CompoundTag();
+        cmp.putString(ModonomiconConstants.Nbt.ITEM_BOOK_ID_TAG, DICTIONARY_OF_SPIRITS.toString());
+        stack.setTag(cmp);
+
+        return stack;
+    }
+
+    @Override
+    public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
+        stack.getOrCreateTag().putString(ModonomiconConstants.Nbt.ITEM_BOOK_ID_TAG, DICTIONARY_OF_SPIRITS.toString());
+        return super.initCapabilities(stack, nbt);
+    }
+}

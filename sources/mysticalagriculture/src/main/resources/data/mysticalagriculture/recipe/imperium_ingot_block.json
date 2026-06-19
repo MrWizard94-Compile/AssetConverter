@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": "mysticalagriculture:imperium_ingot"
+  },
+  "result": {
+    "id": "mysticalagriculture:imperium_ingot_block"
+  }
+}

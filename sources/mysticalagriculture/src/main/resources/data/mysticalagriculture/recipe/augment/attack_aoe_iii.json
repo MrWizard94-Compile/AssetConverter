@@ -1,0 +1,27 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:attack_aoe_ii"
+    },
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:attack_aoe_iii"
+    }
+  ],
+  "input": "mysticalagriculture:attack_aoe_ii_augment",
+  "ingredients": [
+    "minecraft:diamond_sword",
+    "mysticalagriculture:supremium_essence",
+    "minecraft:diamond_sword",
+    "mysticalagriculture:supremium_essence",
+    "minecraft:diamond_sword",
+    "mysticalagriculture:supremium_essence",
+    "minecraft:diamond_sword",
+    "mysticalagriculture:supremium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:attack_aoe_iii_augment"
+  }
+}

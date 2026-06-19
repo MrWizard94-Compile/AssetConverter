@@ -1,0 +1,28 @@
+{
+  "type": "occultism:crushing",
+  "conditions": [
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:tag_empty",
+        "tag": "forge:dusts/topaz"
+      }
+    },
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:tag_empty",
+        "tag": "forge:ores/topaz"
+      }
+    }
+  ],
+  "crushing_time": 200,
+  "ignore_crushing_multiplier": false,
+  "ingredient": {
+    "tag": "forge:ores/topaz"
+  },
+  "result": {
+    "count": 4,
+    "tag": "forge:dusts/topaz"
+  }
+}

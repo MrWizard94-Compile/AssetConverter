@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": "mysticalagriculture:inferium_gemstone"
+  },
+  "result": {
+    "id": "mysticalagriculture:inferium_gemstone_block"
+  }
+}

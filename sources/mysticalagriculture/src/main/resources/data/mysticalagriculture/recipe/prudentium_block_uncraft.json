@@ -1,0 +1,10 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    "mysticalagriculture:prudentium_block"
+  ],
+  "result": {
+    "id": "mysticalagriculture:prudentium_essence",
+    "count": 9
+  }
+}

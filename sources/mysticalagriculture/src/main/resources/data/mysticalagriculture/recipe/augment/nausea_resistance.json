@@ -1,0 +1,23 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:nausea_resistance"
+    }
+  ],
+  "input": "mysticalagriculture:blank_augment",
+  "ingredients": [
+    "#c:leathers",
+    "mysticalagriculture:inferium_essence",
+    "minecraft:milk_bucket",
+    "mysticalagriculture:inferium_essence",
+    "#c:leathers",
+    "mysticalagriculture:inferium_essence",
+    "minecraft:milk_bucket",
+    "mysticalagriculture:inferium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:nausea_resistance_augment"
+  }
+}

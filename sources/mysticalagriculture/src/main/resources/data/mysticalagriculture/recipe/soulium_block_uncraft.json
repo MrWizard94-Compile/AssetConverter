@@ -1,0 +1,10 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    "mysticalagriculture:soulium_block"
+  ],
+  "result": {
+    "id": "mysticalagriculture:soulium_dust",
+    "count": 9
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "display": {
+    "icon": {
+      "item": "integrateddynamics:variable",
+      "nbt": "{_type:\"integrateddynamics:valuetype\",typeName:\"integrateddynamics:list\",_id:1,value:{proxyName:\"integrateddynamics:materialized\",serialized:{valueType:\"integrateddynamics:integer\",values:[1,10,100]}}}"
+    },
+    "title": {
+      "translate": "advancement.integrateddynamics.logical_list_building"
+    },
+    "description": {
+      "translate": "advancement.integrateddynamics.logical_list_building.desc"
+    }
+  },
+  "parent": "integrateddynamics:logic_operations/logic_programming",
+  "criteria": {
+    "criteria_0": {
+      "trigger": "integrateddynamics:part_variable_driven",
+      "conditions": {
+        "parttype": "integrateddynamics:display_panel",
+        "variable": {
+          "type": "integrateddynamics:valuetype",
+          "valuetype": "integrateddynamics:list",
+          "value": "{proxyName:\"integrateddynamics:materialized\",serialized:{valueType:\"integrateddynamics:integer\",values:[1,10,100]}}"
+        }
+      }
+    }
+  }
+}

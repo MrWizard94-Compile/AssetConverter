@@ -1,0 +1,23 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:flight"
+    }
+  ],
+  "input": "mysticalagriculture:blank_augment",
+  "ingredients": [
+    "minecraft:nether_star",
+    "mysticalagriculture:supremium_essence",
+    "minecraft:nether_star",
+    "mysticalagriculture:supremium_essence",
+    "minecraft:nether_star",
+    "mysticalagriculture:supremium_essence",
+    "minecraft:nether_star",
+    "mysticalagriculture:supremium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:flight_augment"
+  }
+}

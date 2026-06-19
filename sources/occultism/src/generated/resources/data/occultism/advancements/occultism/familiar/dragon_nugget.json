@@ -1,0 +1,32 @@
+{
+  "parent": "occultism:occultism/familiar/root",
+  "criteria": {
+    "dragon_nugget": {
+      "conditions": {
+        "type": "DRAGON_NUGGET"
+      },
+      "trigger": "occultism:familiar"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.occultism.familiar.dragon_nugget.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:gold_nugget"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.occultism.familiar.dragon_nugget.title"
+    }
+  },
+  "requirements": [
+    [
+      "dragon_nugget"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

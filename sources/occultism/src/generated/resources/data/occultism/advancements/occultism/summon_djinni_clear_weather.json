@@ -1,0 +1,34 @@
+{
+  "parent": "occultism:occultism/root",
+  "criteria": {
+    "summon_djinni_clear_weather": {
+      "conditions": {
+        "ritual_predicate": {
+          "ritual_id": "occultism:ritual/summon_djinni_clear_weather"
+        }
+      },
+      "trigger": "occultism:ritual"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.occultism.summon_djinni_clear_weather.description"
+    },
+    "frame": "task",
+    "hidden": true,
+    "icon": {
+      "item": "occultism:jei_dummy/none"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.occultism.summon_djinni_clear_weather.title"
+    }
+  },
+  "requirements": [
+    [
+      "summon_djinni_clear_weather"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

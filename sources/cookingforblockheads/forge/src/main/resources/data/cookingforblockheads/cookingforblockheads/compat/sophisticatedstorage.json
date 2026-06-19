@@ -1,0 +1,13 @@
+{
+  "modid": "sophisticatedstorage",
+  "kitchenConnectors": [
+    "sophisticatedstorage:controller",
+	"sophisticatedstorage:storage_link"
+  ],
+  "kitchenItemProviders": [
+    "sophisticatedstorage:barrel",
+	"sophisticatedstorage:limited_barrel",
+	"sophisticatedstorage:chest",
+	"sophisticatedstorage:shulker_box"
+  ]
+}

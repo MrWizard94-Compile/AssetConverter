@@ -1,0 +1,22 @@
+{
+  "type": "crafting_shaped",
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "botania"
+    }
+  ],
+  "pattern": [
+    "CO",
+    "PR"
+  ],
+  "key": {
+    "C": "botania:cyan_mystical_flower",
+    "O": "botania:orange_mystical_flower",
+    "P": "botania:pink_mystical_flower",
+    "R": "botania:red_mystical_flower"
+  },
+  "result": {
+    "id": "mysticalagriculture:mystical_flower_agglomeratio"
+  }
+}

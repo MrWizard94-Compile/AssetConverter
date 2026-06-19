@@ -1,0 +1,8 @@
+{
+  "type": "mysticalagriculture:soul_extraction",
+  "input": "minecraft:gunpowder",
+  "result": {
+    "type": "mysticalagriculture:creeper",
+    "souls": 0.5
+  }
+}

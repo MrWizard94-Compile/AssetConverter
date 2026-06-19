@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "cookingforblockheads:item/no_filter_edition"
+  }
+}

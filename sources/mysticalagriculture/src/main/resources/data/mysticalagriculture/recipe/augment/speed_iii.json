@@ -1,0 +1,27 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:speed_ii"
+    },
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:speed_iii"
+    }
+  ],
+  "input": "mysticalagriculture:speed_ii_augment",
+  "ingredients": [
+    "minecraft:sugar",
+    "mysticalagriculture:imperium_essence",
+    "minecraft:sugar",
+    "mysticalagriculture:imperium_essence",
+    "minecraft:sugar",
+    "mysticalagriculture:imperium_essence",
+    "minecraft:sugar",
+    "mysticalagriculture:imperium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:speed_iii_augment"
+  }
+}

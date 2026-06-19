@@ -1,0 +1,27 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:absorption_ii"
+    },
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:absorption_iii"
+    }
+  ],
+  "input": "mysticalagriculture:absorption_ii_augment",
+  "ingredients": [
+    "minecraft:golden_apple",
+    "mysticalagriculture:tertium_essence",
+    "minecraft:golden_apple",
+    "mysticalagriculture:tertium_essence",
+    "minecraft:golden_apple",
+    "mysticalagriculture:tertium_essence",
+    "minecraft:golden_apple",
+    "mysticalagriculture:tertium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:absorption_iii_augment"
+  }
+}

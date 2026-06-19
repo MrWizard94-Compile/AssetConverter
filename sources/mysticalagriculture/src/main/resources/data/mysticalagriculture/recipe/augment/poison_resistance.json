@@ -1,0 +1,23 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:poison_resistance"
+    }
+  ],
+  "input": "mysticalagriculture:blank_augment",
+  "ingredients": [
+    "minecraft:milk_bucket",
+    "mysticalagriculture:imperium_essence",
+    "minecraft:milk_bucket",
+    "mysticalagriculture:imperium_essence",
+    "minecraft:milk_bucket",
+    "mysticalagriculture:imperium_essence",
+    "minecraft:milk_bucket",
+    "mysticalagriculture:imperium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:poison_resistance_augment"
+  }
+}

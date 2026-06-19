@@ -1,0 +1,16 @@
+{
+  "type": "crafting_shaped",
+  "group": "mysticalagriculture:soulstone_stairs",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": "mysticalagriculture:soulstone"
+  },
+  "result": {
+    "id": "mysticalagriculture:soulstone_stairs",
+    "count": 4
+  }
+}

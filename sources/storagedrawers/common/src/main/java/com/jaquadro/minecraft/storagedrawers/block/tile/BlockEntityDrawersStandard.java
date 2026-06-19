@@ -1,0 +1,196 @@
+package com.jaquadro.minecraft.storagedrawers.block.tile;
+
+import com.jaquadro.minecraft.storagedrawers.ModServices;
+import com.jaquadro.minecraft.storagedrawers.api.security.ISecurityProvider;
+import com.jaquadro.minecraft.storagedrawers.api.storage.IControlGroup;
+import com.jaquadro.minecraft.storagedrawers.api.storage.IDrawer;
+import com.jaquadro.minecraft.storagedrawers.api.storage.IDrawerGroup;
+import com.jaquadro.minecraft.storagedrawers.api.storage.INetworked;
+import com.jaquadro.minecraft.storagedrawers.api.storage.attribute.IProtectable;
+import com.jaquadro.minecraft.storagedrawers.block.tile.tiledata.StandardDrawerGroup;
+import com.jaquadro.minecraft.storagedrawers.core.ModBlockEntities;
+import com.texelsaurus.minecraft.chameleon.capabilities.ChameleonCapability;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Set;
+import java.util.UUID;
+
+public abstract class BlockEntityDrawersStandard extends BlockEntityDrawers
+{
+    public BlockEntityDrawersStandard(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
+        super(blockEntityType, pos, state);
+    }
+
+    public static class Slot1 extends BlockEntityDrawersStandard
+    {
+        private final GroupData groupData = new GroupData(1);
+
+        public Slot1 (BlockPos pos, BlockState state) {
+            super(ModBlockEntities.STANDARD_DRAWERS_1.get(), pos, state);
+            injectPortableData(groupData);
+        }
+
+        @Override
+        @NotNull
+        public IDrawerGroup getGroup () {
+            return groupData;
+        }
+
+        @Override
+        protected void onAttributeChanged () {
+            super.onAttributeChanged();
+            groupData.syncAttributes();
+        }
+    }
+
+    public static class Slot2 extends BlockEntityDrawersStandard
+    {
+        private final GroupData groupData = new GroupData(2);
+
+        public Slot2 (BlockPos pos, BlockState state) {
+            super(ModBlockEntities.STANDARD_DRAWERS_2.get(), pos, state);
+            injectPortableData(groupData);
+        }
+
+        @Override
+        @NotNull
+        public IDrawerGroup getGroup () {
+            return groupData;
+        }
+
+        @Override
+        protected void onAttributeChanged () {
+            super.onAttributeChanged();
+            groupData.syncAttributes();
+        }
+    }
+
+    public static class Slot4 extends BlockEntityDrawersStandard
+    {
+        private final GroupData groupData = new GroupData(4);
+
+        public Slot4 (BlockPos pos, BlockState state) {
+            super(ModBlockEntities.STANDARD_DRAWERS_4.get(), pos, state);
+            injectPortableData(groupData);
+        }
+
+        @Override
+        @NotNull
+        public IDrawerGroup getGroup () {
+            return groupData;
+        }
+
+        @Override
+        protected void onAttributeChanged () {
+            super.onAttributeChanged();
+            groupData.syncAttributes();
+        }
+    }
+
+    private class GroupData extends StandardDrawerGroup implements IProtectable, INetworked
+    {
+        public GroupData (int slotCount) {
+            super(slotCount);
+        }
+
+        @NotNull
+        @Override
+        protected DrawerData createDrawer (int slot) {
+            return new StandardDrawerData(this, slot);
+        }
+
+        @Override
+        public boolean isGroupValid () {
+            return BlockEntityDrawersStandard.this.isGroupValid();
+        }
+
+        @Override
+        public <T> T getCapability (ChameleonCapability<T> capability) {
+            if (level == null)
+                return null;
+
+            return capability.getCapability(level, getBlockPos());
+        }
+
+        @Override
+        public UUID getOwner () {
+            return BlockEntityDrawersStandard.this.getOwner();
+        }
+
+        @Override
+        public boolean setOwner (UUID owner) {
+            return BlockEntityDrawersStandard.this.setOwner(owner);
+        }
+
+        @Override
+        public ISecurityProvider getSecurityProvider () {
+            return BlockEntityDrawersStandard.this.getSecurityProvider();
+        }
+
+        @Override
+        public boolean setSecurityProvider (ISecurityProvider provder) {
+            return BlockEntityDrawersStandard.this.setSecurityProvider(provder);
+        }
+
+        @Override
+        public IControlGroup getBoundControlGroup () {
+            return BlockEntityDrawersStandard.this.getBoundControlGroup();
+        }
+
+        @Override
+        public Set<IControlGroup> getSoftBoundControlGroups () {
+            return BlockEntityDrawersStandard.this.getSoftBoundControlGroups();
+        }
+    }
+
+    private class StandardDrawerData extends StandardDrawerGroup.DrawerData
+    {
+        private final int slot;
+
+        public StandardDrawerData (StandardDrawerGroup group, int slot) {
+            super(group);
+            this.slot = slot;
+        }
+
+        private StandardDrawerData (StandardDrawerData data) {
+            super(data);
+            slot = data.slot;
+        }
+
+        @Override
+        protected int getStackCapacity () {
+            try {
+                return Math.multiplyExact(upgrades().getStorageMultiplier(), getEffectiveDrawerCapacity());
+            } catch (ArithmeticException e) {
+                return Integer.MAX_VALUE;
+            }
+        }
+
+        @Override
+        protected void onItemChanged () {
+            // DrawerPopulatedEvent event = new DrawerPopulatedEvent(this);
+            // NeoForge.EVENT_BUS.post(event);
+
+            if (getLevel() != null && !getLevel().isClientSide) {
+                setChanged();
+                markBlockForUpdate();
+            }
+        }
+
+        @Override
+        protected void onAmountChanged () {
+            if (getLevel() != null && !getLevel().isClientSide) {
+                syncClientCount(slot, getStoredItemCount());
+                setChanged();
+            }
+        }
+
+        @Override
+        public IDrawer copy () {
+            return new StandardDrawerData(this);
+        }
+    }
+}

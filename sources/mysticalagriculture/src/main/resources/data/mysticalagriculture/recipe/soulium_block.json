@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": "mysticalagriculture:soulium_dust"
+  },
+  "result": {
+    "id": "mysticalagriculture:soulium_block"
+  }
+}

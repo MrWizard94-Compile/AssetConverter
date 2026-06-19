@@ -1,0 +1,390 @@
+plugins {
+    id 'idea'
+    id "org.sonarqube" version "5.0.0.4638"
+    id "maven-publish"
+    id 'net.neoforged.gradle' version '[6.0.18,6.2)'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id "net.darkhax.curseforgegradle" version "1.1.15"
+    id "com.modrinth.minotaur" version "2.+"
+    id "com.diffplug.spotless" version "7.0.4"
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+if (findProject(':SophisticatedCore') != null) {
+    evaluationDependsOn(':SophisticatedCore')
+}
+
+def storageRunDataTaskNames = [':SophisticatedStorage:runData', 'SophisticatedStorage:runData']
+if (gradle.startParameter.taskNames.any { it in storageRunDataTaskNames }) {
+    def prepTaskNames = [':Reliquary:prepareRunDataCompile', ':SophisticatedCore:prepareRunDataCompile', ':SophisticatedBackpacks:prepareRunDataCompile']
+    if (!prepTaskNames.every { prepTaskName -> gradle.startParameter.taskNames.contains(prepTaskName) }) {
+        gradle.startParameter.setTaskNames(prepTaskNames + gradle.startParameter.taskNames)
+    }
+}
+
+spotless {
+    enforceCheck = false
+    def spotlessFiles = findProperty("spotlessFiles")
+
+    java {
+        target spotlessFiles == null ? "src/*/java/**/*.java" : spotlessFiles.toString().split(/\s*,\s*/).findAll { it.endsWith(".java") }
+
+        eclipse().configFile "$projectDir/codeformat/eclipse-java-format.xml"
+        importOrder "", "javax", "java"
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+
+    groovyGradle {
+        target spotlessFiles == null ? "*.gradle" : spotlessFiles.toString().split(/\s*,\s*/).findAll { it.endsWith(".gradle") }
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url = "https://modmaven.dev/" }
+    maven { url "https://maven.theillusivec4.top/" }
+    maven {
+        url "https://minecraft.curseforge.com/api/maven/"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        url "https://maven.blamejared.com/"
+        content {
+            includeGroup "mezz.jei"
+            includeGroup "vazkii.patchouli"
+            includeGroup "vazkii.botania"
+        }
+    }
+    maven {
+        name = "GHPCore"
+        url = uri("https://maven.pkg.github.com/p3pp3rf1y/sophisticatedcore")
+        credentials {
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
+        }
+        content {
+            includeModule("net.p3pp3rf1y", "sophisticatedcore")
+        }
+    }
+    maven {
+        name = "GHPBackpacks"
+        url = uri("https://maven.pkg.github.com/p3pp3rf1y/sophisticatedbackpacks")
+        credentials {
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
+        }
+        content {
+            includeModule("net.p3pp3rf1y", "sophisticatedbackpacks")
+        }
+    }
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+        content {
+            includeGroup "dev.emi"
+        }
+    }
+    maven {
+        url = "https://maven.shedaniel.me/"
+        content {
+            includeGroup "dev.architectury"
+            includeGroup "me.shedaniel"
+            includeGroup "me.shedaniel.cloth"
+        }
+    }
+}
+
+group = mod_group_id
+version = "${project.minecraft_version}-${project.mod_version}.${getBuildNumber()}"
+archivesBaseName = mod_id
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '17'
+
+minecraft {
+    mappings channel: 'parchment', version: "$parchment_version"
+    copyIdeResources = true
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    runs {
+        configureEach {
+            workingDirectory project.file("run/${it.name}")
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            property "mixin.env.disableRefMap", "true"
+            //property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
+        }
+        client {
+        }
+        server {
+        }
+        data {
+            property 'fml.earlyprogresswindow', 'false'
+            mods {
+                if (findProject(':Reliquary') != null) {
+                    Reliquary {
+                        source project(':Reliquary').sourceSets.main
+                    }
+                }
+                if (findProject(':SophisticatedCore') != null) {
+                    SophisticatedCore {
+                        source project(':SophisticatedCore').sourceSets.main
+                    }
+                }
+                if (findProject(':SophisticatedBackpacks') != null) {
+                    SophisticatedBackpacks {
+                        source project(':SophisticatedBackpacks').sourceSets.main
+                    }
+                }
+            }
+            args '--mod', 'sophisticatedstorage', '--all', '--output', file('src/generated/resources/')
+        }
+    }
+}
+
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+}
+
+tasks.matching { it.name in ['prepareRunDataCompile', 'runData'] }.configureEach {
+	[':Reliquary', ':SophisticatedCore', ':SophisticatedBackpacks'].each { siblingProjectPath ->
+		if (findProject(siblingProjectPath) != null) {
+			dependsOn "${siblingProjectPath}:prepareRunDataCompile"
+		}
+	}
+}
+
+dependencies {
+    minecraft "net.neoforged:forge:${minecraft_version}-${neo_version}"
+
+    compileOnly fg.deobf("mezz.jei:jei-${jei_mc_version}:${jei_version}")
+    compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
+    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
+    compileOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}")
+    compileOnly fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
+    compileOnly fg.deobf("curse.maven:rubidium-574856:${rubidium_cf_file_id}")
+    compileOnly fg.deobf("curse.maven:jade-324717:${jade_cf_file_id}")
+    compileOnly fg.deobf("curse.maven:chipped-456956:${chipped_cf_file_id}")
+    runtimeOnly fg.deobf("curse.maven:chipped-456956:${chipped_cf_file_id}")
+    compileOnly fg.deobf("curse.maven:athena-841890:${athena_cf_file_id}")
+    runtimeOnly fg.deobf("curse.maven:athena-841890:${athena_cf_file_id}")
+    compileOnly fg.deobf("curse.maven:resourcefullib-570073:${resourcefullib_cf_file_id}")
+    runtimeOnly fg.deobf("curse.maven:resourcefullib-570073:${resourcefullib_cf_file_id}")
+
+    compileOnly fg.deobf("curse.maven:quark-243121:${quark_cf_file_id}")
+    compileOnly fg.deobf("curse.maven:zeta-968868:${zeta_cf_file_id}")
+
+    if (findProject(':SophisticatedCore') != null) {
+        implementation project(':SophisticatedCore')
+        testImplementation project(':SophisticatedCore')
+    } else {
+        implementation fg.deobf("net.p3pp3rf1y:sophisticatedcore:${sc_version}") {
+            transitive = false
+        }
+        testImplementation fg.deobf("net.p3pp3rf1y:sophisticatedcore:${sc_version}") {
+            transitive = false
+        }
+    }
+    if (findProject(':SophisticatedBackpacks') != null) {
+        implementation project(':SophisticatedBackpacks')
+        testImplementation project(':SophisticatedBackpacks')
+    } else {
+        implementation fg.deobf("net.p3pp3rf1y:sophisticatedbackpacks:${sb_version}") {
+            transitive = false
+        }
+        testImplementation fg.deobf("net.p3pp3rf1y:sophisticatedbackpacks:${sb_version}") {
+            transitive = false
+        }
+    }
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.+'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.+'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.+'
+    testImplementation "org.mockito:mockito-core:5.1.+"
+}
+
+def runRecipeViewerRegressionTests = gradle.startParameter.taskNames.any { it == 'recipeViewerRegressionTest' || it == "${project.path}:recipeViewerRegressionTest" } || project.hasProperty('recipeViewerRegression')
+test {
+    inputs.property('recipeViewerRegressionMode', runRecipeViewerRegressionTests)
+    useJUnitPlatform {
+        if (runRecipeViewerRegressionTests) {
+            includeTags 'recipeViewerRegression'
+        } else {
+            excludeTags 'recipeViewerRegression'
+        }
+    }
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+tasks.register('recipeViewerRegressionTest', Test) {
+    description = 'Runs recipe viewer regression tests.'
+    group = 'verification'
+    testClassesDirs = files("$buildDir/classes/java/test")
+    classpath = files("$buildDir/classes/java/test", "$buildDir/resources/test", "$buildDir/classes/java/main", "$buildDir/resources/main", { configurations.testRuntimeClasspath.resolve().toList() })
+    useJUnitPlatform {
+        includeTags 'recipeViewerRegression'
+    }
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+tasks.named('jar', Jar).configure {
+    from('/') {
+        include 'LICENSE'
+    }
+
+    manifest {
+        attributes([
+                'Specification-Title'     : mod_id,
+                'Specification-Vendor'    : "p3pp3rf1y",
+                'Specification-Version'   : '1', // We are version 1 of ourselves
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : project.jar.archiveVersion,
+                'Implementation-Vendor'   : "p3pp3rf1y",
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
+            neo_version         : neo_version, neo_version_range: neo_version_range,
+            loader_version_range: loader_version_range,
+            mod_id              : mod_id, mod_version: mod_version,
+            mod_full_version    : "${project.mod_version}.${getBuildNumber()}",
+            sc_version          : sc_version.substring(sc_version.indexOf("-") + 1, sc_version.lastIndexOf(',')) + ".+"
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
+    }
+}
+
+static def getBuildNumber() {
+    if (System.getenv("GITHUB_RUN_NUMBER") != null) {
+        return System.getenv("GITHUB_RUN_NUMBER").toString()
+    }
+    return "1"
+}
+
+tasks.named('publish').configure {
+    dependsOn 'reobfJar'
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("${github_package_url}")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            artifactId = mod_id
+            from(components.java)
+        }
+    }
+}
+
+sonar {
+    properties {
+        property "sonar.organization", "p3pp3rf1y-github"
+        property "sonar.projectKey", "${sonar_project_key}"
+    }
+}
+
+def sharedChangelogScript = file('../gradle/changelog.gradle')
+apply from: sharedChangelogScript.exists() ? sharedChangelogScript : 'https://raw.githubusercontent.com/P3pp3rF1y/MultiWorkspace/1.20.x/gradle/changelog.gradle'
+
+task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    dependsOn 'generateChangelog'
+
+    apiToken = System.getenv("CURSEFORGE_TOKEN")
+    def mainFile = upload(project.curseforge_id, file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
+    mainFile.changelogType = 'markdown'
+    mainFile.changelog = {project.ext.changelog}
+    mainFile.addModLoader('NeoForge')
+    mainFile.addModLoader('Forge')
+    mainFile.releaseType = "${release_type}"
+    "${release_versions}".split(',').each {
+        mainFile.addGameVersion("${it}")
+    }
+    mainFile.addRequirement('sophisticated-core')
+    mainFile.addOptional('jei')
+    mainFile.addOptional('crafting-tweaks')
+    mainFile.addOptional('trashslot')
+    mainFile.addOptional('item-borders')
+    mainFile.addOptional('chipped')
+    mainFile.addOptional('quark')
+    onlyIf { !project.ext.changelog.isEmpty() }
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "${modrinth_project_id}"
+    versionType = "${release_type}"
+    uploadFile = jar
+    gameVersions = "${release_versions}".split(',').collect {e -> e}
+    loaders = ["forge", "neoforge"]
+    dependencies {
+        required.project "sophisticated-core"
+        optional.project "jei"
+        optional.project "crafting-tweaks"
+        optional.project "trashslot"
+        optional.project "item-borders"
+        optional.project "chipped"
+        optional.project "quark"
+    }
+    changelog = provider {
+        project.ext.changelog
+    }
+}
+tasks.modrinth {
+    dependsOn(tasks.generateChangelog)
+    onlyIf { !project.ext.changelog.isEmpty() }
+}
+
+tasks.withType(net.minecraftforge.gradle.common.util.runs.MinecraftRunTask).configureEach {
+    doFirst {
+        List<String> runArgs = getRunConfig().get().getArgs()
+        int fmlVersionArgIdx = runArgs.indexOf("--fml.fmlVersion")
+        if (fmlVersionArgIdx >= 0 && fmlVersionArgIdx + 1 < runArgs.size()) {
+            runArgs[fmlVersionArgIdx + 1] = project.neo_version.toString()
+        }
+    }
+}
+
+task printVersionName {
+  println "version:" + project.version
+}

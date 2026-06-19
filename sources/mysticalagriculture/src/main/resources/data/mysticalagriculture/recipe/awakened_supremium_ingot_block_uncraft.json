@@ -1,0 +1,10 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    "mysticalagriculture:awakened_supremium_ingot_block"
+  ],
+  "result": {
+    "id": "mysticalagriculture:awakened_supremium_ingot",
+    "count": 9
+  }
+}

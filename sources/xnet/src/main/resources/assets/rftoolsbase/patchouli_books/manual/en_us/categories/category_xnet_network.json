@@ -1,0 +1,7 @@
+{
+  "name": "Multiple Networks",
+  "description": "Connecting multiple networks with a Router",
+  "parent": "rftoolsbase:category_xnet",
+  "icon": "xnet:router",
+  "sortnum": 20
+}
