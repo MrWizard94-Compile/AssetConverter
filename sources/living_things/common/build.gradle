@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+    id 'org.spongepowered.gradle.vanilla'
+}
+
+base {
+    version = "${minecraft_version}-${mod_version}"
+    archivesBaseName = "${mod_id}-common"
+}
+
+minecraft {
+    version(minecraft_version)
+}
+
+dependencies {
+    compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
+}

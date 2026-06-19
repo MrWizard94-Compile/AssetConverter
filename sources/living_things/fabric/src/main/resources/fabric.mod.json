@@ -1,0 +1,48 @@
+{
+    "schemaVersion": 1,
+    "id": "livingthings",
+    "version": "${version}",
+    "name": "Living Things",
+    "description": "adds various new mobs to Minecraft",
+    "authors": [
+        "Buecher_wurm"
+    ],
+    "contact": {
+        "sources": "https://github.com/tristankechlo/LivingThings",
+        "issues": "https://github.com/tristankechlo/LivingThings/issues",
+        "homepage": "https://github.com/tristankechlo/LivingThings"
+    },
+    "license": "CC BY-NC-ND 4.0",
+    "icon": "pack.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "com.tristankechlo.livingthings.FabricLivingThings"
+        ],
+        "client": [
+            "com.tristankechlo.livingthings.FabricLivingThingsClient"
+        ]
+    },
+    "mixins": [
+        "livingthings.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=${fabric_loader_min}",
+        "fabric": "*",
+        "minecraft": ">=${fabric_range_min_inclusive} <${fabric_range_max_exclusive}",
+        "java": ">=${java_version}"
+    },
+    "recommends": {
+        "patchouli": "*"
+    },
+    "custom": {
+        "modmenu": {
+            "links": {
+                "modmenu.discord": "https://discord.gg/bhUaWhq",
+                "modmenu.curseforge": "https://www.curseforge.com/minecraft/mc-mods/living-things",
+                "modmenu.modrinth": "https://modrinth.com/mod/living-things",
+                "modmenu.wiki": "https://github.com/tristankechlo/LivingThings/wiki"
+            }
+        }
+    }
+}
