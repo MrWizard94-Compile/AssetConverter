@@ -10,23 +10,23 @@ Mod list source: [modpackindex.com ATM10 API](https://www.modpackindex.com/api/v
 |--------|------:|
 | **Total ATM10 mods** | **477** |
 | Unique normalized mod IDs | 477 |
-| **Already covered** (matched to `output/assets`) | **63** |
+| **Already covered** (matched to `output/assets`) | **73** |
 | Library / utility / perf (excluded) | 136 |
-| **NEW texture candidates** (public repo) | **166** |
+| **NEW texture candidates** (public repo) | **156** |
 | No public source URL | 112 |
 
 ## Already Covered
 
-**113 namespaces** in `output/assets/`. **63** appear in the ATM10 mod list:
+**137 namespaces** in `output/assets/`. **73** appear in the ATM10 mod list:
 
 ```
-actuallyadditions, ae2, aether, apotheosis, aquaculture, ars_nouveau, artifacts, bellsandwhistles, chipped, comforts, cookingforblockheads, create, create_aquatic_ambitions, create_dragons_plus, create_enchantment_industry, create_hypertube, createaddition, deeperdarker, enderio, eternal_starlight, evilcraft, extrastorage, farmersdelight, fluxnetworks, forbidden_arcanus, handcrafted, iceandfire, immersiveengineering, industrialforegoing, integrateddynamics, ironjetpacks, irons_spellbooks, mcwbridges, mcwdoors, mcwfences, mcwlights, mcwroofs, mcwwindows, mekanism, mekanism_covers, mekanismgenerators, mekanismmoremachine, mekanismtools, minecolonies, modern_industrialization, modularrouters, mysticalagradditions, mysticalagriculture, occultism, pneumaticcraft, productivebees, productivetrees, rechiseled, refinedstorage, reliquary, securitycraft, sophisticatedbackpacks, sophisticatedstorage, supplementaries, trashcans, twilightforest, waystones, xnet
+actuallyadditions, ae2, aether, apotheosis, aquaculture, ars_additions, ars_nouveau, ars_ocultas, artifacts, bellsandwhistles, chipped, comforts, connectedglass, cookingforblockheads, create, create_aquatic_ambitions, create_dragons_plus, create_enchantment_industry, create_hypertube, createaddition, deeperdarker, dimstorage, enderio, entangled, eternal_starlight, evilcraft, extended_industrialization, extrastorage, farmersdelight, fluxnetworks, forbidden_arcanus, handcrafted, iceandfire, immersiveengineering, industrialforegoing, integrateddynamics, ironjetpacks, irons_spellbooks, mcwbridges, mcwdoors, mcwfences, mcwlights, mcwroofs, mcwwindows, mekanism, mekanism_covers, mekanismgenerators, mekanismmoremachine, mekanismtools, merequester, minecolonies, modern_industrialization, modularrouters, mysticalagradditions, mysticalagriculture, occultism, pipez, pneumaticcraft, productivebees, productivetrees, rechiseled, refinedstorage, reliquary, securitycraft, sophisticatedbackpacks, sophisticatedstorage, supplementaries, trashcans, twilightforest, variants_and_ventures, villages_and_pillages, waystones, xnet
 ```
 
-**Upscaled mods NOT in ATM10** (49): classic 1.20.1 Forge content dropped or replaced in the 1.21 pack — e.g. Botania, Quark, Tinkers, Biomes O' Plenty, Alex's Caves, many Create addons.
+**Upscaled mods NOT in ATM10** (63): classic 1.20.1 Forge content dropped or replaced in the 1.21 pack — e.g. Botania, Quark, Tinkers, Biomes O' Plenty, Alex's Caves, many Create addons.
 
 ```
-alexscaves, another_furniture, arseng, betterdeserttemples, betterdungeons, betterfortresses, bettermineshafts, betteroceanmonuments, betterstrongholds, bigreactors, biomesoplenty, biomeswevegone, botania, brewinandchewin, copycats, create_central_kitchen, create_connected, create_jetpack, create_new_age, create_sa, createbigcannons, createdeco, createendertransmission, createoreexcavation, creeperoverhaul, draconicevolution, functionalstorage, integratedterminals, interiors, ironfurnaces, mostructures, mowziesmobs, quark, railways, rftoolsbase, rftoolsstorage, rftoolsutility, sereneseasons, simplemagnets, sliceanddice, storagedelight, storagedrawers, tconstruct, thermal, trackwork, valkyrienskies, vs_clockwork, wirelesschargers, yungsextras
+ae2importexportcard, alexscaves, another_furniture, appmek, arseng, betterdeserttemples, betterdungeons, betterendisland, betterfortresses, betterjungletemples, bettermineshafts, betteroceanmonuments, betterstrongholds, betterwitchhuts, bigreactors, biomesoplenty, biomeswevegone, blue_skies, botania, brewinandchewin, cabletiers, copycats, create_central_kitchen, create_connected, create_jetpack, create_new_age, create_sa, createbigcannons, createdeco, createendertransmission, createoreexcavation, creativewirelesstransmitter, creeperoverhaul, draconicevolution, extradisks, functionalstorage, integratedterminals, interiors, ironfurnaces, itemcollectors, megacells, mostructures, mowziesmobs, quark, railways, rangedpumps, rftoolsbase, rftoolsstorage, rftoolsutility, sereneseasons, simplemagnets, sliceanddice, stevescarts, storagedelight, storagedrawers, tconstruct, thermal, trackwork, universalgrid, valkyrienskies, vs_clockwork, wirelesschargers, yungsextras
 ```
 
 ## Top 30 NEW Mods to Add
@@ -39,57 +39,57 @@ Prioritized by texture count + content categories. Excludes libraries/QoL/perfor
 | `railcraft_reborn` | https://github.com/railcraft-reborn/railcraft.git | `main` | 1084 |
 | `the_undergarden` | https://github.com/quek04/The-Undergarden.git | `main` | 546 |
 | `draconic_evolution` | https://github.com/Draconic-Inc/Draconic-Evolution.git | `1.20.1` | 520 |
+| `creeperhost_presents_steves_carts` | https://github.com/CreeperHost/StevesCarts2.git | `1.20` | 420 |
 | `storage_delight` | https://github.com/axperty/storagedelight.git | `main` | 436 |
 | `relics_mod` | https://github.com/SSKirillSS/relics.git | `main` | 348 |
 | `extreme_reactors` | https://github.com/ZeroNoRyouki/ExtremeReactors2.git | `main` | 293 |
 | `iron_furnaces` | https://github.com/Qelifern/IronFurnaces.git | `main` | 168 |
 | `rftools_utility` | https://github.com/McJtyMods/RFToolsUtility.git | `1.20` | 139 |
+| `cable_tiers` | https://github.com/starforcraft/Cable-Tiers.git | `main` | 91 |
 | `simple_magnets` | https://github.com/SuperMartijn642/SimpleMagnets.git | `forge-1.20` | 16 |
+| `mega` | https://github.com/62832/MEGACells.git | `main` | 90 |
 | `wireless_chargers` | https://github.com/SuperMartijn642/WirelessChargers.git | `main` | 9 |
 | `reliquified_artifacts` | https://github.com/Octo-Studios/rar-compat.git | `main` | ? |
+| `extra_disks` | https://github.com/ChaoticTrials/ExtraDisks.git | `main` | 62 |
 | `yungs_better_strongholds` | https://github.com/YUNG-GANG/YUNGs-Better-Strongholds.git | `1.20` | 4 |
 | `yungs_better_dungeons` | https://github.com/YUNG-GANG/YUNGs-Better-Dungeons.git | `1.20` | 4 |
 | `yungs_better_desert_temples` | https://github.com/YUNG-GANG/YUNGs-Better-Desert-Temples.git | `1.20` | 4 |
+| `yungs_better_witch_huts` | https://github.com/YUNG-GANG/YUNGs-Better-Witch-Huts.git | `1.20` | 4 |
 | `yungs_better_ocean_monuments` | https://github.com/YUNG-GANG/YUNGs-Better-Ocean-Monuments.git | `1.20` | 4 |
 | `yungs_better_nether_fortresses` | https://github.com/YUNG-GANG/YUNGs-Better-Fortresses.git | `1.20` | 4 |
+| `yungs_better_jungle_temples` | https://github.com/YUNG-GANG/YUNGs-Better-Jungle-Temples.git | `1.20` | 4 |
+| `yungs_better_end_island` | https://github.com/yungnickyoung/YUNGs-Better-End-Island.git | `1.20` | 4 |
 | `yungs_better_mineshafts` | https://github.com/YUNG-GANG/YUNGs-Better-Mineshafts.git | `1.20` | 4 |
 | `yungs_extras` | https://github.com/YUNG-GANG/YUNGs-Extras.git | `1.20` | 3 |
 | `mo_structures` | https://github.com/frqnny/mostructures.git | `1.20.x` | 1 |
-| `yungs_better_witch_huts` | https://github.com/YUNG-GANG/YUNGs-Better-Witch-Huts.git | `1.20.1` | ? |
-| `structory` | https://github.com/Stardust-Labs-MC/Structory | `main` | ? |
-| `moogs_voyager_structures` | https://github.com/Moog-s-Mods/MoogsVoyagerStructures | `main` | ? |
-| `structory_towers` | https://github.com/Stardust-Labs-MC/Structory-Towers | `main` | ? |
-| `mes_moogs_end_structures` | https://github.com/FinnSetchell/MoogsEndStructures | `main` | ? |
-| `yungs_better_jungle_temples` | https://github.com/YUNG-GANG/YUNGs-Better-Jungle-Temples.git | `1.20.1` | ? |
-| `yungs_better_end_island` | https://github.com/yungnickyoung/YUNGs-Better-End-Island.git | `1.20.1` | ? |
-| `villages_and_pillages` | https://github.com/Faboslav/villages-and-pillages | `main` | ? |
-| `ars_energistique` | https://github.com/62832/ArsEnergistique.git | `main` | 12 |
-| `integrated_terminals` | https://github.com/CyclopsMC/IntegratedTerminals.git | `main` | 11 |
+| `structory` | https://github.com/Stardust-Labs-MC/Structory.git | `main` | ? |
+| `moogs_voyager_structures` | https://github.com/Moog-s-Mods/MoogsVoyagerStructures.git | `main` | ? |
+| `structory_towers` | https://github.com/Stardust-Labs-MC/Structory-Towers.git | `main` | ? |
 
 ## Notable NEW Candidates (#31–50)
 
 | mod_id | repo_url | branch | ~png_count |
 |--------|----------|--------|----------:|
-| `dimstorage` | https://github.com/Edivad99/DimStorage | `main` | ? |
-| `entangled` | https://github.com/SuperMartijn642/Entangled | `main` | ? |
-| `universal_grid` | https://github.com/starforcraft/Universal-Grid | `main` | ? |
-| `creeperhost_presents_steves_carts` | https://github.com/CreeperHost/StevesCarts2 | `main` | ? |
-| `ars_ocultas` | https://github.com/dphaldes/Ars-Ocultas | `main` | ? |
+| `mes_moogs_end_structures` | https://github.com/FinnSetchell/MoogsEndStructures.git | `main` | ? |
+| `ars_energistique` | https://github.com/62832/ArsEnergistique.git | `main` | 12 |
+| `integrated_terminals` | https://github.com/CyclopsMC/IntegratedTerminals.git | `main` | 11 |
+| `universal_grid` | https://github.com/starforcraft/Universal-Grid.git | `main` | 5 |
 | `apothic_spawners` | https://github.com/Shadows-of-Fire/Apothic-Spawners | `main` | ? |
-| `connectedglass` | https://github.com/SuperMartijn642/ConnectedGlass.git | `main` | 90 |
 | `rftools_storage` | https://github.com/McJtyMods/RFToolsStorage.git | `1.20` | 30 |
 | `rftools_base` | https://github.com/McJtyMods/RFToolsBase.git | `1.20` | 29 |
 | `creeper_overhaul` | https://github.com/bonsaistudi0s/Creeper-Overhaul.git | `main` | 51 |
-| `variants_and_ventures` | https://github.com/Faboslav/variants-and-ventures | `main` | ? |
-| `pipez` | https://github.com/henkelmax/pipez.git | `1.20.1` | 45 |
-| `extra_disks` | https://github.com/ChaoticTrials/ExtraDisks | `main` | ? |
+| `interdimensional_wireless_transmitter` | https://github.com/starforcraft/Interdimensional-Wireless-Transmitter.git | `1.20.1` | 18 |
+| `applied_mekanistics` | https://github.com/AppliedEnergistics/Applied-Mekanistics.git | `main` | 14 |
+| `ae2_import_export_card` | https://github.com/starforcraft/AE2-Insert-Export-Card.git | `main` | 8 |
+| `item_collectors` | https://github.com/SuperMartijn642/ItemCollectors.git | `main` | 7 |
+| `ranged_pumps` | https://github.com/refinedmods/rangedpumps.git | `main` | 3 |
 | `cpm_fabric` | https://github.com/AlphaMode/CompactMachines | `main` | ? |
-| `ranged_pumps` | https://github.com/refinedmods/rangedpumps | `main` | ? |
-| `item_collectors` | https://github.com/SuperMartijn642/ItemCollectors | `main` | ? |
-| `interdimensional_wireless_transmitter` | https://github.com/starforcraft/Interdimensional-Wireless-Transmitter | `main` | ? |
-| `cable_tiers` | https://github.com/starforcraft/Cable-Tiers | `main` | ? |
 | `ars_creo` | https://github.com/baileyholl/Ars-Creo | `main` | ? |
-| `applied_mekanistics` | https://github.com/AppliedEnergistics/Applied-Mekanistics | `main` | ? |
+| `theurgy_kubejs` | https://github.com/klikli-dev/theurgy-kubejs | `main` | ? |
+| `advancedae` | https://github.com/pedroksl/AdvancedAE/tree/master | `main` | ? |
+| `mekanistic_routers` | https://github.com/MatyrobbrtMods/MekanisticRouters | `main` | ? |
+| `ars_polymorphia` | https://github.com/Vonr/Ars-Polymorphia | `main` | ? |
+| `functional_storage` | https://github.com/Buuz135/FunctionalStorage.git | `main` | 89 |
 
 ## No Public GitHub/GitLab Source
 

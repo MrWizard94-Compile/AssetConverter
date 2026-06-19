@@ -45,6 +45,14 @@ MOD_NAMESPACES = {
     "item_collectors": "itemcollectors",
     "universal_grid": "universalgrid",
     "interdimensional_wireless_transmitter": "creativewirelesstransmitter",
+    "silents_gems": "silentgems",
+    "advancedae": "advanced_ae",
+    "rftools_power": "rftoolspower",
+    "rftools_builder": "rftoolsbuilder",
+    "living_things": "livingthings",
+    "baubley_heart_canisters": "bhc",
+    "cpm_fabric": "compactmachines",
+    "mekanistic_routers": "mekanisticrouters",
     "thermal_core": "thermal",
     "thermal_foundation": "thermal",
     "thermal_expansion": "thermal",
@@ -228,6 +236,17 @@ MOD_REPOS = {
     "ars_ocultas": "https://github.com/dphaldes/Ars-Ocultas.git",
     "universal_grid": "https://github.com/starforcraft/Universal-Grid.git",
     "interdimensional_wireless_transmitter": "https://github.com/starforcraft/Interdimensional-Wireless-Transmitter.git",
+    # ATM10 batch-4 (magic, AE2, RFTools, structures)
+    "malum": "https://github.com/SammySemicolon/Malum-Mod.git",
+    "silents_gems": "https://github.com/SilentChaos512/SilentGems.git",
+    "theurgy": "https://github.com/klikli-dev/theurgy.git",
+    "advancedae": "https://github.com/pedroksl/AdvancedAE.git",
+    "rftools_power": "https://github.com/McJtyMods/RFToolsPower.git",
+    "rftools_builder": "https://github.com/McJtyMods/RFToolsBuilder.git",
+    "living_things": "https://github.com/tristankechlo/LivingThings.git",
+    "baubley_heart_canisters": "https://github.com/Traverse-Joe/Baubley-Heart-Canisters.git",
+    "cpm_fabric": "https://github.com/AlphaMode/CompactMachines.git",
+    "mekanistic_routers": "https://github.com/MatyrobbrtMods/MekanisticRouters.git",
 }
 
 CLONE_BRANCHES = {
@@ -287,6 +306,14 @@ CLONE_BRANCHES = {
     "creeperhost_presents_steves_carts": "1.20",
     "extended_industrialization": "1.20.4",
     "interdimensional_wireless_transmitter": "1.20.1",
+    "malum": "1.20.1",
+    "silents_gems": "1.20.x",
+    "theurgy": "version/1.20.1",
+    "rftools_power": "1.20",
+    "rftools_builder": "1.20",
+    "living_things": "1.20.1",
+    "baubley_heart_canisters": "1.20",
+    "cpm_fabric": "1.20",
 }
 
 JAR_ONLY_MODS = {

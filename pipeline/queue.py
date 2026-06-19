@@ -58,6 +58,17 @@ QUEUE_PRIORITY = [
     "ars_ocultas",
     "universal_grid",
     "interdimensional_wireless_transmitter",
+    # ATM10 batch-4
+    "malum",
+    "silents_gems",
+    "theurgy",
+    "advancedae",
+    "rftools_power",
+    "rftools_builder",
+    "living_things",
+    "baubley_heart_canisters",
+    "cpm_fabric",
+    "mekanistic_routers",
 ]
 
 
