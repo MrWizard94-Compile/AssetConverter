@@ -1,0 +1,11 @@
+{
+  "edge": {
+    "parent": "morered:block/lime_network_cable_edge",
+    "render_type": "minecraft:solid"
+  },
+  "line": {
+    "parent": "morered:block/lime_network_cable_line",
+    "render_type": "minecraft:solid"
+  },
+  "loader": "morered:wire_parts"
+}
