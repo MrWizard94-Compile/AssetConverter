@@ -43,6 +43,21 @@ QUEUE_PRIORITY = [
     "dimstorage",
     "entangled",
     "variants_and_ventures",
+    # ATM10 batch-3
+    "creeperhost_presents_steves_carts",
+    "mega",
+    "extended_industrialization",
+    "ars_additions",
+    "cable_tiers",
+    "extra_disks",
+    "applied_mekanistics",
+    "merequester",
+    "ranged_pumps",
+    "ae2_import_export_card",
+    "item_collectors",
+    "ars_ocultas",
+    "universal_grid",
+    "interdimensional_wireless_transmitter",
 ]
 
 

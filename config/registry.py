@@ -35,6 +35,16 @@ MOD_NAMESPACES = {
     "yungs_better_end_island": "betterendisland",
     "mo_structures": "mostructures",
     "simple_magnets": "simplemagnets",
+    "creeperhost_presents_steves_carts": "stevescarts",
+    "mega": "megacells",
+    "cable_tiers": "cabletiers",
+    "extra_disks": "extradisks",
+    "applied_mekanistics": "appmek",
+    "ranged_pumps": "rangedpumps",
+    "ae2_import_export_card": "ae2importexportcard",
+    "item_collectors": "itemcollectors",
+    "universal_grid": "universalgrid",
+    "interdimensional_wireless_transmitter": "creativewirelesstransmitter",
     "thermal_core": "thermal",
     "thermal_foundation": "thermal",
     "thermal_expansion": "thermal",
@@ -203,6 +213,21 @@ MOD_REPOS = {
     "dimstorage": "https://github.com/Edivad99/DimStorage.git",
     "entangled": "https://github.com/SuperMartijn642/Entangled.git",
     "variants_and_ventures": "https://github.com/Faboslav/variants-and-ventures.git",
+    # ATM10 batch-3 (AE2/Ars/MI addons + Steves Carts)
+    "creeperhost_presents_steves_carts": "https://github.com/CreeperHost/StevesCarts2.git",
+    "mega": "https://github.com/62832/MEGACells.git",
+    "extended_industrialization": "https://github.com/Swedz/Extended-Industrialization.git",
+    "ars_additions": "https://github.com/Jarva/Ars-Additions.git",
+    "cable_tiers": "https://github.com/starforcraft/Cable-Tiers.git",
+    "extra_disks": "https://github.com/ChaoticTrials/ExtraDisks.git",
+    "applied_mekanistics": "https://github.com/AppliedEnergistics/Applied-Mekanistics.git",
+    "merequester": "https://github.com/AlmostReliable/merequester.git",
+    "ranged_pumps": "https://github.com/refinedmods/rangedpumps.git",
+    "ae2_import_export_card": "https://github.com/starforcraft/AE2-Insert-Export-Card.git",
+    "item_collectors": "https://github.com/SuperMartijn642/ItemCollectors.git",
+    "ars_ocultas": "https://github.com/dphaldes/Ars-Ocultas.git",
+    "universal_grid": "https://github.com/starforcraft/Universal-Grid.git",
+    "interdimensional_wireless_transmitter": "https://github.com/starforcraft/Interdimensional-Wireless-Transmitter.git",
 }
 
 CLONE_BRANCHES = {
@@ -259,6 +284,9 @@ CLONE_BRANCHES = {
     "yungs_better_witch_huts": "1.20",
     "yungs_better_jungle_temples": "1.20",
     "yungs_better_end_island": "1.20",
+    "creeperhost_presents_steves_carts": "1.20",
+    "extended_industrialization": "1.20.4",
+    "interdimensional_wireless_transmitter": "1.20.1",
 }
 
 JAR_ONLY_MODS = {

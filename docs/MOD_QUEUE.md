@@ -4,10 +4,10 @@
 
 ## Upscaled namespaces (`output/assets/`)
 
-**123** namespaces already processed:
+**137** namespaces already processed:
 
 ```
-actuallyadditions, ae2, aether, alexscaves, another_furniture, apotheosis, aquaculture, ars_nouveau, arseng, artifacts, bellsandwhistles, betterdeserttemples, betterdungeons, betterendisland, betterfortresses, betterjungletemples, bettermineshafts, betteroceanmonuments, betterstrongholds, betterwitchhuts, bigreactors, biomesoplenty, biomeswevegone, blue_skies, botania, brewinandchewin, chipped, comforts, connectedglass, cookingforblockheads, copycats, create, create_central_kitchen, create_connected, create_enchantment_industry, create_hypertube, create_jetpack, create_new_age, create_sa, createaddition, createbigcannons, createdeco, createendertransmission, createoreexcavation, creeperoverhaul, deeperdarker, dimstorage, draconicevolution, enderio, entangled, eternal_starlight, evilcraft, extrastorage, farmersdelight, fluxnetworks, forbidden_arcanus, functionalstorage, handcrafted, iceandfire, immersiveengineering, industrialforegoing, integrateddynamics, integratedterminals, interiors, ironfurnaces, ironjetpacks, irons_spellbooks, jei, mcwbridges, mcwdoors, mcwfences, mcwlights, mcwroofs, mcwwindows, mekanism, mekanismgenerators, mekanismtools, minecolonies, modern_industrialization, modularrouters, mostructures, mowziesmobs, mysticalagradditions, mysticalagriculture, occultism, pipez, pneumaticcraft, powah, productivebees, productivetrees, quark, railcraft, railways, rechiseled, refinedstorage, relics, reliquary, rftoolsbase, rftoolsstorage, rftoolsutility, securitycraft, sereneseasons, simplemagnets, sliceanddice, sophisticatedbackpacks, sophisticatedstorage, storagedelight, storagedrawers, supplementaries, tconstruct, thermal, trackwork, trashcans, twilightforest, undergarden, valkyrienskies, variants_and_ventures, villages_and_pillages, vs_clockwork, waystones, wirelesschargers, xnet, yungsextras
+actuallyadditions, ae2, ae2importexportcard, aether, alexscaves, another_furniture, apotheosis, appmek, aquaculture, ars_additions, ars_nouveau, ars_ocultas, arseng, artifacts, bellsandwhistles, betterdeserttemples, betterdungeons, betterendisland, betterfortresses, betterjungletemples, bettermineshafts, betteroceanmonuments, betterstrongholds, betterwitchhuts, bigreactors, biomesoplenty, biomeswevegone, blue_skies, botania, brewinandchewin, cabletiers, chipped, comforts, connectedglass, cookingforblockheads, copycats, create, create_central_kitchen, create_connected, create_enchantment_industry, create_hypertube, create_jetpack, create_new_age, create_sa, createaddition, createbigcannons, createdeco, createendertransmission, createoreexcavation, creativewirelesstransmitter, creeperoverhaul, deeperdarker, dimstorage, draconicevolution, enderio, entangled, eternal_starlight, evilcraft, extended_industrialization, extradisks, extrastorage, farmersdelight, fluxnetworks, forbidden_arcanus, functionalstorage, handcrafted, iceandfire, immersiveengineering, industrialforegoing, integrateddynamics, integratedterminals, interiors, ironfurnaces, ironjetpacks, irons_spellbooks, itemcollectors, jei, mcwbridges, mcwdoors, mcwfences, mcwlights, mcwroofs, mcwwindows, megacells, mekanism, mekanismgenerators, mekanismtools, merequester, minecolonies, modern_industrialization, modularrouters, mostructures, mowziesmobs, mysticalagradditions, mysticalagriculture, occultism, pipez, pneumaticcraft, powah, productivebees, productivetrees, quark, railcraft, railways, rangedpumps, rechiseled, refinedstorage, relics, reliquary, rftoolsbase, rftoolsstorage, rftoolsutility, securitycraft, sereneseasons, simplemagnets, sliceanddice, sophisticatedbackpacks, sophisticatedstorage, stevescarts, storagedelight, storagedrawers, supplementaries, tconstruct, thermal, trackwork, trashcans, twilightforest, undergarden, universalgrid, valkyrienskies, variants_and_ventures, villages_and_pillages, vs_clockwork, waystones, wirelesschargers, xnet, yungsextras
 ```
 
 ## Summary
@@ -15,10 +15,10 @@ actuallyadditions, ae2, aether, alexscaves, another_furniture, apotheosis, aquac
 | Metric | Value |
 |--------|------:|
 | ATM10 mods in research JSON | 477 |
-| Already upscaled (namespace match) | 123 |
+| Already upscaled (namespace match) | 137 |
 | ATM10 mods matched to upscaled set | 60 |
 | Remaining candidates (public GitHub/GitLab) | 170 |
-| `MOD_REPOS` entries | 128 |
+| `MOD_REPOS` entries | 142 |
 
 ## Top 15 — Next mods to upscale
 

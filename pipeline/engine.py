@@ -63,8 +63,13 @@ def process_queue(count=1, **kwargs):
     skip_errors = kwargs.pop("skip_errors", True)
     processed = []
     failed = []
+    skipped = set()
     for _ in range(count):
-        mod_id = next_mod()
+        mod_id = None
+        for candidate in pending_mods():
+            if candidate not in skipped:
+                mod_id = candidate
+                break
         if not mod_id:
             print("[*] Queue empty — nothing to process")
             break
@@ -72,6 +77,7 @@ def process_queue(count=1, **kwargs):
             process_mod(mod_id, build=build_each, **kwargs)
             processed.append(mod_id)
         except SystemExit:
+            skipped.add(mod_id)
             failed.append(mod_id)
             print(f"[-] Engine skipped {mod_id} after failure")
             if not skip_errors:
