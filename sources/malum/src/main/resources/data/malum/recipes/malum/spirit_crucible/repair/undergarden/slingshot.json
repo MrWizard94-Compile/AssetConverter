@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "undergarden"
+    }
+  ],
+  "type": "malum:spirit_repair",
+  "itemIdRegex": "",
+  "modIdRegex": "",
+  "durabilityPercentage": 0.5,
+  "inputs": [
+    "undergarden:slingshot"
+	],
+  "repairMaterial": {
+    "item": "undergarden:twistytwig",
+    "count": 1
+  },
+  "spirits": [
+    {
+      "type": "earthen",
+      "count": 2
+    }
+  ]
+}

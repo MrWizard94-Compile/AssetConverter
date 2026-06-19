@@ -1,0 +1,31 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "undergarden"
+    }
+  ],
+  "type": "malum:spirit_repair",
+  "itemIdRegex": "forgotten_.+",
+  "modIdRegex": "undergarden",
+  "durabilityPercentage": 0.75,
+  "inputs": [],
+  "repairMaterial": {
+    "tag": "forge:ingots/forgotten_metal",
+    "count": 1
+  },
+  "spirits": [
+    {
+      "type": "earthen",
+      "count": 20
+    },
+    {
+      "type": "arcane",
+      "count": 12
+    },
+    {
+      "type": "eldritch",
+      "count": 2
+    }
+  ]
+}

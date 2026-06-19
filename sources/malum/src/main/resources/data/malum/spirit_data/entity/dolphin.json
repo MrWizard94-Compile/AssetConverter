@@ -1,0 +1,14 @@
+{
+  "registry_name": "minecraft:dolphin",
+  "primary_type": "aqueous",
+  "spirits": [
+    {
+      "spirit": "aqueous",
+      "count": 3
+    },
+    {
+      "spirit": "sacred",
+      "count": 2
+    }
+  ]
+}

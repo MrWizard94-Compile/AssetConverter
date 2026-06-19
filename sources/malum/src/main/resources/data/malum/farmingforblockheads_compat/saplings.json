@@ -1,0 +1,24 @@
+{
+  "modId": "malum",
+  "silent": true,
+  "group": {
+    "name": "Malum Saplings",
+    "enabledByDefault": true,
+    "defaultPayment": {
+      "item": "malum:processed_soulstone"
+    },
+    "defaultCategory": "farmingforblockheads:saplings"
+  },
+  "customEntries": [
+    {
+      "output": {
+        "item": "malum:runewood_sapling"
+      }
+    },
+    {
+      "output": {
+        "item": "malum:azure_runewood_sapling"
+      }
+    }
+  ]
+}

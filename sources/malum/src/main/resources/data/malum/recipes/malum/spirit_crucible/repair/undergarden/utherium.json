@@ -1,0 +1,27 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "undergarden"
+    }
+  ],
+  "type": "malum:spirit_repair",
+  "itemIdRegex": "utherium_.+",
+  "modIdRegex": "undergarden",
+  "durabilityPercentage": 0.5,
+  "inputs": [],
+  "repairMaterial": {
+    "tag": "forge:ingots/utherium",
+    "count": 2
+  },
+  "spirits": [
+    {
+      "type": "arcane",
+      "count": 12
+    },
+    {
+      "type": "infernal",
+      "count": 12
+    }
+  ]
+}

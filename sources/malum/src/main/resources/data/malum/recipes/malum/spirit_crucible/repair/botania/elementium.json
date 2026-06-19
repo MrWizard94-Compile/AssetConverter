@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botania"
+    }
+  ],
+  "type": "malum:spirit_repair",
+  "itemIdRegex": "elementium_.+",
+  "modIdRegex": "botania",
+  "durabilityPercentage": 1,
+  "inputs": [
+    "botania:star_sword",
+    "botania:thunder_sword"
+  ],
+  "repairMaterial": {
+    "tag": "forge:ingots/elementium",
+    "count": 1
+  },
+  "spirits": [
+    {
+      "type": "arcane",
+      "count": 24
+    }
+  ]
+}

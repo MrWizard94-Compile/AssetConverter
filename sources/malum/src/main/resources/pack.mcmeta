@@ -1,0 +1,9 @@
+{
+    "pack": {
+        "description": "Malum resources",
+        "pack_format": 10
+    },
+    "fusion": {
+        "overrides_folder": "fusion"
+    }
+}

@@ -1,0 +1,31 @@
+{
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:ingots/aluminum",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "type": "malum:spirit_repair",
+  "itemIdRegex": "aluminum_.+",
+  "modIdRegex": ".+",
+  "durabilityPercentage": 0.5,
+  "inputs": [
+  ],
+  "repairMaterial": {
+    "tag": "forge:ingots/aluminum",
+    "count": 2
+  },
+  "spirits": [
+    {
+      "type": "aerial",
+      "count": 8
+    },
+    {
+      "type": "arcane",
+      "count": 4
+    }
+  ]
+}

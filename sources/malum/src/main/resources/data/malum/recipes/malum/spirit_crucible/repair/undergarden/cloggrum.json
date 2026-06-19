@@ -1,0 +1,23 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "undergarden"
+    }
+  ],
+  "type": "malum:spirit_repair",
+  "itemIdRegex": "cloggrum_.+",
+  "modIdRegex": "undergarden",
+  "durabilityPercentage": 0.5,
+  "inputs": [],
+  "repairMaterial": {
+    "tag": "forge:ingots/cloggrum",
+    "count": 2
+  },
+  "spirits": [
+    {
+      "type": "earthen",
+      "count": 12
+    }
+  ]
+}

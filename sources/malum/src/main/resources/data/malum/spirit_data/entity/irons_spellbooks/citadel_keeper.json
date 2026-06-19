@@ -1,0 +1,18 @@
+{
+  "registry_name": "irons_spellbooks:citadel_keeper",
+  "primary_type": "infernal",
+  "spirits": [
+    {
+      "spirit": "wicked",
+      "count": 2
+    },
+    {
+      "spirit": "eldritch",
+      "count": 2
+    },
+    {
+      "spirit": "infernal",
+      "count": 2
+    }
+  ]
+}
