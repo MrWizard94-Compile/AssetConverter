@@ -1,0 +1,123 @@
+buildscript {
+    repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://repo.spongepowered.org/maven' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+apply plugin: 'org.spongepowered.mixin'
+
+repositories {
+    maven {
+        name = 'JEI'
+        url = "https://maven.blamejared.com/"
+    }
+    maven {
+        name 'RS maven'
+        url = uri("https://maven.pkg.github.com/refinedmods/refinedstorage")
+        credentials {
+            username = "anything"
+            password = "\u0067hp_oGjcDFCn8jeTzIj4Ke9pLoEVtpnZMP4VQgaX"
+        }
+    }
+}
+
+version = "${mod_version}"
+group = "com.ultramega.creativewirelesstransmitter"
+archivesBaseName = "${modid}"
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+minecraft {
+    mappings channel: "official", version: "${mc_version}"
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            arg "-mixin.config=creativewirelesstransmitter.mixins.json"
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            properties 'mixin.env.disableRefMap': 'true'
+
+            mods {
+                creativewirelesstransmitter {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            arg "-mixin.config=creativewirelesstransmitter.mixins.json"
+	    
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            properties 'mixin.env.disableRefMap': 'true'
+
+            mods {
+                creativewirelesstransmitter {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            property 'forge.logging.console.level', 'debug'
+            properties 'mixin.env.disableRefMap': 'true'
+
+            args '--mod', 'creativewirelesstransmitter', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+
+            mods {
+                creativewirelesstransmitter {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+mixin {
+    add sourceSets.main, "${modid}.refmap.json"
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+
+    implementation fg.deobf("com.refinedmods:refinedstorage:${rs_version}") {
+        transitive false
+    }
+}
+
+jar {
+    manifest {
+        attributes([
+            "Specification-Title": "creativewirelesstransmitter",
+            "Specification-Vendor": "creativewirelesstransmitter",
+            "Specification-Version": "1",
+            "Implementation-Title": project.name,
+            "Implementation-Version": "${version}",
+            "Implementation-Vendor" :"creativewirelesstransmitter",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "MixinConfigs": "${modid}.mixins.json"
+        ])
+    }
+}
+
+jar.finalizedBy('reobfJar') 
