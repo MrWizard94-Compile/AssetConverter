@@ -1,0 +1,17 @@
+{
+  "parent": "connectedglass:block/template_glass_pane_post",
+  "textures": {
+    "edge": "connectedglass:clear_glass/clear_glass_purple_edge",
+    "pane": "connectedglass:clear_glass/clear_glass_purple"
+  },
+  "connections": {
+    "predicates": [
+      {
+        "type": "fusion:is_same_block"
+      }
+    ],
+    "type": "fusion:or"
+  },
+  "loader": "fusion:model",
+  "type": "fusion:connecting"
+}

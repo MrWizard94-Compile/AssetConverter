@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "ABA",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "item": "connectedglass:tinted_borderless_glass"
+    },
+    "B": {
+      "tag": "forge:dyes/white"
+    }
+  },
+  "result": {
+    "item": "connectedglass:tinted_borderless_glass_white",
+    "count": 8
+  }
+}

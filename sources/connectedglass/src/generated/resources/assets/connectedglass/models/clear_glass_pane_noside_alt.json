@@ -1,0 +1,17 @@
+{
+  "parent": "connectedglass:block/template_glass_pane_noside_alt",
+  "textures": {
+    "edge": "connectedglass:clear_glass/clear_glass_edge",
+    "pane": "connectedglass:clear_glass/clear_glass"
+  },
+  "connections": {
+    "predicates": [
+      {
+        "type": "fusion:is_same_block"
+      }
+    ],
+    "type": "fusion:or"
+  },
+  "loader": "fusion:model",
+  "type": "fusion:connecting"
+}
