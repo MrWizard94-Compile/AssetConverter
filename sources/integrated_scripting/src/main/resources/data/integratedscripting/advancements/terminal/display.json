@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "item": "integrateddynamics:part_display_panel"
+    },
+    "title": {
+      "translate": "advancement.integratedscripting.terminal_display"
+    },
+    "description": {
+      "translate": "advancement.integratedscripting.terminal_display.desc"
+    }
+  },
+  "parent": "integratedscripting:terminal/bind",
+  "criteria": {
+    "criteria_0": {
+      "trigger": "integrateddynamics:part_variable_driven",
+      "conditions": {
+        "parttype": "integrateddynamics:display_panel",
+        "variable": {
+          "type": "integratedscripting:script"
+        }
+      }
+    }
+  }
+}
