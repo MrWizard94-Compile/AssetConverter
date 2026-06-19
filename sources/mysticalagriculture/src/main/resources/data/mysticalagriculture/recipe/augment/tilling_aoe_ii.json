@@ -1,0 +1,27 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:tilling_aoe_i"
+    },
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:tilling_aoe_ii"
+    }
+  ],
+  "input": "mysticalagriculture:tilling_aoe_i_augment",
+  "ingredients": [
+    "minecraft:iron_hoe",
+    "mysticalagriculture:tertium_essence",
+    "minecraft:iron_hoe",
+    "mysticalagriculture:tertium_essence",
+    "minecraft:iron_hoe",
+    "mysticalagriculture:tertium_essence",
+    "minecraft:iron_hoe",
+    "mysticalagriculture:tertium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:tilling_aoe_ii_augment"
+  }
+}

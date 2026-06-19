@@ -1,0 +1,16 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    " S ",
+    "SBS",
+    " S "
+  ],
+  "key": {
+    "S": "mysticalagriculture:soul_dust",
+    "B": "minecraft:bone_block"
+  },
+  "result": {
+    "id": "mysticalagriculture:blank_skull",
+    "count": 4
+  }
+}

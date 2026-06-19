@@ -1,0 +1,11 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    "mysticalagriculture:prosperity_gemstone",
+    "mysticalagriculture:awakened_supremium_essence",
+    "mysticalagriculture:awakened_supremium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:awakened_supremium_gemstone"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "ISI",
+    "WBW",
+    "ISI"
+  ],
+  "key": {
+    "I": "#c:ingots/iron",
+    "S": "mysticalagriculture:soulium_ingot",
+    "W": "minecraft:wither_skeleton_skull",
+    "B": "mysticalagriculture:machine_frame"
+  },
+  "result": {
+    "id": "mysticalagriculture:soulium_spawner"
+  }
+}

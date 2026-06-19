@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalagradditions:end_prosperity_ore",
+    "mysticalagradditions:end_inferium_ore",
+    "mysticalagradditions:nether_prosperity_ore",
+    "mysticalagradditions:nether_inferium_ore"
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "transfer_components": true,
+  "input": "mysticalagriculture:soulium_dagger",
+  "ingredients": [
+    "mysticalagriculture:soulium_ingot",
+    {
+      "neoforge:ingredient_type": "neoforge:components",
+      "items": ["mysticalagriculture:soul_jar"],
+      "strict": false,
+      "components": {
+        "mysticalagriculture:soul_jar": {
+          "type": "mysticalagriculture:zombie",
+          "souls": 10.0
+        }
+      }
+    },
+    "mysticalagriculture:soulium_gemstone",
+    {
+      "neoforge:ingredient_type": "neoforge:components",
+      "items": ["mysticalagriculture:soul_jar"],
+      "strict": false,
+      "components": {
+        "mysticalagriculture:soul_jar": {
+          "type": "mysticalagriculture:skeleton",
+          "souls": 10.0
+        }
+      }
+    },
+    "mysticalagriculture:soulium_ingot",
+    {
+      "neoforge:ingredient_type": "neoforge:components",
+      "items": ["mysticalagriculture:soul_jar"],
+      "strict": false,
+      "components": {
+        "mysticalagriculture:soul_jar": {
+          "type": "mysticalagriculture:creeper",
+          "souls": 10.0
+        }
+      }
+    },
+    "mysticalagriculture:soulium_gemstone",
+    {
+      "neoforge:ingredient_type": "neoforge:components",
+      "items": ["mysticalagriculture:soul_jar"],
+      "strict": false,
+      "components": {
+        "mysticalagriculture:soul_jar": {
+          "type": "mysticalagriculture:spider",
+          "souls": 10.0
+        }
+      }
+    }
+  ],
+  "result": {
+    "id": "mysticalagriculture:hostile_soulium_dagger"
+  }
+}

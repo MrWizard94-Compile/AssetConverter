@@ -1,0 +1,10 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    "mysticalagriculture:soulium_ingot"
+  ],
+  "result": {
+    "id": "mysticalagriculture:soulium_nugget",
+    "count": 9
+  }
+}

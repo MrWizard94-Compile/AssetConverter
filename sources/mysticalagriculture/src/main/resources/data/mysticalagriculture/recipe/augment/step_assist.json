@@ -1,0 +1,23 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:step_assist"
+    }
+  ],
+  "input": "mysticalagriculture:blank_augment",
+  "ingredients": [
+    "#minecraft:stairs",
+    "mysticalagriculture:tertium_essence",
+    "#minecraft:stairs",
+    "mysticalagriculture:tertium_essence",
+    "#minecraft:stairs",
+    "mysticalagriculture:tertium_essence",
+    "#minecraft:stairs",
+    "mysticalagriculture:tertium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:step_assist_augment"
+  }
+}

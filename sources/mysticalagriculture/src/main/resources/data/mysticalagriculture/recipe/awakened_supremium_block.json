@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": "mysticalagriculture:awakened_supremium_essence"
+  },
+  "result": {
+    "id": "mysticalagriculture:awakened_supremium_block"
+  }
+}

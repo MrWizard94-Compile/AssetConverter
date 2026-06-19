@@ -1,0 +1,50 @@
+{
+  "variants": {
+    "error=false,facing=down": {
+      "model": "xnet:block/controller",
+      "x": 90
+    },
+    "error=false,facing=east": {
+      "model": "xnet:block/controller",
+      "y": 90
+    },
+    "error=false,facing=north": {
+      "model": "xnet:block/controller"
+    },
+    "error=false,facing=south": {
+      "model": "xnet:block/controller",
+      "y": 180
+    },
+    "error=false,facing=up": {
+      "model": "xnet:block/controller",
+      "x": -90
+    },
+    "error=false,facing=west": {
+      "model": "xnet:block/controller",
+      "y": 270
+    },
+    "error=true,facing=down": {
+      "model": "xnet:block/controller_error",
+      "x": 90
+    },
+    "error=true,facing=east": {
+      "model": "xnet:block/controller_error",
+      "y": 90
+    },
+    "error=true,facing=north": {
+      "model": "xnet:block/controller_error"
+    },
+    "error=true,facing=south": {
+      "model": "xnet:block/controller_error",
+      "y": 180
+    },
+    "error=true,facing=up": {
+      "model": "xnet:block/controller_error",
+      "x": -90
+    },
+    "error=true,facing=west": {
+      "model": "xnet:block/controller_error",
+      "y": 270
+    }
+  }
+}

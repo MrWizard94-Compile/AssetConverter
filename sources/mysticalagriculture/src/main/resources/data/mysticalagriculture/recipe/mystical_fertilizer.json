@@ -1,0 +1,17 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "%#%",
+    "#X#",
+    "%#%"
+  ],
+  "key": {
+    "#": "minecraft:bone_meal",
+    "%": "mysticalagriculture:inferium_essence",
+    "X": "#c:gems/diamond"
+  },
+  "result": {
+    "id": "mysticalagriculture:mystical_fertilizer",
+    "count": 4
+  }
+}

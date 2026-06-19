@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": "mysticalagriculture:soulium_gemstone"
+  },
+  "result": {
+    "id": "mysticalagriculture:soulium_gemstone_block"
+  }
+}

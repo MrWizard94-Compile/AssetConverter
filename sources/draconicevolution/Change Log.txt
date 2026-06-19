@@ -1,0 +1,127 @@
+######## 3.0.31.xxx ########
+- Fix: Prevented guardian crystals from being pushed by pistons.
+- Fixed dislocators vanishing when dropped.
+
+######## 3.0.30.529 ########
+- Added energy link module. (Effectively wireless charging direct from an energy core)
+- Fixed guardian damaging itself with its own projectiles.
+- Fixed rare edge case energy pylon crash.
+- Fixed energy sometimes getting voided when adding and then removing modules containing energy.
+
+######## 3.0.29.524 ########
+- Fixed energy module removal voiding energy when total is over 2.4G
+- Fixed energy core CC integration bug.
+- Fixed a couple bugs with the guardian fight.
+- Fixed staff compatibility with CoFH Enchantments.
+- Fixed a minor bug in fusion crafting JEI recipe transfer.
+
+== start 1.18 ==
+
+######## 3.0.24.452 (hotfix) ########
+- Fixed broken energy core activation caused by a crash fix in previous version.
+
+######## 3.0.23.451 ########
+- Generator now allows you to pull non fuel items out of fuel slots (e.g. empty buckets)
+- Fixed edge case crash with energy core.
+- Fixed sneaking not disabling hill step module.
+- Updated placed items.
+- Fixed sneaking not disabling hill step.
+- Re wrote Draconium Chest (Have not yet re implemented I/O regions or upgrades)
+
+######## 3.0.22.444 ########
+- Fixed broken ore gen caused by a recent PR to add some ore gen configurability.
+- Fixed chaos crystal not dropping the configured number of shards.
+- Added Input / Output details to energy core UI when you mouse-over the transfer rate.
+
+######## 3.0.21.443 ########
+- Re implemented Project Intelligence support.
+- Fixed a conflict with FlashNpc.
+- Fixed an impossible crash... i think.
+- Fixed high velocity arrows not syncing properly when on fire.
+
+######## 3.0.20.440 ########
+- Prevented players from dropping souls which was causing issues.
+- Added config for creative warning.
+- Fixed a possible mob soul crash.
+- Merged PR from FoxMcloud5655 that fixes some some issues with computercraft integration.
+- Merged PR from YarinQuapi that adds more config options for world gen.
+
+######## 3.0.19.432 ########
+- Fixed fusion crafting not updating comparator state when result is removed.
+- Re implemented dragon draconium dust drop count config.
+- Ensured creative mode warning is only sent to the player changing their game mode.
+- Prevented energy module installation in creative capacitor (It breaks)
+- Added support for other mods custom arrows. But many DE arrow effects will not work on custom arrows.
+
+######## 3.0.18.428 ########
+- Removed a debug line from previous module work.
+
+######## 3.0.18.427 ########
+- Re implemented lasers through portals!
+- Renamed "Basic crafting injector" to "Draconium crafting injector" to match up with new 1.16 tir naming.
+- Re implemented computer craft integration (Thanks to FoxMcloud5655)
+- Fixed chaos islands not generating when end ore is disabled.
+- Added warning when using creative mode on a server as this will delete module data due to dumb creative inventory logic.
+- Fixed fusion core claiming ownership of injectors for an adjacent crafting setup.
+- Added Craft Tweaker support thanks to a PR from jaredlll08.
+- Basic dislocator no-longer consumes player health on teleport.
+- Fixed fluid gates not working.
+- Fixed random concurrent modification exceptions when multiple players have DE gear in the same area.
+
+######## 3.0.17.420 ########
+- Re implemented portal redstone control.
+- Fixed issue where portal will sometimes fail to activate in certain configurations.
+- Re implemented reactor config settings.
+- Ported bound dislocators.
+
+######## 3.0.16.417 ########
+- Fixed random crash caused by other mods adding/removing entity renderers during concurrent mod loading events.
+- Fixed a random tool config crash.
+- Fixed broken ore gen configs.
+- Tools and armor will now keep their modules and enchantments when upgraded.
+
+######## 3.0.15.415 ########
+- *Actually* Fixed CCL dependency issue. (Previous fix resulted in a new issue that did not show up in dev)
+
+######## 3.0.15.414 ########
+- Fixed DE portal crashing servers.
+- Re implemented configs for Stabilized Spawner.
+
+######## 3.0.14.412 ########
+- Fixed CCL dependency issue.
+
+######## 3.0.14.411 ########
+- Fixed mobs spawning on energy core.
+- Fixed issue where chaos crystal could drop shards when guardian has not been defeated.
+- Fixed some more shader related issues.
+
+######## 3.0.13.408 ########
+- Fixed a shader rendering crash related to modular armor.
+
+######## 3.0.12.406 ########
+- Fixed config GUI crash related to the visualization setting.
+- Fixed issue where creative flight is disabled when teleporting across dimensions.
+- Updated and overhauled portals! (Bound dislocators will be returning in the next update)
+- Fixed text rendering crash with the undying module.
+- Fixed random ConcurrentModificationException related to mod load order and timing.
+- Fixed broken error with DE GUI controls when certain mods are installed.
+
+######## 3.0.11.395 ########
+- Fixed some startup warnings
+- Fixed crash with certain system languages
+- Fixed crash when rendering the staff with the 'glowing' effect
+
+//Where did .10 go? ¯\_(ツ)_/¯
+
+######## 3.0.9.392 ########
+- Fixed dislocation inhibitor localization. (aka: Dislocation Normalization Field Projector)
+- Fixed broken undying module texture (caused by previous update)
+- Fixed issue where blocks that require a tool to harvest could still be collected by hand.
+
+######## 3.0.8.390 ########
+- Fixed reaper enchant localization
+- Fixed staff Enchantability.
+- Fixed jump boost modules not respecting the power setting specified by the user.
+
+######## 3.0.7.389 ########
+- Initial public 1.16.5 release

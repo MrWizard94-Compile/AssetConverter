@@ -1,0 +1,17 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "ESE",
+    "SDS",
+    "ESE"
+  ],
+  "key": {
+    "E": "mysticalagriculture:tertium_essence",
+    "S": "#c:stones",
+    "D": "mysticalagriculture:tertium_gemstone"
+  },
+  "result": {
+    "id": "mysticalagriculture:tertium_growth_accelerator",
+    "count": 3
+  }
+}

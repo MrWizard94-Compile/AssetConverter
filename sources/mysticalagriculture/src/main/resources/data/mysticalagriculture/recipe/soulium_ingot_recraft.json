@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": "mysticalagriculture:soulium_nugget"
+  },
+  "result": {
+    "id": "mysticalagriculture:soulium_ingot"
+  }
+}

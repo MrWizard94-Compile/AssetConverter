@@ -1,0 +1,1 @@
+- Fixed unnamed sharestones being created when placing a new one on Forge

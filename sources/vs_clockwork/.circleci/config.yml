@@ -1,0 +1,215 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+
+orbs:
+  discord: antonioned/discord@0.1.0
+
+executors:
+  java_large:
+    resource_class: large
+    docker:
+      - image: cimg/openjdk:17.0
+    environment:
+      ORG_GRADLE_PROJECT_block_external_repositories: "true"
+
+
+commands:
+  checkout_and_cache:
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+
+      - restore_cache:
+          keys:
+            - v2-gradle-home-{{ checksum "build.gradle" }}-{{ checksum "gradle.properties" }}
+            - v2-gradle-home
+      - restore_cache:
+          keys:
+            - v2-{{ checksum "build.gradle" }}-{{ checksum "gradle.properties" }}
+  save_artifacts:
+    parameters:
+      artifact_name:
+        type: string
+        default: clockwork
+      version:
+        type: string
+        default: ${CIRCLE_SHA1}
+    steps:
+      # Rename artifacts to "forge.jar" and "fabric.jar"
+      - run: mkdir artifacts
+      - run: find ./forge/build/libs -regextype posix-extended -regex ".*/<< parameters.artifact_name >>.*\.jar" -exec bash -c 'cp $0 ./artifacts/<< parameters.artifact_name >>-forge-<< parameters.version >>.jar' {} \;
+      - run: find ./fabric/build/libs -regextype posix-extended -regex ".*/<< parameters.artifact_name >>.*\.jar" -exec bash -c 'cp $0 ./artifacts/<< parameters.artifact_name >>-fabric-<< parameters.version >>.jar' {} \;
+
+      # Store artifacts
+      - store_artifacts:
+          path: artifacts
+  save_artifacts_and_generate_discord:
+    parameters:
+      artifact_name:
+        type: string
+        default: clockwork
+      version:
+        type: string
+        default: ${CIRCLE_SHA1}
+    steps:
+      - save_artifacts:
+          artifact_name: << parameters.artifact_name >>
+          version: << parameters.version >>
+      - run: >-
+          echo 'export DISCORD_MSG="
+          New version, **${CIRCLE_TAG}** |
+          [Download Forge](https://output.circle-artifacts.com/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/${CIRCLE_NODE_INDEX}/artifacts/<< parameters.artifact_name >>-forge-<< parameters.version >>.jar) |
+          [Download Fabric](https://output.circle-artifacts.com/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/${CIRCLE_NODE_INDEX}/artifacts/<< parameters.artifact_name >>-fabric-<< parameters.version >>.jar)
+          "' >> "$BASH_ENV"
+  save_gradle_cache:
+    steps:
+      - save_cache:
+          key: v2-gradle-home-{{ checksum "build.gradle" }}-{{ checksum "gradle.properties" }}
+          paths:
+            - ~/.gradle
+      - save_cache:
+          key: v2-gradle-{{ checksum "build.gradle" }}-{{ checksum "gradle.properties" }}
+          paths:
+            - .gradle
+
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+jobs:
+  gradle_build:
+    executor: java_large
+    steps:
+      # Checkout repo
+      - checkout_and_cache
+      # Run build
+      - run:
+          name: "Build"
+          command: "./gradlew build --no-daemon --stacktrace"
+      - save_artifacts
+      - save_gradle_cache
+  publish_to_maven:
+    executor: java_large
+    steps:
+      # Checkout repo
+      - checkout_and_cache
+      # Run build
+      - run:
+          name: "Build"
+          command: "./gradlew build publish --no-daemon --stacktrace"
+  deploy_to_curse:
+    executor: java_large
+    steps:
+      - checkout_and_cache
+      - run: echo 'export ORG_GRADLE_PROJECT_CustomReleaseVersion=${CIRCLE_TAG}' >> "$BASH_ENV"
+      - run:
+          command: "./gradlew build modrinth curseforge --no-daemon --stacktrace --continue"
+  
+  notify_playtesters:
+    executor: java_large
+    steps:
+      - checkout_and_cache
+      - run:
+          name: Build
+          command: "./gradlew build --no-daemon --stacktrace"
+      - save_artifacts_and_generate_discord
+      - discord/status:
+          success_message: ${DISCORD_MSG}
+          success_only: true
+          webhook: ${CLOCKWORK_120_WEBHOOK}
+
+  deploy_to_lilypad:
+    executor: java_large
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Find built Forge mod jar
+          command: |
+            set -euo pipefail
+            FORGE_JAR="$(pwd)/$(ls -1 artifacts/*-forge-*.jar | head -n1)"
+            if [ -z "${FORGE_JAR}" ]; then
+              echo "No Forge jar found in artifacts/"
+              ls -la artifacts || true
+              exit 1
+            fi
+            
+            PLAYTEST_JAR="$(pwd)/cw-playtest.jar"
+            cp "${FORGE_JAR}" "${PLAYTEST_JAR}"
+
+            echo "Prepared playtest jar: ${PLAYTEST_JAR}"
+            echo "export FORGE_MOD_JAR='${PLAYTEST_JAR}'" >> "$BASH_ENV"
+      - run:
+          name: Install SSH tools
+          command: sudo apt-get update && sudo apt-get install -y openssh-client
+      - run:
+          name: Upload jar to Lilypad mods folder
+          command: |
+            mkdir -p ~/.ssh
+            echo "${LILYPAD_SFTP_PRIVATE_KEY}" | base64 -d > ~/.ssh/lilypad_key
+            chmod 600 ~/.ssh/lilypad_key
+
+            sftp \
+              -i ~/.ssh/lilypad_key \
+              -o StrictHostKeyChecking=no \
+              -P "${LILYPAD_SFTP_PORT}" \
+              "${LILYPAD_SFTP_USER}@${LILYPAD_SFTP_HOST}" \<<EOF
+            cd mods
+            put "${FORGE_MOD_JAR}"
+            bye
+            EOF
+      - run:
+          name: Restart Lilypad server
+          command: |
+            curl --fail-with-body -X POST "https://panel.lilypad.gg/api/client/servers/${LILYPAD_SERVER_ID}/power" \
+              -H "Authorization: Bearer ${LILYPAD_API_KEY}" \
+              -H "Accept: application/json" \
+              -H "Content-Type: application/json" \
+              -d '{"signal":"restart"}'
+
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+workflows:
+  build:
+    jobs:
+      - gradle_build:
+          context:
+            - valkyrien_maven
+
+      - notify_playtesters:
+          filters:
+            tags:
+              only: /^playtest.*/
+            branches:
+              ignore: /.*/
+          context:
+            - discord_webhooks
+            - valkyrien_maven
+      - deploy_to_curse:
+          filters:
+            tags:
+              only: /^release.*/
+            branches:
+              ignore: /.*/
+          context:
+            - curse_publishing
+            - valkyrien_maven
+      - publish_to_maven:
+          filters:
+            branches:
+              only:
+                - /.*\/main/
+          context:
+            - valkyrien_maven
+            - github_maven
+      - deploy_to_lilypad:
+          requires:
+            - notify_playtesters
+          filters:
+            tags:
+              only: /^playtest\/1\.20\.1\/.*/
+            branches:
+              ignore: /.*/
+          context:
+            - valkyrien_maven
+            - lilypad_publishing

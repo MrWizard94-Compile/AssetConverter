@@ -1,0 +1,131 @@
+plugins {
+	id 'eclipse'
+	id 'idea'
+	id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+	id 'org.spongepowered.mixin' version '0.7.+'
+	id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+}
+
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+version = '1.10.1'
+group = 'net.geforcemods.securitycraft'
+
+base {
+	archivesName = 'securitycraft'
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+
+processResources {
+	exclude ".cache"
+	duplicatesStrategy = 'include'
+
+	//minify json resources
+	doLast {
+		fileTree(dir: outputs.files.asPath, include: "**/*.json").each {
+			File file -> file.text = JsonOutput.toJson(new JsonSlurper().parse(file))
+		}
+	}
+}
+
+sourceSets.main.resources {
+	srcDir 'src/generated/resources' //include generated files
+}
+
+minecraft {
+	mappings channel: 'parchment', version: '2023.09.03-1.20.1'
+	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+	copyIdeResources = true
+
+	runs {
+		configureEach {
+			property 'forge.logging.console.level', 'debug'
+			args '-mixin.config=securitycraft.mixins.json'
+
+			mods {
+				securitycraft {
+					source sourceSets.main
+				}
+			}
+		}
+
+		client {
+			taskName "SC_${project.mc_version}_Client"
+			workingDirectory project.file('run/client')
+		}
+
+		client2 {
+			parent runs.client
+			taskName "SC_${project.mc_version}_Client2"
+			workingDirectory project.file('run/client')
+			args '--username', 'Dev2'
+		}
+
+		server {
+			taskName "SC_${project.mc_version}_Server"
+			workingDirectory project.file('run/server')
+			args '-nogui'
+		}
+
+		data {
+			taskName "SC_${project.mc_version}_Data"
+			workingDirectory project.file('run/data')
+			args '--mod', 'securitycraft', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+		}
+	}
+}
+
+repositories {
+	maven {
+		url "https://cursemaven.com/"
+		content {
+			includeGroup "curse.maven"
+		}
+	}
+}
+
+dependencies {
+	minecraft 'net.minecraftforge:forge:1.20.1-47.4.20'
+	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
+	implementation fg.deobf("curse.maven:architectury-api-419699:5137938") //ftb teams dependency
+	implementation fg.deobf("curse.maven:ftb-library-forge-404465:7296748") //ftb teams dependency
+	implementation fg.deobf("curse.maven:ftb-teams-forge-404468:7499810")
+	implementation fg.deobf("curse.maven:jei-238222:7920915")
+	implementation fg.deobf("curse.maven:the-one-probe-245211:6106996")
+	implementation fg.deobf("curse.maven:jade-324717:6855440")
+	implementation fg.deobf("curse.maven:betterf3-401648:4863626")
+	implementation fg.deobf("curse.maven:cloth-config-348521:5729105") //betterf3 dependency
+	implementation fg.deobf("curse.maven:wthit-forge-455982:7803622")
+	implementation fg.deobf("curse.maven:badpackets-615134:4784395") //wthit dependency
+	implementation fg.deobf("curse.maven:projecte-226410:4901949")
+	implementation fg.deobf("curse.maven:embeddium-908741:5681725")
+	compileOnly fg.deobf("curse.maven:distant-horizons-508933:7948170")
+	implementation fg.deobf("curse.maven:curios-309927:6418456")
+}
+
+mixin {
+	add sourceSets.main, "securitycraft.refmap.json"
+}
+
+tasks.named('jar', Jar).configure {
+	exclude('net/geforcemods/securitycraft/datagen/**') //exclude files from the built jar that are only used to generate the assets & data
+	archiveFileName = "[${project.mc_version}] SecurityCraft v${version}.jar"
+	manifest {
+		attributes(["Specification-Title": "SecurityCraft",
+					"Specification-Vendor": "Geforce, bl4ckscor3, Redstone_Dubstep",
+					"Specification-Version": "${version}",
+					"Implementation-Title": "SecurityCraft",
+					"Implementation-Version": "${version}",
+					"Implementation-Vendor": "Geforce, bl4ckscor3, Redstone_Dubstep",
+					"MixinConfigs": "securitycraft.mixins.json"],)
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+	options.release = 17
+}

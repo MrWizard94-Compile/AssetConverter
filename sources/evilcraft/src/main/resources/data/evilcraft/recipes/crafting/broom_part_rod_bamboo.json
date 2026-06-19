@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:bamboo"
+    },
+    {
+      "type": "forge:nbt",
+      "item": "evilcraft:broom_part",
+      "nbt": "{broom_parts_tag: [\"evilcraft:rod_bare\"]}"
+    },
+    {
+      "item": "minecraft:bamboo"
+    }
+  ],
+  "result": {
+    "item": "evilcraft:broom_part",
+    "nbt": {
+      "broom_parts_tag": [
+        "evilcraft:rod_bamboo"
+      ]
+    }
+  }
+}

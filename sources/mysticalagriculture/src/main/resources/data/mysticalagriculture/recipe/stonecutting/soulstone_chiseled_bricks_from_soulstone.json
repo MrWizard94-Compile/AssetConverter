@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "mysticalagriculture:soulstone",
+  "result": {
+    "id": "mysticalagriculture:soulstone_chiseled_bricks"
+  }
+}

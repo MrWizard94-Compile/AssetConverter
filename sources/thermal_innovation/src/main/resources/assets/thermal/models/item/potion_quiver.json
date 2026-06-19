@@ -1,0 +1,239 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "thermal:item/potion_quiver",
+    "layer1": "thermal:item/potion_quiver_outline"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [0, -90, -35],
+      "translation": [0, -1.0, 0],
+      "scale": [0.8, 0.8, 0.8]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [0, 90, 35],
+      "translation": [0, -1.0, 0],
+      "scale": [0.8, 0.8, 0.8]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, -90, -55],
+      "translation": [1.13, 1.2, 1.13],
+      "scale": [0.55, 0.55, 0.55]
+    },
+    "firstperson_lefthand": {
+      "rotation": [0, 90, 55],
+      "translation": [1.13, 1.2, 1.13],
+      "scale": [0.55, 0.55, 0.55]
+    },
+    "ground": {
+      "translation": [0, 1.0, 0],
+      "scale": [0.5, 0.5, 0.5]
+    }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "arrows": 0.0001
+      },
+      "model": "thermal:item/potion_quiver_1"
+    },
+    {
+      "predicate": {
+        "arrows": 0.25
+      },
+      "model": "thermal:item/potion_quiver_2"
+    },
+    {
+      "predicate": {
+        "arrows": 0.5
+      },
+      "model": "thermal:item/potion_quiver_3"
+    },
+    {
+      "predicate": {
+        "arrows": 0.75
+      },
+      "model": "thermal:item/potion_quiver_4"
+    },
+    {
+      "predicate": {
+        "state": 0.5
+      },
+      "model": "thermal:item/potion_quiver_filled_0"
+    },
+    {
+      "predicate": {
+        "arrows": 0.0001,
+        "state": 0.5
+      },
+      "model": "thermal:item/potion_quiver_filled_1"
+    },
+    {
+      "predicate": {
+        "arrows": 0.25,
+        "state": 0.5
+      },
+      "model": "thermal:item/potion_quiver_filled_2"
+    },
+    {
+      "predicate": {
+        "arrows": 0.5,
+        "state": 0.5
+      },
+      "model": "thermal:item/potion_quiver_filled_3"
+    },
+    {
+      "predicate": {
+        "arrows": 0.75,
+        "state": 0.5
+      },
+      "model": "thermal:item/potion_quiver_filled_4"
+    },
+    {
+      "predicate": {
+        "state": 0.75
+      },
+      "model": "thermal:item/potion_quiver_active_0"
+    },
+    {
+      "predicate": {
+        "arrows": 0.0001,
+        "state": 0.75
+      },
+      "model": "thermal:item/potion_quiver_active_1"
+    },
+    {
+      "predicate": {
+        "arrows": 0.25,
+        "state": 0.75
+      },
+      "model": "thermal:item/potion_quiver_active_2"
+    },
+    {
+      "predicate": {
+        "arrows": 0.5,
+        "state": 0.75
+      },
+      "model": "thermal:item/potion_quiver_active_3"
+    },
+    {
+      "predicate": {
+        "arrows": 0.75,
+        "state": 0.75
+      },
+      "model": "thermal:item/potion_quiver_active_4"
+    },
+    {
+      "predicate": {
+        "color": 1
+      },
+      "model": "thermal:item/potion_quiver_color"
+    },
+    {
+      "predicate": {
+        "color": 1,
+        "arrows": 0.0001
+      },
+      "model": "thermal:item/potion_quiver_color_1"
+    },
+    {
+      "predicate": {
+        "color": 1,
+        "arrows": 0.25
+      },
+      "model": "thermal:item/potion_quiver_color_2"
+    },
+    {
+      "predicate": {
+        "color": 1,
+        "arrows": 0.5
+      },
+      "model": "thermal:item/potion_quiver_color_3"
+    },
+    {
+      "predicate": {
+        "color": 1,
+        "arrows": 0.75
+      },
+      "model": "thermal:item/potion_quiver_color_4"
+    },
+    {
+      "predicate": {
+        "color": 1,
+        "state": 0.5
+      },
+      "model": "thermal:item/potion_quiver_color_filled_0"
+    },
+    {
+      "predicate": {
+        "color": 1,
+        "arrows": 0.0001,
+        "state": 0.5
+      },
+      "model": "thermal:item/potion_quiver_color_filled_1"
+    },
+    {
+      "predicate": {
+        "color": 1,
+        "arrows": 0.25,
+        "state": 0.5
+      },
+      "model": "thermal:item/potion_quiver_color_filled_2"
+    },
+    {
+      "predicate": {
+        "color": 1,
+        "arrows": 0.5,
+        "state": 0.5
+      },
+      "model": "thermal:item/potion_quiver_color_filled_3"
+    },
+    {
+      "predicate": {
+        "color": 1,
+        "arrows": 0.75,
+        "state": 0.5
+      },
+      "model": "thermal:item/potion_quiver_color_filled_4"
+    },
+    {
+      "predicate": {
+        "color": 1,
+        "state": 0.75
+      },
+      "model": "thermal:item/potion_quiver_color_active_0"
+    },
+    {
+      "predicate": {
+        "color": 1,
+        "arrows": 0.0001,
+        "state": 0.75
+      },
+      "model": "thermal:item/potion_quiver_color_active_1"
+    },
+    {
+      "predicate": {
+        "color": 1,
+        "arrows": 0.25,
+        "state": 0.75
+      },
+      "model": "thermal:item/potion_quiver_color_active_2"
+    },
+    {
+      "predicate": {
+        "color": 1,
+        "arrows": 0.5,
+        "state": 0.75
+      },
+      "model": "thermal:item/potion_quiver_color_active_3"
+    },
+    {
+      "predicate": {
+        "color": 1,
+        "arrows": 0.75,
+        "state": 0.75
+      },
+      "model": "thermal:item/potion_quiver_color_active_4"
+    }
+  ]
+}

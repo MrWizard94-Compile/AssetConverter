@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "xnet:block/antenna_dish"
+    },
+    "facing=south": {
+      "model": "xnet:block/antenna_dish",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "xnet:block/antenna_dish",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "xnet:block/antenna_dish",
+      "y": 90
+    }
+  }
+}

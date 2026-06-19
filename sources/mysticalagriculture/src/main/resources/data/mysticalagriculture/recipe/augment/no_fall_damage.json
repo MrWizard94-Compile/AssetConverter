@@ -1,0 +1,23 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:no_fall_damage"
+    }
+  ],
+  "input": "mysticalagriculture:blank_augment",
+  "ingredients": [
+    "#c:gems/diamond",
+    "mysticalagriculture:tertium_essence",
+    "#minecraft:wool",
+    "mysticalagriculture:tertium_essence",
+    "#c:gems/diamond",
+    "mysticalagriculture:tertium_essence",
+    "#minecraft:wool",
+    "mysticalagriculture:tertium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:no_fall_damage_augment"
+  }
+}

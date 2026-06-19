@@ -1,0 +1,32 @@
+{
+  "parent": "occultism:occultism/familiar/shub_niggurath_summon",
+  "criteria": {
+    "shub_cthulhu_friends": {
+      "conditions": {
+        "type": "SHUB_CTHULHU_FRIENDS"
+      },
+      "trigger": "occultism:familiar"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.occultism.familiar.shub_cthulhu_friends.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:poppy"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.occultism.familiar.shub_cthulhu_friends.title"
+    }
+  },
+  "requirements": [
+    [
+      "shub_cthulhu_friends"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

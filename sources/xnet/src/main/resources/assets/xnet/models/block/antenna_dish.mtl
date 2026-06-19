@@ -1,0 +1,16 @@
+# Blender MTL File: 'antenna_dish.blend'
+# Material Count: 2
+
+newmtl Material
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+d 1.000000
+
+map_Kd xnet:block/antenna_dish
+
+newmtl Material_antenna.png
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+d 1.000000
+
+map_Kd xnet:block/antenna

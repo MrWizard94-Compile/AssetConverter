@@ -1,0 +1,10 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    "mysticalagriculture:tertium_gemstone_block"
+  ],
+  "result": {
+    "id": "mysticalagriculture:tertium_gemstone",
+    "count": 9
+  }
+}

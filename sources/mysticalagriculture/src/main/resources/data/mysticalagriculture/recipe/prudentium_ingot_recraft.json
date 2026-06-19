@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": "mysticalagriculture:prudentium_nugget"
+  },
+  "result": {
+    "id": "mysticalagriculture:prudentium_ingot"
+  }
+}

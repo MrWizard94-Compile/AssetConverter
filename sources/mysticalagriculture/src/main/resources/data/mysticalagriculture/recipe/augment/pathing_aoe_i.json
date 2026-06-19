@@ -1,0 +1,23 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:pathing_aoe_i"
+    }
+  ],
+  "input": "mysticalagriculture:blank_augment",
+  "ingredients": [
+    "minecraft:iron_shovel",
+    "mysticalagriculture:inferium_essence",
+    "minecraft:iron_shovel",
+    "mysticalagriculture:inferium_essence",
+    "minecraft:iron_shovel",
+    "mysticalagriculture:inferium_essence",
+    "minecraft:iron_shovel",
+    "mysticalagriculture:inferium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:pathing_aoe_i_augment"
+  }
+}

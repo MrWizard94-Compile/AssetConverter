@@ -1,0 +1,10 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    "mysticalagriculture:inferium_block"
+  ],
+  "result": {
+    "id": "mysticalagriculture:inferium_essence",
+    "count": 9
+  }
+}

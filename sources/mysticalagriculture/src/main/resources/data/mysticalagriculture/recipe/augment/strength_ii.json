@@ -1,0 +1,27 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:strength_i"
+    },
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:strength_ii"
+    }
+  ],
+  "input": "mysticalagriculture:strength_i_augment",
+  "ingredients": [
+    "minecraft:quartz_block",
+    "mysticalagriculture:imperium_essence",
+    "minecraft:iron_sword",
+    "mysticalagriculture:imperium_essence",
+    "minecraft:quartz_block",
+    "mysticalagriculture:imperium_essence",
+    "minecraft:iron_sword",
+    "mysticalagriculture:imperium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:strength_ii_augment"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:weakness_resistance"
+    }
+  ],
+  "input": "mysticalagriculture:blank_augment",
+  "ingredients": [
+    "minecraft:quartz_block",
+    "mysticalagriculture:tertium_essence",
+    "minecraft:iron_axe",
+    "mysticalagriculture:tertium_essence",
+    "minecraft:quartz_block",
+    "mysticalagriculture:tertium_essence",
+    "minecraft:iron_axe",
+    "mysticalagriculture:tertium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:weakness_resistance_augment"
+  }
+}

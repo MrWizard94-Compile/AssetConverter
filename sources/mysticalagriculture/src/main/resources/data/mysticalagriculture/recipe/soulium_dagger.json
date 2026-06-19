@@ -1,0 +1,17 @@
+{
+  "type": "cucumber:shaped_transfer_damage",
+  "transfer_components": true,
+  "pattern": [
+    " D ",
+    "ISI",
+    " D "
+  ],
+  "key": {
+    "D": "mysticalagriculture:soulium_dust",
+    "I": "mysticalagriculture:soulium_ingot",
+    "S": "minecraft:golden_sword"
+  },
+  "result": {
+    "id": "mysticalagriculture:soulium_dagger"
+  }
+}

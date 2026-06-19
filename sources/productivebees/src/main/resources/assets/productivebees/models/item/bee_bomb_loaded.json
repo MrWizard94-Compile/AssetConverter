@@ -1,0 +1,6 @@
+{
+    "parent": "productivebees:item/bee_bomb",
+    "textures": {
+        "layer0": "productivebees:item/bee_bomb_loaded"
+    }
+}

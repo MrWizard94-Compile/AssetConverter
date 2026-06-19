@@ -1,0 +1,6 @@
+{
+  "parent": "thermal:item/flux_drill",
+  "textures": {
+    "layer2": "thermal:item/flux_drill_charged"
+  }
+}

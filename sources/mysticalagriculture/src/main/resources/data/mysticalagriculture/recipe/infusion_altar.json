@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GCG",
+    " S ",
+    "SSS"
+  ],
+  "key": {
+    "S": "minecraft:stone",
+    "C": "minecraft:red_wool",
+    "G": "#c:ingots/gold"
+  },
+  "result": {
+    "id": "mysticalagriculture:infusion_altar"
+  }
+}

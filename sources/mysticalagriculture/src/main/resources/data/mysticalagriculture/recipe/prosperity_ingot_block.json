@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": "mysticalagriculture:prosperity_ingot"
+  },
+  "result": {
+    "id": "mysticalagriculture:prosperity_ingot_block"
+  }
+}

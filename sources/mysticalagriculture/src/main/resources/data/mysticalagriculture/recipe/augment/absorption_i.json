@@ -1,0 +1,23 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:absorption_i"
+    }
+  ],
+  "input": "mysticalagriculture:blank_augment",
+  "ingredients": [
+    "minecraft:golden_apple",
+    "mysticalagriculture:inferium_essence",
+    "minecraft:golden_apple",
+    "mysticalagriculture:inferium_essence",
+    "minecraft:golden_apple",
+    "mysticalagriculture:inferium_essence",
+    "minecraft:golden_apple",
+    "mysticalagriculture:inferium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:absorption_i_augment"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "mysticalagriculture:soul_extraction",
+  "input": "minecraft:phantom_membrane",
+  "result": {
+    "type": "mysticalagriculture:phantom",
+    "souls": 0.5
+  }
+}

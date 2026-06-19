@@ -1,0 +1,35 @@
+{
+  "type": "integrateddynamics:squeezer",
+  "item": {
+    "tag": "forge:ores/nickel"
+  },
+  "result": {
+    "items": [
+      {
+        "tag": "forge:raw_materials/nickel",
+        "count": 2
+      },
+      {
+        "tag": "forge:raw_materials/nickel",
+        "chance": 0.75
+      }
+    ]
+  },
+  "duration": 40,
+  "conditions": [
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:tag_empty",
+        "tag": "forge:raw_materials/nickel"
+      }
+    },
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:tag_empty",
+        "tag": "forge:ores/nickel"
+      }
+    }
+  ]
+}

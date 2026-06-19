@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " E ",
+    " I ",
+    "SSS"
+  ],
+  "key": {
+    "E": "minecraft:enchanting_table",
+    "S": "mysticalagriculture:soulstone",
+    "I": "mysticalagriculture:soulium_ingot"
+  },
+  "result": {
+    "id": "mysticalagriculture:enchanter"
+  }
+}

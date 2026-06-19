@@ -1,0 +1,27 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:mining_aoe_ii"
+    },
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:mining_aoe_iii"
+    }
+  ],
+  "input": "mysticalagriculture:mining_aoe_ii_augment",
+  "ingredients": [
+    "minecraft:diamond_pickaxe",
+    "mysticalagriculture:imperium_essence",
+    "minecraft:diamond_pickaxe",
+    "mysticalagriculture:imperium_essence",
+    "minecraft:diamond_pickaxe",
+    "mysticalagriculture:imperium_essence",
+    "minecraft:diamond_pickaxe",
+    "mysticalagriculture:imperium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:mining_aoe_iii_augment"
+  }
+}

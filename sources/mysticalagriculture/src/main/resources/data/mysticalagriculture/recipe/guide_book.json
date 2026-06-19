@@ -1,0 +1,20 @@
+{
+  "type": "crafting_shapeless",
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "patchouli:guide_book"
+    }
+  ],
+  "ingredients": [
+    "minecraft:book",
+    "mysticalagriculture:inferium_essence"
+  ],
+  "result": {
+    "id": "patchouli:guide_book",
+    "components": {
+      "patchouli:book": "mysticalagriculture:guide"
+    }
+  }
+}

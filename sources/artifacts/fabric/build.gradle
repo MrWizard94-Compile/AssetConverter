@@ -1,0 +1,83 @@
+plugins {
+    id 'com.gradleup.shadow'
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+}
+
+configurations {
+    common {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+
+    // Files in this configuration will be bundled into your mod using the Shadow plugin.
+    // Don't use the `shadow` configuration from the plugin itself as it's meant for excluding files.
+    shadowBundle {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+dependencies {
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+    modApi "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowBundle(project(path: ":common", configuration: "transformProductionFabric"))
+
+    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:${rootProject.mixin_extras_version}")))
+
+    modImplementation("dev.emi:trinkets:${rootProject.trinkets_version}")
+
+    modImplementation("com.terraformersmc:modmenu:${rootProject.mod_menu_version}") {
+        transitive = false
+    }
+
+    modImplementation "me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}"
+
+    modImplementation(include("com.github.emilyploszaj:step-height-entity-attribute:v1.2.0"))
+
+    modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${rootProject.cardinal_components_version}")
+    modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${rootProject.cardinal_components_version}")
+
+    modImplementation include("be.florens:expandability-fabric:${rootProject.expandability_version}")
+
+    // Compat & integration
+    modCompileOnly("curse.maven:origins-391943:4609386") {
+        transitive = false
+    }
+    modCompileOnly("com.github.apace100:apoli:v${rootProject.apoli_version}") {
+        transitive = false
+    }
+    modCompileOnly("com.github.apace100:calio:v${rootProject.calio_version}") {
+        transitive = false
+    }
+}
+
+processResources {
+    inputs.property 'version', project.version
+
+    filesMatching('fabric.mod.json') {
+        expand version: inputs.properties.version
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = 'dev-shadow'
+}
+
+remapJar {
+    inputFile.set shadowJar.archiveFile
+}

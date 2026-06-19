@@ -1,0 +1,27 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:tilling_aoe_iii"
+    },
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:tilling_aoe_iv"
+    }
+  ],
+  "input": "mysticalagriculture:tilling_aoe_iii_augment",
+  "ingredients": [
+    "minecraft:diamond_hoe",
+    "mysticalagriculture:supremium_essence",
+    "minecraft:diamond_hoe",
+    "mysticalagriculture:supremium_essence",
+    "minecraft:diamond_hoe",
+    "mysticalagriculture:supremium_essence",
+    "minecraft:diamond_hoe",
+    "mysticalagriculture:supremium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:tilling_aoe_iv_augment"
+  }
+}

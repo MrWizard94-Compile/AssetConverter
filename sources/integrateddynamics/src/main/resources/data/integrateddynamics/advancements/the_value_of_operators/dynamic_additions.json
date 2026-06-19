@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "item": "integrateddynamics:variable",
+      "nbt": "{_type:\"integrateddynamics:operator\",_id:1,operatorName:\"integrateddynamics:arithmetic_addition\",variableIds:[I;1,1]}"
+    },
+    "title": {
+      "translate": "advancement.integrateddynamics.dynamic_additions"
+    },
+    "description": {
+      "translate": "advancement.integrateddynamics.dynamic_additions.desc"
+    }
+  },
+  "parent": "integrateddynamics:logic_operations/logic_programming",
+  "criteria": {
+    "criteria_0": {
+      "trigger": "integrateddynamics:part_variable_driven",
+      "conditions": {
+        "parttype": "integrateddynamics:display_panel",
+        "variable": {
+          "type": "integrateddynamics:operator",
+          "operator": "integrateddynamics:operator_apply",
+          "input": {
+            "0": {
+              "type": "integrateddynamics:operator",
+              "operator": "integrateddynamics:operator_apply",
+              "valuetype": "integrateddynamics:operator"
+            },
+            "1": {
+              "valuetype": "integrateddynamics:integer"
+            }
+          }
+        }
+      }
+    }
+  }
+}

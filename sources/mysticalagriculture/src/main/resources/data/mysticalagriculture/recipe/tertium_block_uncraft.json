@@ -1,0 +1,10 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    "mysticalagriculture:tertium_block"
+  ],
+  "result": {
+    "id": "mysticalagriculture:tertium_essence",
+    "count": 9
+  }
+}

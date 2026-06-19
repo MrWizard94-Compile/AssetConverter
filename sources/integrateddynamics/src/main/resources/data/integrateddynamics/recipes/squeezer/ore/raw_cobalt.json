@@ -1,0 +1,35 @@
+{
+  "type": "integrateddynamics:squeezer",
+  "item": {
+    "tag": "forge:ores/cobalt"
+  },
+  "result": {
+    "items": [
+      {
+        "tag": "forge:raw_materials/cobalt",
+        "count": 2
+      },
+      {
+        "tag": "forge:raw_materials/cobalt",
+        "chance": 0.75
+      }
+    ]
+  },
+  "duration": 40,
+  "conditions": [
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:tag_empty",
+        "tag": "forge:raw_materials/cobalt"
+      }
+    },
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:tag_empty",
+        "tag": "forge:ores/cobalt"
+      }
+    }
+  ]
+}

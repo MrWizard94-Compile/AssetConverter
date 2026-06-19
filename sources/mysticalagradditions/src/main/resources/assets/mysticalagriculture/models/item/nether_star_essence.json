@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "mysticalagradditions:item/essence/nether_star_essence"
+  }
+}

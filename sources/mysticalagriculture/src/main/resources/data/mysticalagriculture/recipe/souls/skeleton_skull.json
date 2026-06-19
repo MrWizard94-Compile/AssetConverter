@@ -1,0 +1,8 @@
+{
+  "type": "mysticalagriculture:soul_extraction",
+  "input": "minecraft:skeleton_skull",
+  "result": {
+    "type": "mysticalagriculture:skeleton",
+    "souls": 3.0
+  }
+}

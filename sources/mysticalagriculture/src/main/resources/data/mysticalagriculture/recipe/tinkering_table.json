@@ -1,0 +1,15 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "SSS",
+    "DSD",
+    "SSS"
+  ],
+  "key": {
+    "S": "minecraft:stone",
+    "D": "mysticalagriculture:soulium_dust"
+  },
+  "result": {
+    "id": "mysticalagriculture:tinkering_table"
+  }
+}

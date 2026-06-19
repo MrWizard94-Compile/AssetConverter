@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "item": "integrateddynamics:variable",
+      "nbt": "{_type:\"integrateddynamics:operator\",_id:1,operatorName:\"integrateddynamics:operator_filter\",variableIds:[I;1,1]}"
+    },
+    "title": {
+      "translate": "advancement.integrateddynamics.dynamic_list_filtering"
+    },
+    "description": {
+      "translate": "advancement.integrateddynamics.dynamic_list_filtering.desc"
+    }
+  },
+  "parent": "integrateddynamics:logic_operations/logic_programming",
+  "criteria": {
+    "criteria_0": {
+      "trigger": "integrateddynamics:part_variable_driven",
+      "conditions": {
+        "parttype": "integrateddynamics:display_panel",
+        "variable": {
+          "type": "integrateddynamics:operator",
+          "operator": "integrateddynamics:operator_filter",
+          "valuetype": "integrateddynamics:list",
+          "value": "{proxyName:\"integrateddynamics:materialized\",serialized:{valueType:\"integrateddynamics:integer\",values:[10]}}"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": "mysticalagriculture:imperium_essence"
+  },
+  "result": {
+    "id": "mysticalagriculture:imperium_block"
+  }
+}

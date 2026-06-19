@@ -1,0 +1,27 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:jump_boost_ii"
+    },
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:jump_boost_iii"
+    }
+  ],
+  "input": "mysticalagriculture:jump_boost_ii_augment",
+  "ingredients": [
+    "minecraft:rabbit_foot",
+    "mysticalagriculture:imperium_essence",
+    "minecraft:rabbit_foot",
+    "mysticalagriculture:imperium_essence",
+    "minecraft:rabbit_foot",
+    "mysticalagriculture:imperium_essence",
+    "minecraft:rabbit_foot",
+    "mysticalagriculture:imperium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:jump_boost_iii_augment"
+  }
+}

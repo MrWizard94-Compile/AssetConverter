@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.illusivesoulworks.comforts.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "AccessorPlayer",
+    "MixinServerSleepStatus",
+    "MixinSleepStatus"
+  ],
+  "client": [
+  ],
+  "server": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "${refmap_target}refmap.json"
+}

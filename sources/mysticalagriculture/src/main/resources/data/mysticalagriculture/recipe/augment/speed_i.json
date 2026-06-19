@@ -1,0 +1,23 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:speed_i"
+    }
+  ],
+  "input": "mysticalagriculture:blank_augment",
+  "ingredients": [
+    "minecraft:sugar",
+    "mysticalagriculture:prudentium_essence",
+    "minecraft:sugar",
+    "mysticalagriculture:prudentium_essence",
+    "minecraft:sugar",
+    "mysticalagriculture:prudentium_essence",
+    "minecraft:sugar",
+    "mysticalagriculture:prudentium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:speed_i_augment"
+  }
+}

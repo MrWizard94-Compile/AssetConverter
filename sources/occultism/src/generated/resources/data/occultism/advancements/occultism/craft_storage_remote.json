@@ -1,0 +1,34 @@
+{
+  "parent": "occultism:occultism/root",
+  "criteria": {
+    "craft_storage_remote": {
+      "conditions": {
+        "ritual_predicate": {
+          "ritual_id": "occultism:ritual/craft_storage_remote"
+        }
+      },
+      "trigger": "occultism:ritual"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.occultism.craft_storage_remote.description"
+    },
+    "frame": "task",
+    "hidden": true,
+    "icon": {
+      "item": "occultism:jei_dummy/none"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.occultism.craft_storage_remote.title"
+    }
+  },
+  "requirements": [
+    [
+      "craft_storage_remote"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

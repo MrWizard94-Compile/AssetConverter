@@ -1,0 +1,201 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2026, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+package com.buuz135.industrial.block.agriculturehusbandry.tile;
+
+import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
+import com.buuz135.industrial.block.tile.RangeManager;
+import com.buuz135.industrial.capability.tile.BigEnergyHandler;
+import com.buuz135.industrial.config.machine.agriculturehusbandry.MobDuplicatorConfig;
+import com.buuz135.industrial.item.MobImprisonmentToolItem;
+import com.buuz135.industrial.item.addon.RangeAddonItem;
+import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
+import com.buuz135.industrial.module.ModuleTool;
+import com.buuz135.industrial.utils.BlockUtils;
+import com.buuz135.industrial.utils.IndustrialTags;
+import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
+import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
+import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.item.AugmentWrapper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.UUID;
+
+public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTile> {
+
+    private int maxProgress;
+    private int powerPerOperation;
+    private boolean exactCopy;
+
+    @Save
+    private SidedFluidTankComponent<MobDuplicatorTile> tank;
+
+    @Save
+    private SidedInventoryComponent<MobDuplicatorTile> input;
+
+    public MobDuplicatorTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleAgricultureHusbandry.MOB_DUPLICATOR, RangeManager.RangeType.TOP_UP, true, MobDuplicatorConfig.powerPerOperation, blockPos, blockState);
+        this.addTank(tank = (SidedFluidTankComponent<MobDuplicatorTile>) new SidedFluidTankComponent<MobDuplicatorTile>("essence", MobDuplicatorConfig.tankSize, 43, 20, 0)
+                .setColor(DyeColor.LIME)
+                .setTankAction(FluidTankComponent.Action.FILL)
+                .setComponentHarness(this)
+                .setValidator(fluidStack -> ForgeRegistries.FLUIDS.tags().getTag(IndustrialTags.Fluids.EXPERIENCE).contains(fluidStack.getFluid()))
+        );
+
+        this.addInventory(input = (SidedInventoryComponent<MobDuplicatorTile>) new SidedInventoryComponent<MobDuplicatorTile>("mob_imprisonment_tool", 64, 22, 1, 1)
+                .setColor(DyeColor.ORANGE)
+                .setInputFilter((itemStack, integer) -> itemStack.getItem().equals(ModuleTool.MOB_IMPRISONMENT_TOOL.get()))
+                .setComponentHarness(this)
+        );
+
+        this.maxProgress = MobDuplicatorConfig.maxProgress;
+        this.powerPerOperation = MobDuplicatorConfig.powerPerOperation;
+        this.exactCopy = MobDuplicatorConfig.exactCopy;
+    }
+
+    @Override
+    public WorkAction work() {
+
+        if (input.getStackInSlot(0).isEmpty() || !hasEnergy(MobDuplicatorConfig.powerPerOperation))
+            return new WorkAction(1, 0);
+        if (tank.getFluid().isEmpty()) return new WorkAction(1, 0);
+
+        ItemStack stack = input.getStackInSlot(0);
+        LivingEntity entity = (LivingEntity) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.level, MobDuplicatorConfig.exactCopy && exactCopy, true);
+        if (entity == null) return new WorkAction(1, 0);
+
+        List<? extends LivingEntity> entityAmount = level.getEntitiesOfClass(entity.getClass(), getWorkingArea().bounds());
+        entityAmount.removeIf(entityLiving -> !entityLiving.isAlive());
+        if (entityAmount.size() > 32) return new WorkAction(1, 0);
+
+        int essenceNeeded = (int) (entity.getHealth() * MobDuplicatorConfig.essenceNeeded);
+        int canSpawn = (int) ((tank.getFluid().isEmpty() ? 0 : tank.getFluid().getAmount()) / Math.max(essenceNeeded, 1));
+        if (canSpawn == 0) return new WorkAction(1, 0);
+
+        int spawnAmount = 1 + this.level.random.nextInt(Math.min(canSpawn, 4));
+        List<BlockPos> blocks = BlockUtils.getBlockPosInAABB(getWorkingArea().bounds());
+        while (spawnAmount > 0) {
+            if (tank.getFluid().getAmount() >= essenceNeeded) {
+                entity = (LivingEntity) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.level, MobDuplicatorConfig.exactCopy && exactCopy, true);
+                int tries = 20;
+                Vec3 random = blockPosToVec3d(blocks.get(this.level.random.nextInt(blocks.size())));
+                random = random.add(0.5, 0, 0.5);
+                entity.moveTo(random.x, random.y, random.z, level.random.nextFloat() * 360F, 0);
+                entity.setUUID(UUID.randomUUID());
+                if (entity instanceof Mob) {
+                    ((Mob) entity).finalizeSpawn((ServerLevelAccessor) this.level, this.level.getCurrentDifficultyAt(this.worldPosition), MobSpawnType.MOB_SUMMONED, null, null);
+                }
+                while (tries > 0 && !canEntitySpawn(entity)) {
+                    random = blockPosToVec3d(blocks.get(this.level.random.nextInt(blocks.size())));
+                    random = random.add(0.5, 0, 0.5);
+                    entity.moveTo(random.x, random.y, random.z, level.random.nextFloat() * 360F, 0);
+                    --tries;
+                }
+                if (tries <= 0) {
+                    --spawnAmount;
+                    continue;
+                }
+
+                this.level.addFreshEntity(entity);
+
+                tank.drainForced(essenceNeeded, IFluidHandler.FluidAction.EXECUTE);
+            }
+            --spawnAmount;
+        }
+        if (canSpawn > 0) {
+            return new WorkAction(1f, MobDuplicatorConfig.powerPerOperation);
+        }
+
+        return new WorkAction(1, 0);
+    }
+
+    private boolean canEntitySpawn(LivingEntity living) {
+        return this.level.isUnobstructed(living) && (!this.level.containsAnyLiquid(living.getBoundingBox()));
+    }
+
+    private Vec3 blockPosToVec3d(BlockPos blockPos) {
+        return new Vec3(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+    }
+
+    @Override
+    public VoxelShape getWorkingArea() {
+        return new RangeManager(this.worldPosition, this.getFacingDirection(), RangeManager.RangeType.TOP_UP) {
+            @Override
+            public AABB getBox() {
+                return super.getBox().expandTowards(0, 1, 0);
+            }
+        }.get(hasAugmentInstalled(RangeAddonItem.RANGE) ? ((int) AugmentWrapper.getType(getInstalledAugments(RangeAddonItem.RANGE).get(0), RangeAddonItem.RANGE) + 1) : 0);
+    }
+
+    @Nonnull
+    @Override
+    public MobDuplicatorTile getSelf() {
+        return this;
+    }
+
+    @Nonnull
+    @Override
+    protected EnergyStorageComponent<MobDuplicatorTile> createEnergyStorage() {
+        return new BigEnergyHandler<MobDuplicatorTile>(MobDuplicatorConfig.maxStoredPower, 10, 20) {
+            @Override
+            public void sync() {
+                MobDuplicatorTile.this.syncObject(getEnergyStorage());
+            }
+        };
+    }
+
+    @Override
+    public int getMaxProgress() {
+        return MobDuplicatorConfig.maxProgress;
+    }
+
+    @Override
+    public void saveSettings(Player player, CompoundTag tag) {
+        tag.putBoolean("MC_exactCopy", exactCopy);
+        super.saveSettings(player, tag);
+    }
+
+    @Override
+    public void loadSettings(Player player, CompoundTag tag) {
+        if (tag.contains("MC_exactCopy")) {
+            exactCopy = tag.getBoolean("MC_exactCopy");
+        }
+        super.loadSettings(player, tag);
+    }
+}

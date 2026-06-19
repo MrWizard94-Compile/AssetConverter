@@ -1,0 +1,14 @@
+{
+  "criteria": {
+    "occultism_present": {
+      "conditions": {},
+      "trigger": "minecraft:tick"
+    }
+  },
+  "requirements": [
+    [
+      "occultism_present"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

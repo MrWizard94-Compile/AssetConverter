@@ -1,0 +1,15 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    " E ",
+    "EGE",
+    " E "
+  ],
+  "key": {
+    "E": "mysticalagriculture:soul_dust",
+    "G": "#c:glass_blocks/colorless"
+  },
+  "result": {
+    "id": "mysticalagriculture:soul_glass"
+  }
+}

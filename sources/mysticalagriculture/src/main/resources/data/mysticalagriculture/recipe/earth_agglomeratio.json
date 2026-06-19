@@ -1,0 +1,16 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "IG",
+    "DC"
+  ],
+  "key": {
+    "I": "minecraft:short_grass",
+    "G": "minecraft:gravel",
+    "D": "minecraft:dirt",
+    "C": "minecraft:clay_ball"
+  },
+  "result": {
+    "id": "mysticalagriculture:earth_agglomeratio"
+  }
+}

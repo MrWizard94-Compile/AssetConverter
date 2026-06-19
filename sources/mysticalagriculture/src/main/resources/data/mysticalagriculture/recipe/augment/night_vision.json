@@ -1,0 +1,23 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:night_vision"
+    }
+  ],
+  "input": "mysticalagriculture:blank_augment",
+  "ingredients": [
+    "minecraft:golden_carrot",
+    "mysticalagriculture:prudentium_essence",
+    "minecraft:golden_carrot",
+    "mysticalagriculture:prudentium_essence",
+    "minecraft:golden_carrot",
+    "mysticalagriculture:prudentium_essence",
+    "minecraft:golden_carrot",
+    "mysticalagriculture:prudentium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:night_vision_augment"
+  }
+}

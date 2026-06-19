@@ -1,0 +1,17 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "ESE",
+    "SDS",
+    "ESE"
+  ],
+  "key": {
+    "E": "mysticalagriculture:inferium_essence",
+    "S": "#c:stones",
+    "D": "mysticalagriculture:inferium_gemstone"
+  },
+  "result": {
+    "id": "mysticalagriculture:inferium_growth_accelerator",
+    "count": 3
+  }
+}

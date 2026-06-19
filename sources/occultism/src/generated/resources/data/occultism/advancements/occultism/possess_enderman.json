@@ -1,0 +1,34 @@
+{
+  "parent": "occultism:occultism/root",
+  "criteria": {
+    "possess_enderman": {
+      "conditions": {
+        "ritual_predicate": {
+          "ritual_id": "occultism:ritual/possess_enderman"
+        }
+      },
+      "trigger": "occultism:ritual"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.occultism.possess_enderman.description"
+    },
+    "frame": "task",
+    "hidden": true,
+    "icon": {
+      "item": "occultism:jei_dummy/none"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.occultism.possess_enderman.title"
+    }
+  },
+  "requirements": [
+    [
+      "possess_enderman"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

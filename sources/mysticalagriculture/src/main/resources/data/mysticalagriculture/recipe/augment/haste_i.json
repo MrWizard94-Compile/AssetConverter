@@ -1,0 +1,23 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:haste_i"
+    }
+  ],
+  "input": "mysticalagriculture:blank_augment",
+  "ingredients": [
+    "minecraft:redstone",
+    "mysticalagriculture:tertium_essence",
+    "minecraft:redstone",
+    "mysticalagriculture:tertium_essence",
+    "minecraft:redstone",
+    "mysticalagriculture:tertium_essence",
+    "minecraft:redstone",
+    "mysticalagriculture:tertium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:haste_i_augment"
+  }
+}

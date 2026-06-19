@@ -1,0 +1,27 @@
+{
+  "display": {
+    "icon": {
+      "item": "integrateddynamics:variable",
+      "nbt": "{typeName:\"integrateddynamics:block\",partId:1,_type:\"integrateddynamics:valuetype\",value:{Name:\"minecraft:stone\"},_id:1}"
+    },
+    "title": {
+      "translate": "advancement.integrateddynamics.what_would_i_be_looking_at"
+    },
+    "description": {
+      "translate": "advancement.integrateddynamics.what_would_i_be_looking_at.desc"
+    }
+  },
+  "parent": "integrateddynamics:logic_operations/logic_programming",
+  "criteria": {
+    "criteria_0": {
+      "trigger": "integrateddynamics:part_variable_driven",
+      "conditions": {
+        "parttype": "integrateddynamics:display_panel",
+        "variable": {
+          "type": "integrateddynamics:operator",
+          "operator": "integrateddynamics:entity_targetblock"
+        }
+      }
+    }
+  }
+}

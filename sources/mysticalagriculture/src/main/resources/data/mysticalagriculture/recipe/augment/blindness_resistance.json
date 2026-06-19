@@ -1,0 +1,23 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:blindness_resistance"
+    }
+  ],
+  "input": "mysticalagriculture:blank_augment",
+  "ingredients": [
+    "minecraft:torch",
+    "mysticalagriculture:prudentium_essence",
+    "minecraft:glowstone",
+    "mysticalagriculture:prudentium_essence",
+    "minecraft:torch",
+    "mysticalagriculture:prudentium_essence",
+    "minecraft:glowstone",
+    "mysticalagriculture:prudentium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:blindness_resistance_augment"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    "mysticalagriculture:imperium_gemstone_block"
+  ],
+  "result": {
+    "id": "mysticalagriculture:imperium_gemstone",
+    "count": 9
+  }
+}

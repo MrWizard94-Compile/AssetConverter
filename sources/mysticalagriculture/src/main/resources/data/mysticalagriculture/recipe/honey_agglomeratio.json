@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "BC",
+    "CB"
+  ],
+  "key": {
+    "B": "minecraft:honey_bottle",
+    "C": "minecraft:honeycomb"
+  },
+  "result": {
+    "id": "mysticalagriculture:honey_agglomeratio"
+  }
+}

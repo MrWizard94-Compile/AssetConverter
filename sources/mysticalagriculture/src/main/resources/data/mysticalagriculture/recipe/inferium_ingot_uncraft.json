@@ -1,0 +1,10 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    "mysticalagriculture:inferium_ingot"
+  ],
+  "result": {
+    "id": "mysticalagriculture:inferium_nugget",
+    "count": 9
+  }
+}

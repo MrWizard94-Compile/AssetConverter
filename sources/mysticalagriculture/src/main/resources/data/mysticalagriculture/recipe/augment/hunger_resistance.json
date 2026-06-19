@@ -1,0 +1,23 @@
+{
+  "type": "mysticalagriculture:infusion",
+  "neoforge:conditions": [
+    {
+      "type": "mysticalagriculture:augment_enabled",
+      "augment": "mysticalagriculture:hunger_resistance"
+    }
+  ],
+  "input": "mysticalagriculture:blank_augment",
+  "ingredients": [
+    "minecraft:pumpkin_pie",
+    "mysticalagriculture:imperium_essence",
+    "minecraft:mushroom_stew",
+    "mysticalagriculture:imperium_essence",
+    "minecraft:pumpkin_pie",
+    "mysticalagriculture:imperium_essence",
+    "minecraft:mushroom_stew",
+    "mysticalagriculture:imperium_essence"
+  ],
+  "result": {
+    "id": "mysticalagriculture:hunger_resistance_augment"
+  }
+}

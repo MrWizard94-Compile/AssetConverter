@@ -1,0 +1,34 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "reliquary:charm_enabled"
+        }
+      ],
+      "recipe": {
+        "type": "reliquary:mob_charm",
+        "key": {
+          "F": {
+            "item": "reliquary:mob_charm_fragment"
+          },
+          "L": {
+            "tag": "forge:leather"
+          },
+          "S": {
+            "tag": "forge:string"
+          }
+        },
+        "pattern": [
+          "FLF",
+          "FSF",
+          "F F"
+        ],
+        "result": {
+          "item": "reliquary:mob_charm"
+        }
+      }
+    }
+  ]
+}

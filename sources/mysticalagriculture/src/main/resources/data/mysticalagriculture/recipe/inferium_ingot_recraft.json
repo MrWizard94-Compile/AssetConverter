@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": "mysticalagriculture:inferium_nugget"
+  },
+  "result": {
+    "id": "mysticalagriculture:inferium_ingot"
+  }
+}
