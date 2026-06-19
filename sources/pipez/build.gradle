@@ -1,0 +1,43 @@
+plugins {
+    id 'net.minecraftforge.gradle' version "${forgegradle_version}"
+    id 'org.spongepowered.mixin' version "${mixingradle_version}"
+    id 'com.matthewprenger.cursegradle' version "${cursegradle_version}"
+    id 'com.modrinth.minotaur' version "${minotaur_version}"
+    id 'com.gradleup.shadow' version "${shadow_version}"
+    id 'mod-update' version "${mod_update_version}"
+}
+
+apply from: "https://raw.githubusercontent.com/henkelmax/mod-gradle-scripts/${mod_gradle_script_version}/mod.gradle"
+
+repositories {
+    maven { url = 'https://modmaven.dev' }
+}
+
+dependencies {
+    implementation fg.deobf("maven.modrinth:jei:${jei_version}")
+    implementation fg.deobf("maven.modrinth:the-one-probe:${theoneprobe_version}")
+    implementation fg.deobf("maven.modrinth:jade:${jade_version}")
+
+    compileOnly "mekanism:Mekanism:${mekanism_version}:api"
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")
+
+    shadow fg.deobf("de.maxhenkel.corelib:corelib:${minecraft_version}-${corelib_version}:api")
+    runtimeOnly fg.deobf("de.maxhenkel.corelib:corelib:${minecraft_version}-${corelib_version}")
+    compileOnly fg.deobf("de.maxhenkel.corelib:corelib:${minecraft_version}-${corelib_version}:javadoc")
+}
+
+processResources {
+    filesMatching('**/*.toml') {
+        expand 'mod_version': mod_version,
+                'forge_dependency': forge_dependency,
+                'minecraft_version': minecraft_version,
+                'mekanism_dependency': mekanism_dependency
+    }
+}
+
+shadowJar {
+    relocate 'de.maxhenkel.corelib', 'de.maxhenkel.pipez.corelib'
+}

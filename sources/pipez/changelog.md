@@ -1,0 +1,1 @@
+- Updated Brazilian Portuguese translation
