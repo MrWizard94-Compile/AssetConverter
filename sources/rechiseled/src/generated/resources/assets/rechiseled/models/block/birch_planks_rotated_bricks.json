@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/birch_planks_rotated_bricks",
+    "down": "rechiseled:block/birch_planks_rotated_bricks",
+    "north": "rechiseled:block/birch_planks_rotated_bricks",
+    "east": "rechiseled:block/birch_planks_rotated_bricks",
+    "south": "rechiseled:block/birch_planks_rotated_bricks",
+    "west": "rechiseled:block/birch_planks_rotated_bricks",
+    "particle": "rechiseled:block/birch_planks_rotated_bricks"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/lapis_block_crushed",
+    "down": "rechiseled:block/lapis_block_crushed",
+    "north": "rechiseled:block/lapis_block_crushed",
+    "east": "rechiseled:block/lapis_block_crushed",
+    "south": "rechiseled:block/lapis_block_crushed",
+    "west": "rechiseled:block/lapis_block_crushed",
+    "particle": "rechiseled:block/lapis_block_crushed"
+  }
+}

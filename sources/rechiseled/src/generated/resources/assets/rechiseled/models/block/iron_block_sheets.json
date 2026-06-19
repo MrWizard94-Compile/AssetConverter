@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/iron_block_sheets",
+    "down": "rechiseled:block/iron_block_sheets",
+    "north": "rechiseled:block/iron_block_sheets",
+    "east": "rechiseled:block/iron_block_sheets",
+    "south": "rechiseled:block/iron_block_sheets",
+    "west": "rechiseled:block/iron_block_sheets",
+    "particle": "rechiseled:block/iron_block_sheets"
+  }
+}

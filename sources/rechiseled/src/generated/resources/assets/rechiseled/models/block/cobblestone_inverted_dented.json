@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/cobblestone_inverted_dented",
+    "down": "rechiseled:block/cobblestone_inverted_dented",
+    "north": "rechiseled:block/cobblestone_inverted_dented",
+    "east": "rechiseled:block/cobblestone_inverted_dented",
+    "south": "rechiseled:block/cobblestone_inverted_dented",
+    "west": "rechiseled:block/cobblestone_inverted_dented",
+    "particle": "rechiseled:block/cobblestone_inverted_dented"
+  }
+}

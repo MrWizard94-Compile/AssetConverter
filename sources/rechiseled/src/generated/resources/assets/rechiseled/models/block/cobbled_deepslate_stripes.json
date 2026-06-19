@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/cobbled_deepslate_stripes",
+    "down": "rechiseled:block/cobbled_deepslate_stripes",
+    "north": "rechiseled:block/cobbled_deepslate_stripes",
+    "east": "rechiseled:block/cobbled_deepslate_stripes",
+    "south": "rechiseled:block/cobbled_deepslate_stripes",
+    "west": "rechiseled:block/cobbled_deepslate_stripes",
+    "particle": "rechiseled:block/cobbled_deepslate_stripes"
+  }
+}

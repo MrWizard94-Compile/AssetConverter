@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/nether_bricks_large_bricks",
+    "down": "rechiseled:block/nether_bricks_large_bricks",
+    "north": "rechiseled:block/nether_bricks_large_bricks",
+    "east": "rechiseled:block/nether_bricks_large_bricks",
+    "south": "rechiseled:block/nether_bricks_large_bricks",
+    "west": "rechiseled:block/nether_bricks_large_bricks",
+    "particle": "rechiseled:block/nether_bricks_large_bricks"
+  }
+}

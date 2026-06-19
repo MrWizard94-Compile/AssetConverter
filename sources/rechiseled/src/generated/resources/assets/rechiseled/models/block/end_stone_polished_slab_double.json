@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/end_stone_polished",
+    "down": "rechiseled:block/end_stone_polished",
+    "north": "rechiseled:block/end_stone_polished",
+    "east": "rechiseled:block/end_stone_polished",
+    "south": "rechiseled:block/end_stone_polished",
+    "west": "rechiseled:block/end_stone_polished",
+    "particle": "rechiseled:block/end_stone_polished"
+  }
+}

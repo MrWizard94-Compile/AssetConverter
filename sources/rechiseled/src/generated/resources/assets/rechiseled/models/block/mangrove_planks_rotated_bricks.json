@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/mangrove_planks_rotated_bricks",
+    "down": "rechiseled:block/mangrove_planks_rotated_bricks",
+    "north": "rechiseled:block/mangrove_planks_rotated_bricks",
+    "east": "rechiseled:block/mangrove_planks_rotated_bricks",
+    "south": "rechiseled:block/mangrove_planks_rotated_bricks",
+    "west": "rechiseled:block/mangrove_planks_rotated_bricks",
+    "particle": "rechiseled:block/mangrove_planks_rotated_bricks"
+  }
+}

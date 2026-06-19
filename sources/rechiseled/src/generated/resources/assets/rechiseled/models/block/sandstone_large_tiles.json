@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/sandstone_large_tiles",
+    "down": "rechiseled:block/sandstone_large_tiles",
+    "north": "rechiseled:block/sandstone_large_tiles",
+    "east": "rechiseled:block/sandstone_large_tiles",
+    "south": "rechiseled:block/sandstone_large_tiles",
+    "west": "rechiseled:block/sandstone_large_tiles",
+    "particle": "rechiseled:block/sandstone_large_tiles"
+  }
+}

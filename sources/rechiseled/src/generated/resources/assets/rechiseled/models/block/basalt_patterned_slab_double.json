@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/basalt_patterned",
+    "down": "rechiseled:block/basalt_patterned",
+    "north": "rechiseled:block/basalt_patterned",
+    "east": "rechiseled:block/basalt_patterned",
+    "south": "rechiseled:block/basalt_patterned",
+    "west": "rechiseled:block/basalt_patterned",
+    "particle": "rechiseled:block/basalt_patterned"
+  }
+}

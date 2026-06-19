@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/prismarine_bricks_rows",
+    "down": "rechiseled:block/prismarine_bricks_rows",
+    "north": "rechiseled:block/prismarine_bricks_rows",
+    "east": "rechiseled:block/prismarine_bricks_rows",
+    "south": "rechiseled:block/prismarine_bricks_rows",
+    "west": "rechiseled:block/prismarine_bricks_rows",
+    "particle": "rechiseled:block/prismarine_bricks_rows"
+  }
+}

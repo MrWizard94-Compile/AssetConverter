@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/cobbled_deepslate_rotated_bricks",
+    "down": "rechiseled:block/cobbled_deepslate_rotated_bricks",
+    "north": "rechiseled:block/cobbled_deepslate_rotated_bricks",
+    "east": "rechiseled:block/cobbled_deepslate_rotated_bricks",
+    "south": "rechiseled:block/cobbled_deepslate_rotated_bricks",
+    "west": "rechiseled:block/cobbled_deepslate_rotated_bricks",
+    "particle": "rechiseled:block/cobbled_deepslate_rotated_bricks"
+  }
+}

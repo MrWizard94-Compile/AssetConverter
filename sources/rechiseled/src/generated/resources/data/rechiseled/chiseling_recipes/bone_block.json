@@ -1,0 +1,109 @@
+{
+  "type": "rechiseled:chiseling",
+  "entries": [
+    {
+      "block": "rechiseled:bone_block_bordered",
+      "connecting_block": "rechiseled:bone_block_bordered_connecting",
+      "connecting_slab": "rechiseled:bone_block_bordered_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:bone_block_bordered_stairs_connecting",
+      "slab": "rechiseled:bone_block_bordered_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:bone_block_bordered_stairs"
+    },
+    {
+      "block": "rechiseled:bone_block_bundled",
+      "slab": "rechiseled:bone_block_bundled_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:bone_block_bundled_stairs"
+    },
+    {
+      "block": "rechiseled:bone_block_chiseled",
+      "connecting_block": "rechiseled:bone_block_chiseled_connecting",
+      "connecting_slab": "rechiseled:bone_block_chiseled_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:bone_block_chiseled_stairs_connecting",
+      "slab": "rechiseled:bone_block_chiseled_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:bone_block_chiseled_stairs"
+    },
+    {
+      "block": "minecraft:bone_block",
+      "connecting_block": "rechiseled:bone_block_connecting_connecting",
+      "connecting_slab": "rechiseled:bone_block_connecting_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:bone_block_connecting_stairs_connecting"
+    },
+    {
+      "block": "rechiseled:bone_block_cracked",
+      "slab": "rechiseled:bone_block_cracked_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:bone_block_cracked_stairs"
+    },
+    {
+      "block": "rechiseled:bone_block_decorated",
+      "slab": "rechiseled:bone_block_decorated_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:bone_block_decorated_stairs"
+    },
+    {
+      "block": "rechiseled:bone_block_decorated_bordered",
+      "connecting_block": "rechiseled:bone_block_decorated_bordered_connecting",
+      "connecting_slab": "rechiseled:bone_block_decorated_bordered_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:bone_block_decorated_bordered_stairs_connecting",
+      "slab": "rechiseled:bone_block_decorated_bordered_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:bone_block_decorated_bordered_stairs"
+    },
+    {
+      "block": "rechiseled:bone_block_inverted_tiles",
+      "connecting_block": "rechiseled:bone_block_inverted_tiles_connecting",
+      "connecting_slab": "rechiseled:bone_block_inverted_tiles_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:bone_block_inverted_tiles_stairs_connecting",
+      "slab": "rechiseled:bone_block_inverted_tiles_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:bone_block_inverted_tiles_stairs"
+    },
+    {
+      "block": "rechiseled:bone_block_patterned",
+      "connecting_block": "rechiseled:bone_block_patterned_connecting",
+      "connecting_slab": "rechiseled:bone_block_patterned_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:bone_block_patterned_stairs_connecting",
+      "slab": "rechiseled:bone_block_patterned_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:bone_block_patterned_stairs"
+    },
+    {
+      "block": "rechiseled:bone_block_pillar",
+      "connecting_block": "rechiseled:bone_block_pillar_connecting",
+      "connecting_slab": "rechiseled:bone_block_pillar_slab_connecting",
+      "connecting_slab_worth": 0.5,
+      "connecting_stairs": "rechiseled:bone_block_pillar_stairs_connecting",
+      "slab": "rechiseled:bone_block_pillar_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:bone_block_pillar_stairs"
+    },
+    {
+      "block": "rechiseled:bone_block_rib",
+      "slab": "rechiseled:bone_block_rib_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:bone_block_rib_stairs"
+    },
+    {
+      "block": "rechiseled:bone_block_skull",
+      "slab": "rechiseled:bone_block_skull_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:bone_block_skull_stairs"
+    },
+    {
+      "block": "rechiseled:bone_block_smooth",
+      "slab": "rechiseled:bone_block_smooth_slab",
+      "slab_worth": 0.5,
+      "stairs": "rechiseled:bone_block_smooth_stairs"
+    }
+  ],
+  "overwrite": false
+}

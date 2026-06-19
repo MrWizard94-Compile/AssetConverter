@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/blue_ice_cone",
+    "down": "rechiseled:block/blue_ice_cone",
+    "north": "rechiseled:block/blue_ice_cone",
+    "east": "rechiseled:block/blue_ice_cone",
+    "south": "rechiseled:block/blue_ice_cone",
+    "west": "rechiseled:block/blue_ice_cone",
+    "particle": "rechiseled:block/blue_ice_cone"
+  }
+}

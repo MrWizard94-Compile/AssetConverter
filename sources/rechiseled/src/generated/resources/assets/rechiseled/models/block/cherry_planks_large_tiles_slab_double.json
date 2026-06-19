@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/cherry_planks_large_tiles",
+    "down": "rechiseled:block/cherry_planks_large_tiles",
+    "north": "rechiseled:block/cherry_planks_large_tiles",
+    "east": "rechiseled:block/cherry_planks_large_tiles",
+    "south": "rechiseled:block/cherry_planks_large_tiles",
+    "west": "rechiseled:block/cherry_planks_large_tiles",
+    "particle": "rechiseled:block/cherry_planks_large_tiles"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/emerald_block_clovers",
+    "down": "rechiseled:block/emerald_block_clovers",
+    "north": "rechiseled:block/emerald_block_clovers",
+    "east": "rechiseled:block/emerald_block_clovers",
+    "south": "rechiseled:block/emerald_block_clovers",
+    "west": "rechiseled:block/emerald_block_clovers",
+    "particle": "rechiseled:block/emerald_block_clovers"
+  }
+}

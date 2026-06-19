@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/blue_ice_rocky",
+    "down": "rechiseled:block/blue_ice_rocky",
+    "north": "rechiseled:block/blue_ice_rocky",
+    "east": "rechiseled:block/blue_ice_rocky",
+    "south": "rechiseled:block/blue_ice_rocky",
+    "west": "rechiseled:block/blue_ice_rocky",
+    "particle": "rechiseled:block/blue_ice_rocky"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/iron_block_pipes",
+    "down": "rechiseled:block/iron_block_pipes",
+    "north": "rechiseled:block/iron_block_pipes",
+    "east": "rechiseled:block/iron_block_pipes",
+    "south": "rechiseled:block/iron_block_pipes",
+    "west": "rechiseled:block/iron_block_pipes",
+    "particle": "rechiseled:block/iron_block_pipes"
+  }
+}

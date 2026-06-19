@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/amethyst_block_smooth",
+    "down": "rechiseled:block/amethyst_block_smooth",
+    "north": "rechiseled:block/amethyst_block_smooth",
+    "east": "rechiseled:block/amethyst_block_smooth",
+    "south": "rechiseled:block/amethyst_block_smooth",
+    "west": "rechiseled:block/amethyst_block_smooth",
+    "particle": "rechiseled:block/amethyst_block_smooth"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "pools": [
+    {
+      "rolls": 1.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "functions": [
+        {
+          "conditions": [
+            {
+              "block": "rechiseled:diamond_block_grid_slab",
+              "properties": {
+                "type": "double"
+              },
+              "condition": "minecraft:block_state_property"
+            }
+          ],
+          "count": 2.0,
+          "add": false,
+          "function": "minecraft:set_count"
+        }
+      ],
+      "entries": [
+        {
+          "name": "rechiseled:diamond_block_grid_slab",
+          "type": "minecraft:item"
+        }
+      ]
+    }
+  ]
+}

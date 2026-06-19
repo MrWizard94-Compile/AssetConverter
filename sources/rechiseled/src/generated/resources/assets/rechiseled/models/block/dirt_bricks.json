@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/dirt_bricks",
+    "down": "rechiseled:block/dirt_bricks",
+    "north": "rechiseled:block/dirt_bricks",
+    "east": "rechiseled:block/dirt_bricks",
+    "south": "rechiseled:block/dirt_bricks",
+    "west": "rechiseled:block/dirt_bricks",
+    "particle": "rechiseled:block/dirt_bricks"
+  }
+}

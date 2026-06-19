@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/stone_path",
+    "down": "rechiseled:block/stone_path",
+    "north": "rechiseled:block/stone_path",
+    "east": "rechiseled:block/stone_path",
+    "south": "rechiseled:block/stone_path",
+    "west": "rechiseled:block/stone_path",
+    "particle": "rechiseled:block/stone_path"
+  }
+}

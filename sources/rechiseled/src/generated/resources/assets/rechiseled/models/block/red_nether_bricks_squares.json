@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/red_nether_bricks_squares",
+    "down": "rechiseled:block/red_nether_bricks_squares",
+    "north": "rechiseled:block/red_nether_bricks_squares",
+    "east": "rechiseled:block/red_nether_bricks_squares",
+    "south": "rechiseled:block/red_nether_bricks_squares",
+    "west": "rechiseled:block/red_nether_bricks_squares",
+    "particle": "rechiseled:block/red_nether_bricks_squares"
+  }
+}

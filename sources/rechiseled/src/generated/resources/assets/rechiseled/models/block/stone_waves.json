@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/stone_waves",
+    "down": "rechiseled:block/stone_waves",
+    "north": "rechiseled:block/stone_waves",
+    "east": "rechiseled:block/stone_waves",
+    "south": "rechiseled:block/stone_waves",
+    "west": "rechiseled:block/stone_waves",
+    "particle": "rechiseled:block/stone_waves"
+  }
+}

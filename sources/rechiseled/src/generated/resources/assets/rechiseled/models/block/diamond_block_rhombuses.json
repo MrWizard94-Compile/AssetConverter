@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/diamond_block_rhombuses",
+    "down": "rechiseled:block/diamond_block_rhombuses",
+    "north": "rechiseled:block/diamond_block_rhombuses",
+    "east": "rechiseled:block/diamond_block_rhombuses",
+    "south": "rechiseled:block/diamond_block_rhombuses",
+    "west": "rechiseled:block/diamond_block_rhombuses",
+    "particle": "rechiseled:block/diamond_block_rhombuses"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/mossy_cobblestone_beams",
+    "down": "rechiseled:block/mossy_cobblestone_beams",
+    "north": "rechiseled:block/mossy_cobblestone_beams",
+    "east": "rechiseled:block/mossy_cobblestone_beams",
+    "south": "rechiseled:block/mossy_cobblestone_beams",
+    "west": "rechiseled:block/mossy_cobblestone_beams",
+    "particle": "rechiseled:block/mossy_cobblestone_beams"
+  }
+}

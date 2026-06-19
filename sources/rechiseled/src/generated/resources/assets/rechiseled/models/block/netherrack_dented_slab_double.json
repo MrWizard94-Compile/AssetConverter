@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "rechiseled:block/netherrack_dented",
+    "down": "rechiseled:block/netherrack_dented",
+    "north": "rechiseled:block/netherrack_dented",
+    "east": "rechiseled:block/netherrack_dented",
+    "south": "rechiseled:block/netherrack_dented",
+    "west": "rechiseled:block/netherrack_dented",
+    "particle": "rechiseled:block/netherrack_dented"
+  }
+}
