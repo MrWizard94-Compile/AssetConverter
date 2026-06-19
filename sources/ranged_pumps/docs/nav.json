@@ -1,0 +1,10 @@
+[
+  {
+    "ref": "index.adoc"
+  },
+  {
+    "title": "What's new",
+    "ref": "whats-new.adoc",
+    "icon": "bi-lightbulb-fill"
+  }
+]
