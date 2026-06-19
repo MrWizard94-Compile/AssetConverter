@@ -1,0 +1,40 @@
+{
+    "parent": "minecraft:block/block",
+    "textures": {
+        "texture": "minecraft:block/stripped_oak_log",
+        "top": "minecraft:block/stripped_oak_log_top",
+        "particle": "#texture"
+    },
+    "elements": [
+        {
+            "from": [3, 0, 3],
+            "to": [13, 13, 13],
+            "faces": {
+                "down": {
+                    "uv": [3, 3, 13, 13],
+                    "texture": "#top"
+                },
+                "up": {
+                    "uv": [3, 3, 13, 13],
+                    "texture": "#top"
+                },
+                "north": {
+                    "uv": [3, 3, 13, 13],
+                    "texture": "#texture"
+                },
+                "south": {
+                    "uv": [3, 3, 13, 13],
+                    "texture": "#texture"
+                },
+                "west": {
+                    "uv": [3, 3, 13, 13],
+                    "texture": "#texture"
+                },
+                "east": {
+                    "uv": [3, 3, 13, 13],
+                    "texture": "#texture"
+                }
+            }
+        }
+    ]
+}

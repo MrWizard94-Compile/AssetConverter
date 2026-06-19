@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/air",
+  "render_type": "minecraft:cutout_mipped",
+  "textures": {
+    "particle": "naturesaura:block/light"
+  }
+}

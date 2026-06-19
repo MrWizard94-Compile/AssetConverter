@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "naturesaura:block/ender_crate_bottom",
+    "side": "naturesaura:block/ender_crate",
+    "top": "naturesaura:block/ender_crate_top"
+  }
+}

@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "naturesaura:end_flower"
+        },
+        "title": {
+            "translate": "advancement.naturesaura.end_flower"
+        },
+        "description": {
+            "translate": "advancement.naturesaura.end_flower.desc"
+        }
+    },
+    "parent": "naturesaura:wood_stand",
+    "criteria": {
+        "materials": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": ["naturesaura:end_flower"]
+                    }
+                ]
+            }
+        }
+    }
+}
