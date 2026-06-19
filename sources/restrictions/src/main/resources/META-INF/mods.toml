@@ -1,0 +1,29 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT License https://github.com/McJtyMods/RFToolsBase/blob/1.16/LICENCE"
+issueTrackerURL="http://github.com/McJtyMods/Restrictions/issues"
+displayURL="http://github.com/McJtyMods/Restrictions/"
+#logoFile="examplemod.png" #optional
+#credits="Thanks for this example mod goes to Java" #optional
+authors="McJty"
+
+[[mods]]
+modId="restrictions"
+version="${file.jarVersion}"
+displayName="Restrictions"
+#updateJSONURL="http://myurl.me/" #optional
+description='''
+A vanilla+ style mod that adds some blocks to help push/pull mobs and players
+'''
+[[dependencies.restrictions]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.restrictions]]
+    modId="mcjtylib"
+    mandatory=false
+    versionRange="[1.20-8.0.7,)"
+    ordering="AFTER"
+    side="BOTH"

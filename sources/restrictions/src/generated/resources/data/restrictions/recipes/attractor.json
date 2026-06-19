@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "restrictions",
+  "pattern": [
+    "frf",
+    "rPr",
+    "frf"
+  ],
+  "key": {
+    "f": {
+      "item": "minecraft:feather"
+    },
+    "P": {
+      "item": "minecraft:sticky_piston"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "restrictions:attractor"
+  }
+}
