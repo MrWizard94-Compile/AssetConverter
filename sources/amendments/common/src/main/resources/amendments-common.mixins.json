@@ -1,0 +1,48 @@
+{
+  "minVersion": "0.8",
+  "required": true,
+  "compatibilityLevel": "JAVA_17",
+  "package": "net.mehvahdjukaar.amendments.mixins",
+  "mixins": [
+    "AbstractCauldronBlockMixin",
+    "AbstractSkullBlockMixin",
+    "BellMixin",
+    "BellTileEntityMixin",
+    "BlocksMixin",
+    "BrewingMixin",
+    "BrewingStandMixin",
+    "CampfireBlockEntityMixin",
+    "CauldronBlockMixin",
+    "CeilingHangingSignBlockMixin",
+    "CompatQuarkSelfCandleSkullMixin",
+    "FenceBlockMixin",
+    "FlowerPotBlockMixin",
+    "HangingSignBlockEntityMixin",
+    "JukeboxBlockEntityMixin",
+    "JukeboxBlockMixin",
+    "LanternBlockPlacementMixin",
+    "LavaCauldronMixin",
+    "LecternBlockEntityMixin",
+    "LecternBlockEntityUpdateMixin",
+    "LecternBlockMixin",
+    "PotionTooltipMixin",
+    "SignBlockEntityMixin",
+    "SkullBlockEntityMixin",
+    "SkullBlockMixin",
+    "VineMixin",
+    "WallHangingSignBlockMixin",
+    "WaterLilyMixin"
+  ],
+  "client": [
+    "BellRendererMixin",
+    "DisplayCacheMixin",
+    "HangingSignRendererMixin",
+    "SignRendererAccessor",
+    "SignRendererMixin",
+    "SkullBlockRendererMixin"
+  ],
+  "plugin": "net.mehvahdjukaar.amendments.mixins.MixinPlugin",
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

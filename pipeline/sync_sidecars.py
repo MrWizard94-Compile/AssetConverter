@@ -9,7 +9,7 @@ import os
 import sys
 
 from run_upscale import find_source_textures_dir
-from texture_policy import copy_sidecar
+from texture_policy import infer_image_scale, write_mcmeta_sidecar
 
 OUTPUT_ROOT = os.path.join(OUTPUT_ASSETS_DIR)
 
@@ -39,7 +39,8 @@ def sync_mod(mod_name: str) -> tuple[int, int]:
             if not os.path.isfile(dest_png):
                 missing_output += 1
                 continue
-            if copy_sidecar(src_png, dest_png):
+            scale = infer_image_scale(src_png, dest_png)
+            if write_mcmeta_sidecar(src_png, dest_png, image_scale=scale):
                 copied += 1
 
     print(f"[+] {mod_name}: {copied} sidecars synced")

@@ -1,0 +1,18 @@
+{
+  "minVersion": "0.8",
+  "required": true,
+  "compatibilityLevel": "JAVA_17",
+  "package": "net.mehvahdjukaar.amendments.mixins.fabric",
+  "mixins": [
+    "IHateFabricMixin",
+    "SelfCauldronMixin"
+  ],
+  "client": [
+    "CompatFarmersDelightCanvasMixin",
+    "CompatFarmersDelightSignMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "plugin": "net.mehvahdjukaar.amendments.mixins.MixinPlugin"
+}

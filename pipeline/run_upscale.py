@@ -16,8 +16,8 @@ from pipeline.texture_policy import (
     Strategy,
     classify_texture,
     copy_image,
-    copy_sidecar,
     nearest_scale,
+    write_mcmeta_sidecar,
 )
 from pipeline.waifu_scaler import upscale_rgba as waifu_upscale
 from pipeline.xbrz_scaler import upscale_rgba as xbrz_upscale
@@ -226,18 +226,21 @@ def process_texture(src_path, dest_path, mod_name, upscale_fn):
         if strategy == Strategy.COPY:
             copy_image(src_path, dest_path)
             action = "Copied"
+            meta_scale = 1
         elif strategy == Strategy.NEAREST:
             upscaled = nearest_scale(image)
             os.makedirs(os.path.dirname(dest_path), exist_ok=True)
             upscaled.save(dest_path, format="PNG")
             action = f"Nearest {SCALE}x"
+            meta_scale = SCALE
         else:
             upscaled = upscale_fn(image)
             os.makedirs(os.path.dirname(dest_path), exist_ok=True)
             upscaled.save(dest_path, format="PNG")
             action = f"Upscaled {SCALE}x"
+            meta_scale = SCALE
 
-    copy_sidecar(src_path, dest_path)
+    write_mcmeta_sidecar(src_path, dest_path, image_scale=meta_scale)
     return action, strategy
 
 

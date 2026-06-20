@@ -18,6 +18,8 @@ import os
 import shutil
 import sys
 
+from pipeline.texture_aliases import apply_all_aliases
+
 SOURCE_ASSETS_DIR = OUTPUT_ASSETS_DIR
 BUILD_DIR = RESOURCEPACK_DIR
 
@@ -34,6 +36,8 @@ def build_pack():
     if not os.path.isdir(SOURCE_ASSETS_DIR):
         print(f"[-] No upscaled assets found at {SOURCE_ASSETS_DIR}")
         sys.exit(1)
+
+    apply_all_aliases(SOURCE_ASSETS_DIR)
 
     namespaces = []
     texture_count = 0
