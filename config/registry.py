@@ -268,6 +268,7 @@ MOD_REPOS = {
     "industrial_foregoing_souls": "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing-Souls.git",
     "integrated_scripting": "https://github.com/CyclopsMC/IntegratedScripting.git",
     "restrictions": "https://github.com/McJtyMods/Restrictions.git",
+    # nodecore: vendored under sources/nodecore/ (not a git clone target)
 }
 
 CLONE_BRANCHES = {
